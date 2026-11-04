@@ -55,6 +55,10 @@ header{display:flex;align-items:center;justify-content:space-between;gap:12px;pa
 .btn.ghost:hover{background:var(--char);color:var(--on-char)}
 .btn[disabled]{opacity:.35;cursor:not-allowed}
 .btn.sm{padding:7px 15px;font-size:14px}
+.gift-btn{background:var(--cement-2);color:var(--char);border-color:var(--char)}
+.gift-btn:hover{background:var(--char);color:var(--on-char)}
+.gift-btn svg{width:20px;height:20px;flex:none;animation:gift-nudge 2.8s ease-in-out infinite;transform-origin:50% 90%}
+@keyframes gift-nudge{0%,80%,100%{transform:rotate(0)}85%{transform:rotate(-10deg)}90%{transform:rotate(9deg)}95%{transform:rotate(-5deg)}}
 
 /* hero */
 .hero{display:grid;grid-template-columns:1.25fr .75fr;gap:48px;align-items:end;padding-block:60px 50px}
@@ -279,7 +283,7 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
   .brand .logo{width:74px}
   #hdr-book{display:none}
 }
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}.gift-btn svg{animation:none}}
 </style>
 <style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
 </head>
@@ -293,7 +297,6 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
         <button type="button" id="lang-ar" class="ar-l">عربي</button>
         <button type="button" id="lang-en" class="en-l">EN</button>
       </div>
-      <a class="btn sm ghost" href="#gift" data-i="gift_nav"></a>
       <a class="btn sm" href="#booking" data-i="book_now" id="hdr-book"></a>
     </div>
   </header>
@@ -314,6 +317,7 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
       <div class="row">
         <a class="btn" href="#booking" data-i="start"></a>
         <a class="btn ghost" href="#offers" id="see-offers" data-i="see_offers"></a>
+        <a class="btn gift-btn" href="#gift"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="9" width="17" height="11.5" rx="1.2"/><path d="M2 6h20v3H2zM12 6v14.5M12 6C10.5 2.5 6 2 6 4.5S10 6 12 6zM12 6c1.5-3.5 6-4 6-1.5S14 6 12 6z"/></svg><span data-i="gift_nav"></span></a>
       </div>
     </div>
   </section>
@@ -538,7 +542,7 @@ ar:{
   ready:"طلبك جاهز. اضغط الزر لفتح واتساب وإرساله.", open_wa:"فتح واتساب وإرسال الطلب", copy:"نسخ نص الطلب", copied:"تم نسخ الطلب", select_text:"حدّد النص وانسخه",
   choose_title:"اختر خدماتك", cart_go:"متابعة لحجز الموعد", back:"تعديل الخدمات", edit:"تعديل", appt_title:"حجز الموعد",
   booked:"محجوز", full:"مكتمل", sending:"جارٍ تثبيت الموعد…", err_taken:"هذا الوقت حُجز للتو، اختر وقتاً آخر.", sel_n:n=>n===1?"خدمة واحدة":n===2?"خدمتان":n+" خدمات",
-  gift_nav:"إهداء", gift_title:"أهدِ تجربة هيبة", gift_teaser:"اختر الخدمات التي تريد إهداءها، ونتواصل مع صاحب الهدية لحجز موعده.", gift_cta:"أرسل هدية", home:"الرئيسية",
+  gift_nav:"خدمة الإهداء", gift_title:"أهدِ تجربة هيبة", gift_teaser:"اختر الخدمات التي تريد إهداءها، ونتواصل مع صاحب الهدية لحجز موعده.", gift_cta:"أرسل هدية", home:"الرئيسية",
   gift_intro:"اختر الخدمات، واكتب بياناتك وبيانات من تهديه، ثم أرسل الطلب عبر واتساب. بعد تأكيد الدفع نتواصل مع صاحب الهدية لحجز موعده.",
   g_s1:"اختر الخدمات المُهداة", g_s2:"بيانات الهدية", g_from:"من (المُهدي)", g_to:"إلى (المُهدى إليه)", g_msg:"رسالة الإهداء (اختياري)", g_msg_ph:"مثال: كل عام وأنت بخير",
   g_s3:"الدفع والإيصال", g_pay:"<b>لتأكيد الهدية يجب إرسال إيصال الدفع.</b> حوّل المبلغ ثم أرفق صورة الإيصال هنا، أو أرسلها في محادثة واتساب بعد إرسال الطلب.", g_pay_how:"التحويل عبر رقم الهاتف", g_pay_name:"باسم", g_pay_amt:"المبلغ", copy_num:"نسخ الرقم", copied_num:"تم نسخ الرقم",
@@ -573,7 +577,7 @@ en:{
   ready:"Your request is ready. Tap the button to open WhatsApp and send it.", open_wa:"Open WhatsApp and send", copy:"Copy request text", copied:"Request copied", select_text:"Select the text and copy it",
   choose_title:"Choose your services", cart_go:"Continue to appointment", back:"Edit services", edit:"Edit", appt_title:"Book your appointment",
   booked:"Booked", full:"Full", sending:"Securing your slot…", err_taken:"That time was just booked. Please pick another.", sel_n:n=>n===1?"1 service":n+" services",
-  gift_nav:"Gift", gift_title:"Gift a HAYBAH experience", gift_teaser:"Pick the services you'd like to gift, and we'll contact the recipient to book their visit.", gift_cta:"Send a gift", home:"Home",
+  gift_nav:"Gift service", gift_title:"Gift a HAYBAH experience", gift_teaser:"Pick the services you'd like to gift, and we'll contact the recipient to book their visit.", gift_cta:"Send a gift", home:"Home",
   gift_intro:"Choose the services, add your details and the recipient's, then send the request on WhatsApp. Once payment is confirmed, we contact the recipient to book.",
   g_s1:"Choose the gifted services", g_s2:"Gift details", g_from:"From (you)", g_to:"To (recipient)", g_msg:"Gift message (optional)", g_msg_ph:"e.g. Happy birthday!",
   g_s3:"Payment & receipt", g_pay:"<b>To confirm the gift, the payment receipt is required.</b> Transfer the amount, then attach the receipt here or send it in the WhatsApp chat after sending the request.", g_pay_how:"Transfer by phone number", g_pay_name:"Account name", g_pay_amt:"Amount", copy_num:"Copy number", copied_num:"Number copied",
