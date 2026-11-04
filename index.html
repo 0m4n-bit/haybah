@@ -181,8 +181,8 @@ section h2{font-family:var(--f-display);font-weight:600;font-size:clamp(24px,3vw
 .field input:focus,.field textarea:focus{border-color:var(--char);outline:none}
 .field textarea{min-height:84px;resize:vertical}
 .field .err{font-size:12.5px;color:var(--warn);min-height:1em}
-#f-phone{direction:ltr;font-family:var(--f-latin);letter-spacing:.04em}
-[dir="rtl"] #f-phone{text-align:right}
+#f-phone,.ltr-in{direction:ltr;font-family:var(--f-latin);letter-spacing:.04em}
+[dir="rtl"] #f-phone,[dir="rtl"] .ltr-in{text-align:right}
 
 /* receipt */
 .receipt{position:sticky;top:calc(env(safe-area-inset-top,0px) + 20px);background:var(--char);color:var(--on-char);border-radius:22px;padding:24px;display:grid;gap:18px}
@@ -238,6 +238,23 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .appt-top h2{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,4vw,42px);margin:0}
 [dir="ltr"] .appt-top h2{font-family:var(--f-latin)}
 .edit-link{font-size:13px;font-weight:600;color:var(--on-char);opacity:.8}
+/* gift */
+.gift-band{display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center;border:1.5px solid var(--char);border-radius:26px;padding:26px 28px}
+.gift-band svg{width:54px;height:54px}
+.gift-band h2{font-size:clamp(22px,2.8vw,30px)}
+.gift-band p{margin:4px 0 0;color:var(--stone);max-width:52ch}
+.sub-h{font-family:var(--f-display);font-weight:600;font-size:16px;margin:0 0 12px}
+[dir="ltr"] .sub-h{font-family:var(--f-latin)}
+.who{display:grid;gap:22px}
+.file{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--cement-2);border:1.5px dashed var(--seam);border-radius:12px;padding:14px}
+.file input{position:absolute;width:1px;height:1px;opacity:0}
+.file label{cursor:pointer}
+.file .fname{font-size:13.5px;color:var(--stone);overflow-wrap:anywhere;min-width:0;flex:1}
+.file:focus-within{border-color:var(--char)}
+.pay-note{display:block;font-size:14px;line-height:1.75;background:var(--cement-2);border-radius:12px;padding:12px 14px;margin:0}
+.pay-note b{font-weight:600}
+.code{font-family:var(--f-latin);font-weight:700;letter-spacing:.08em}
+@media (max-width:700px){ .gift-band{grid-template-columns:1fr;text-align:start} }
 .toast{position:fixed;inset:auto 0 0 0;padding:14px max(16px,env(safe-area-inset-left,0px)) calc(14px + env(safe-area-inset-bottom,0px));background:var(--char);color:var(--on-char);text-align:center;font-weight:600;transform:translateY(100%);transition:transform .3s;z-index:20}
 .toast.show{transform:none}
 
@@ -253,7 +270,7 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
   .contact{grid-template-columns:1fr}
   .nd{padding:30px 18px 20px}
   .brand .logo{width:74px}
-  header .btn{display:none}
+  #hdr-book{display:none}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -269,7 +286,8 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
         <button type="button" id="lang-ar" class="ar-l">عربي</button>
         <button type="button" id="lang-en" class="en-l">EN</button>
       </div>
-      <a class="btn sm" href="#booking" data-i="book_now"></a>
+      <a class="btn sm ghost" href="#gift" data-i="gift_nav"></a>
+      <a class="btn sm" href="#booking" data-i="book_now" id="hdr-book"></a>
     </div>
   </header>
 
@@ -322,6 +340,14 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
     </div>
     <div class="tabs" id="tabs" role="tablist"></div>
     <div class="svc-list" id="svc-list"></div>
+  </section>
+
+  <section class="band" id="gift-teaser">
+    <div class="gift-band">
+      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="18" width="34" height="23" rx="2"/><path d="M4 12h40v6H4zM24 12v29M24 12c-3-7-12-8-12-3s8 3 12 3zM24 12c3-7 12-8 12-3s-8 3-12 3z"/></svg>
+      <div><h2 data-i="gift_title"></h2><p data-i="gift_teaser"></p></div>
+      <a class="btn" href="#gift" data-i="gift_cta"></a>
+    </div>
   </section>
 
   <section class="band" id="contact">
@@ -401,6 +427,62 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 </main>
 
 
+
+<main class="appt" id="view-gift" hidden>
+  <div class="appt-top">
+    <a class="back" href="#top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span data-i="home"></span></a>
+    <h2 data-i="gift_title"></h2>
+    <p class="hero-note" data-i="gift_intro" style="margin:0;color:var(--stone);max-width:60ch"></p>
+  </div>
+  <form class="book" id="gift-form" novalidate>
+    <div class="steps">
+      <div id="g-step-svc">
+        <h3 class="step-title"><span class="n">1</span><span data-i="g_s1"></span> <span class="hint" data-i="s1_hint"></span></h3>
+        <div class="tabs" id="g-tabs" role="tablist"></div>
+        <div class="svc-list" id="g-svc-list"></div>
+      </div>
+      <div id="g-step-who">
+        <h3 class="step-title"><span class="n">2</span><span data-i="g_s2"></span></h3>
+        <div class="who">
+          <div>
+            <h4 class="sub-h" data-i="g_from"></h4>
+            <div class="fields">
+              <div class="field"><label for="g-from-name" data-i="name"></label><input id="g-from-name" autocomplete="name"><span class="err" id="ge-from-name"></span></div>
+              <div class="field"><label for="g-from-phone" data-i="phone"></label><input id="g-from-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+968 9X XX XX XX" class="ltr-in"><span class="err" id="ge-from-phone"></span></div>
+            </div>
+          </div>
+          <div>
+            <h4 class="sub-h" data-i="g_to"></h4>
+            <div class="fields">
+              <div class="field"><label for="g-to-name" data-i="name"></label><input id="g-to-name"><span class="err" id="ge-to-name"></span></div>
+              <div class="field"><label for="g-to-phone" data-i="phone"></label><input id="g-to-phone" type="tel" inputmode="tel" placeholder="+968 9X XX XX XX" class="ltr-in"><span class="err" id="ge-to-phone"></span></div>
+              <div class="field full"><label for="g-msg" data-i="g_msg"></label><textarea id="g-msg"></textarea></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="g-step-pay">
+        <h3 class="step-title"><span class="n">3</span><span data-i="g_s3"></span></h3>
+        <div class="who">
+          <p class="pay-note" id="g-pay-note"></p>
+          <div class="file">
+            <input type="file" id="g-file" accept="image/*,application/pdf">
+            <label for="g-file" class="btn sm ghost" data-i="g_attach"></label>
+            <span class="fname" id="g-fname"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="receipt" aria-live="polite">
+      <h3 data-i="g_summary"></h3>
+      <dl><div><dt data-i="services"></dt><dd id="g-r-svc"></dd></div></dl>
+      <div class="total"><span data-i="total"></span><span><span class="num" id="g-r-total">0</span><small data-i="cur"></small></span></div>
+      <button class="btn" type="submit" id="g-submit" data-i="g_confirm"></button>
+      <p class="note" data-i="g_note"></p>
+    </aside>
+  </form>
+</main>
+
   <footer>
     <span data-i="foot_name"></span>
     <span data-i="foot_cur"></span>
@@ -441,6 +523,14 @@ ar:{
   ready:"طلبك جاهز. اضغط الزر لفتح واتساب وإرساله.", open_wa:"فتح واتساب وإرسال الطلب", copy:"نسخ نص الطلب", copied:"تم نسخ الطلب", select_text:"حدّد النص وانسخه",
   choose_title:"اختر خدماتك", cart_go:"متابعة لحجز الموعد", back:"تعديل الخدمات", edit:"تعديل", appt_title:"حجز الموعد",
   booked:"محجوز", full:"مكتمل", sending:"جارٍ تثبيت الموعد…", err_taken:"هذا الوقت حُجز للتو، اختر وقتاً آخر.", sel_n:n=>n===1?"خدمة واحدة":n===2?"خدمتان":n+" خدمات",
+  gift_nav:"إهداء", gift_title:"أهدِ تجربة هيبة", gift_teaser:"اختر الخدمات التي تريد إهداءها، ونتواصل مع صاحب الهدية لحجز موعده.", gift_cta:"أرسل هدية", home:"الرئيسية",
+  gift_intro:"اختر الخدمات، واكتب بياناتك وبيانات من تهديه، ثم أرسل الطلب عبر واتساب. بعد تأكيد الدفع نتواصل مع صاحب الهدية لحجز موعده.",
+  g_s1:"اختر الخدمات المُهداة", g_s2:"بيانات الهدية", g_from:"من (المُهدي)", g_to:"إلى (المُهدى إليه)", g_msg:"رسالة الإهداء (اختياري)", g_msg_ph:"مثال: كل عام وأنت بخير",
+  g_s3:"الدفع والإيصال", g_pay:"<b>لتأكيد الهدية يجب إرسال إيصال الدفع.</b> أرفق صورة الإيصال هنا، أو أرسلها في محادثة واتساب بعد إرسال الطلب.",
+  g_attach:"إرفاق الإيصال", g_nofile:"لم يُرفق إيصال", g_summary:"ملخص الهدية", g_confirm:"فتح واتساب وإرسال طلب الهدية", g_note:"نرد عليك بتأكيد الهدية بعد استلام الإيصال.",
+  g_sending:"جارٍ رفع الإيصال…", g_err_svc:"اختر خدمة واحدة على الأقل.", g_file_big:"حجم الملف كبير، اختر صورة أصغر من 8 ميغابايت.",
+  g_msg_head:"طلب هدية — HAYBAH Grooming & Spa", g_code:"رقم الهدية", g_from_l:"من", g_to_l:"إلى", g_note_l:"رسالة الإهداء",
+  g_rcpt_ok:"✔ تم إرفاق إيصال الدفع", g_rcpt_link:"رابط الإيصال", g_rcpt_later:"سأرسل إيصال الدفع في هذه المحادثة.",
   msg_head:"طلب حجز — HAYBAH Grooming & Spa", msg_name:"الاسم", msg_phone:"الهاتف", nd_tab:"العيد الوطني", nd_tag:"عرض العيد الوطني",
   cats:{hair:"الشعر", face:"الوجه", nails:"الأظافر", body:"الجسم", packs:"الباقات", nd:"العيد الوطني"},
   days:["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"],
@@ -467,6 +557,14 @@ en:{
   ready:"Your request is ready. Tap the button to open WhatsApp and send it.", open_wa:"Open WhatsApp and send", copy:"Copy request text", copied:"Request copied", select_text:"Select the text and copy it",
   choose_title:"Choose your services", cart_go:"Continue to appointment", back:"Edit services", edit:"Edit", appt_title:"Book your appointment",
   booked:"Booked", full:"Full", sending:"Securing your slot…", err_taken:"That time was just booked. Please pick another.", sel_n:n=>n===1?"1 service":n+" services",
+  gift_nav:"Gift", gift_title:"Gift a HAYBAH experience", gift_teaser:"Pick the services you'd like to gift, and we'll contact the recipient to book their visit.", gift_cta:"Send a gift", home:"Home",
+  gift_intro:"Choose the services, add your details and the recipient's, then send the request on WhatsApp. Once payment is confirmed, we contact the recipient to book.",
+  g_s1:"Choose the gifted services", g_s2:"Gift details", g_from:"From (you)", g_to:"To (recipient)", g_msg:"Gift message (optional)", g_msg_ph:"e.g. Happy birthday!",
+  g_s3:"Payment & receipt", g_pay:"<b>To confirm the gift, the payment receipt is required.</b> Attach the receipt here, or send it in the WhatsApp chat after sending the request.",
+  g_attach:"Attach receipt", g_nofile:"No receipt attached", g_summary:"Gift summary", g_confirm:"Open WhatsApp &amp; send gift request", g_note:"We confirm the gift once we receive the receipt.",
+  g_sending:"Uploading receipt…", g_err_svc:"Choose at least one service.", g_file_big:"The file is too large. Choose one under 8 MB.",
+  g_msg_head:"Gift request — HAYBAH Grooming & Spa", g_code:"Gift number", g_from_l:"From", g_to_l:"To", g_note_l:"Gift message",
+  g_rcpt_ok:"✔ Payment receipt attached", g_rcpt_link:"Receipt link", g_rcpt_later:"I'll send the payment receipt in this chat.",
   msg_head:"Booking request — HAYBAH Grooming & Spa", msg_name:"Name", msg_phone:"Phone", nd_tab:"National Day", nd_tag:"National Day offer",
   cats:{hair:"Hair", face:"Face", nails:"Nails", body:"Body", packs:"Packages", nd:"National Day"},
   days:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
@@ -523,6 +621,11 @@ const ND_GROUPS = [
   {key:"face", title:"nd_face", p:12, items:[{id:"nd11", ar:"هايدرا فيشل", en:"HydraFacial"}]}
 ];
 
+/* staff: "barber" = the barber, "spa" = the second staff member (all other services) */
+const STAFF = { barber:["hc","bt","hen","col","thr","hot","nd7","pC"], both:["pB","pD","pE"] };
+const resOf = s => STAFF.both.includes(s.id) ? ["barber","spa"] : STAFF.barber.includes(s.id) ? ["barber"] : ["spa"];
+const neededRes = () => [...new Set(chosen().flatMap(resOf))];
+
 /* derived catalogue */
 const packPrice = k => NATIONAL_DAY.active ? Math.round(k.base*(1-NATIONAL_DAY.packageDiscount)*1000)/1000 : k.base;
 const PACK_ITEMS = PACKS.map(k=>({id:k.id, pack:k, p:packPrice(k), was:NATIONAL_DAY.active?k.base:null}));
@@ -535,7 +638,7 @@ const ALL = TABS.flatMap(t=>t.items);
 
 let LANG = "ar";
 try{ const s=localStorage.getItem("haybah-lang"); if(s==="en"||s==="ar") LANG=s; }catch(e){}
-const state = { svc:new Set(), tab:TABS[0].key, day:null, time:null, taken:new Set(), view:"home" };
+const state = { svc:new Set(), tab:TABS[0].key, day:null, time:null, taken:new Set(), view:"home", gift:new Set(), gtab:TABS[0].key, gfile:null };
 const $ = id => document.getElementById(id);
 const t = k => T[LANG][k];
 const pad = n => String(n).padStart(2,"0");
@@ -562,6 +665,7 @@ function applyLang(){
   $("days").setAttribute("aria-label", t("s2"));
   ["e-name","e-phone"].forEach(id=>$(id).textContent="");
   renderOffers(); renderPacks(); renderTabs(); renderDays(); renderSlots(); renderReceipt(); renderCart();
+  $("g-msg").placeholder=t("g_msg_ph"); $("g-pay-note").innerHTML=t("g_pay"); renderTabs("gift"); renderGift();
 }
 function setLang(l){ LANG=l; try{localStorage.setItem("haybah-lang",l);}catch(e){} applyLang(); }
 $("lang-ar").onclick=()=>setLang("ar"); $("lang-en").onclick=()=>setLang("en");
@@ -576,10 +680,12 @@ function goBook(tab){ state.tab=tab; renderTabs(); renderReceipt(); renderCart()
 function route(){
   const wantAppt = location.hash==="#appointment";
   if(wantAppt && !state.svc.size){ location.replace("#booking"); return; }
-  const v = wantAppt ? "appt" : "home";
+  const v = wantAppt ? "appt" : location.hash==="#gift" ? "gift" : "home";
   const changed = v!==state.view; state.view=v;
   $("view-home").hidden = v!=="home";
   $("view-appt").hidden = v!=="appt";
+  $("view-gift").hidden = v!=="gift";
+  if(v==="gift" && changed) window.scrollTo(0,0);
   if(v==="appt"){ if(changed) window.scrollTo(0,0); renderDays(); renderSlots(); renderReceipt(); loadTaken(); }
   else if(changed && location.hash){ const el=document.getElementById(location.hash.slice(1)); if(el) el.scrollIntoView(); }
   renderCart();
@@ -594,13 +700,14 @@ function renderCart(){
 }
 
 /* ----- booked slots (shared through the booking sheet) ----- */
+const isTaken = (day,m) => neededRes().some(r=>state.taken.has(day+"|"+m+"|"+r));
 async function loadTaken(){
   if(!SALON.bookingApi) return;
   try{
     const r=await fetch(SALON.bookingApi+"?action=taken",{cache:"no-store"});
     const j=await r.json();
-    state.taken=new Set((j.taken||[]).map(x=>x.date+"|"+x.time));
-    if(state.time!=null && state.taken.has(state.day+"|"+state.time)) state.time=null;
+    state.taken=new Set((j.taken||[]).flatMap(x=> x.res ? [x.date+"|"+x.time+"|"+x.res] : [x.date+"|"+x.time+"|barber", x.date+"|"+x.time+"|spa"]));
+    if(state.time!=null && isTaken(state.day,state.time)) state.time=null;
     renderDays(); renderSlots(); renderReceipt();
   }catch(e){ /* sheet unreachable: show all slots */ }
 }
@@ -649,25 +756,29 @@ function renderPacks(){
   });
 }
 
-/* ----- service picker ----- */
-function renderTabs(){
-  const box=$("tabs"); box.innerHTML="";
+/* ----- service picker (used for booking and for gifts) ----- */
+const PICK = {
+  book:{ sel:()=>state.svc, tab:()=>state.tab, setTab:v=>state.tab=v, tabs:"tabs", list:"svc-list", pre:"", after:()=>{ renderReceipt(); renderCart(); } },
+  gift:{ sel:()=>state.gift, tab:()=>state.gtab, setTab:v=>state.gtab=v, tabs:"g-tabs", list:"g-svc-list", pre:"g", after:()=>renderGift() }
+};
+function renderTabs(which="book"){
+  const P=PICK[which], box=$(P.tabs); box.innerHTML="";
   TABS.forEach(c=>{
-    const b=document.createElement("button"); b.type="button"; b.className="tab"+(c.key==="nd"?" hot":""); b.id="tab-"+c.key; b.setAttribute("role","tab");
-    b.setAttribute("aria-selected", state.tab===c.key);
+    const b=document.createElement("button"); b.type="button"; b.className="tab"+(c.key==="nd"?" hot":""); b.id=P.pre+"tab-"+c.key; b.setAttribute("role","tab");
+    b.setAttribute("aria-selected", P.tab()===c.key);
     b.append(t("cats")[c.key]);
-    const n=c.items.filter(s=>state.svc.has(s.id)).length;
+    const n=c.items.filter(s=>P.sel().has(s.id)).length;
     if(n){ const s=document.createElement("span"); s.className="c"; s.textContent="("+n+")"; b.appendChild(s); }
-    b.onclick=()=>{ state.tab=c.key; renderTabs(); };
+    b.onclick=()=>{ P.setTab(c.key); renderTabs(which); };
     box.appendChild(b);
   });
-  renderList();
+  renderList(which);
 }
-function renderList(){
-  const box=$("svc-list"); box.innerHTML="";
-  TABS.find(c=>c.key===state.tab).items.forEach(s=>{
-    const b=document.createElement("button"); b.type="button"; b.className="svc"; b.id="svc-"+s.id;
-    b.setAttribute("aria-pressed", state.svc.has(s.id));
+function renderList(which="book"){
+  const P=PICK[which], box=$(P.list); box.innerHTML="";
+  TABS.find(c=>c.key===P.tab()).items.forEach(s=>{
+    const b=document.createElement("button"); b.type="button"; b.className="svc"; b.id=P.pre+"svc-"+s.id;
+    b.setAttribute("aria-pressed", P.sel().has(s.id));
     b.innerHTML='<span class="box"></span><span class="names"><span class="main"></span><span class="sub"></span></span><span class="pr"></span>';
     b.querySelector(".main").textContent=nameOf(s);
     const sub=b.querySelector(".sub");
@@ -677,7 +788,7 @@ function renderList(){
     const pr=b.querySelector(".pr");
     if(s.was){ const w=document.createElement("span"); w.className="was"; w.textContent=s.was; pr.appendChild(w); }
     pr.append(omr(s.p)); const sm=document.createElement("small"); sm.textContent=t("cur"); pr.appendChild(sm);
-    b.onclick=()=>{ state.svc.has(s.id)?state.svc.delete(s.id):state.svc.add(s.id); renderTabs(); renderReceipt(); renderCart(); };
+    b.onclick=()=>{ const S=P.sel(); S.has(s.id)?S.delete(s.id):S.add(s.id); renderTabs(which); P.after(); };
     box.appendChild(b);
   });
 }
@@ -709,7 +820,7 @@ function renderDays(){
     b.querySelector(".w").textContent = key(d)===key(new Date()) ? t("today") : t("days")[d.getDay()];
     b.querySelector(".d").textContent=d.getDate();
     b.querySelector(".m").textContent=T.en.months[d.getMonth()].toUpperCase();
-    const open=slotsFor(d).filter(x=>!x.past && !state.taken.has(key(d)+"|"+x.m));
+    const open=slotsFor(d).filter(x=>!x.past && !isTaken(key(d),x.m));
     if(!open.length){ b.classList.add("full"); b.querySelector(".m").textContent=t("full"); }
     b.onclick=()=>{ state.day=key(d); state.time=null; renderDays(); renderSlots(); renderReceipt(); goStep("step-time"); };
     box.appendChild(b);
@@ -726,7 +837,7 @@ function renderSlots(){
     const grid=document.createElement("div"); grid.className="slots";
     items.forEach(s=>{
       const btn=document.createElement("button"); btn.type="button"; btn.className="slot"; btn.id="slot-"+s.m;
-      const isBooked=state.taken.has(state.day+"|"+s.m);
+      const isBooked=isTaken(state.day,s.m);
       if(isBooked && !s.past){
         btn.classList.add("booked"); btn.disabled=true;
         btn.innerHTML='<span class="tm"></span><span class="bk"></span>';
@@ -785,17 +896,83 @@ $("book-form").addEventListener("submit",async e=>{
   let res=null;
   try{
     const r=await fetch(SALON.bookingApi,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
-      body:JSON.stringify({date:state.day,time:state.time,timeLabel:fmt12(state.time),name,phone,
+      body:JSON.stringify({res:neededRes(),date:state.day,time:state.time,timeLabel:fmt12(state.time),name,phone,
         services:list.map(s=>nameOf(s)).join(sep),total,notes,lang:LANG})});
     res=await r.json();
   }catch(err){ res=null; }
   btn.textContent=t("confirm");
   if(res && res.ok===false && res.reason==="taken"){
-    state.taken.add(state.day+"|"+state.time); state.time=null;
+    neededRes().forEach(r=>state.taken.add(state.day+"|"+state.time+"|"+r)); state.time=null;
     renderDays(); renderSlots(); renderReceipt(); toast(t("err_taken")); goStep("step-time"); return;
   }
-  state.taken.add(state.day+"|"+state.time);
+  neededRes().forEach(r=>state.taken.add(state.day+"|"+state.time+"|"+r));
   location.href=url;
+});
+
+/* ----- gift ----- */
+const giftChosen = () => ALL.filter(s=>state.gift.has(s.id));
+function renderGift(){
+  const list=giftChosen(), sv=$("g-r-svc"); sv.innerHTML="";
+  if(list.length){
+    const ul=document.createElement("ul");
+    list.forEach(s=>{ const li=document.createElement("li"); const a=document.createElement("span"); a.textContent=nameOf(s); const b=document.createElement("span"); b.className="num"; b.textContent=omr(s.p); li.append(a,b); ul.appendChild(li); });
+    sv.appendChild(ul);
+  } else { const e=document.createElement("span"); e.className="empty"; e.textContent=t("no_svc"); sv.appendChild(e); }
+  $("g-r-total").textContent=omr(list.reduce((a,s)=>a+s.p,0));
+  $("g-submit").disabled=!list.length;
+  $("g-fname").textContent = state.gfile ? state.gfile.name : t("g_nofile");
+}
+$("g-file").addEventListener("change",e=>{
+  const f=e.target.files[0]||null;
+  if(f && f.size>8*1024*1024){ toast(t("g_file_big")); e.target.value=""; state.gfile=null; }
+  else state.gfile=f;
+  renderGift();
+});
+function fileToPayload(f){
+  return new Promise((res,rej)=>{
+    if(f.type.startsWith("image/")){
+      const img=new Image(), url=URL.createObjectURL(f);
+      img.onload=()=>{ const m=1600, k=Math.min(1,m/Math.max(img.width,img.height)), c=document.createElement("canvas");
+        c.width=Math.round(img.width*k); c.height=Math.round(img.height*k); c.getContext("2d").drawImage(img,0,0,c.width,c.height); URL.revokeObjectURL(url);
+        res({name:f.name.replace(/\.[^.]+$/,"")+".jpg", type:"image/jpeg", data:c.toDataURL("image/jpeg",0.85).split(",")[1]}); };
+      img.onerror=()=>{ URL.revokeObjectURL(url); rej(new Error("img")); };
+      img.src=url;
+    } else {
+      const r=new FileReader(); r.onload=()=>res({name:f.name, type:f.type||"application/pdf", data:String(r.result).split(",")[1]}); r.onerror=rej; r.readAsDataURL(f);
+    }
+  });
+}
+const PHONE_RE=/^[+\d][\d\s-]{6,}$/;
+$("gift-form").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const v=id=>$(id).value.trim();
+  const fn=v("g-from-name"), fp=v("g-from-phone"), tn=v("g-to-name"), tp=v("g-to-phone"), note=v("g-msg");
+  const errs=[["ge-from-name",fn,t("err_name")],["ge-from-phone",PHONE_RE.test(fp),t("err_phone")],["ge-to-name",tn,t("err_name")],["ge-to-phone",PHONE_RE.test(tp),t("err_phone")]];
+  let first=null;
+  errs.forEach(([id,ok,msg])=>{ $(id).textContent= ok?"":msg; if(!ok && !first) first=id.replace("ge-","g-"); });
+  const list=giftChosen();
+  if(!list.length){ toast(t("g_err_svc")); goStep("g-step-svc"); return; }
+  if(first){ $(first).focus(); return; }
+  const code="HG-"+Date.now().toString(36).slice(-4).toUpperCase()+Math.floor(Math.random()*90+10);
+  const cur=t("cur"), sep=LANG==="ar"?"، ":", ";
+  const total=omr(list.reduce((a,s)=>a+s.p,0));
+  const lines=list.map(s=>"• "+nameOf(s)+(s.pack?" ("+packList(s.pack).join(sep)+")":"")+(s.nd?" — "+t("nd_tag"):"")+" — "+omr(s.p)+" "+cur).join("\n");
+  const btn=$("g-submit");
+  let link=null;
+  if(SALON.bookingApi){
+    btn.disabled=true; btn.textContent= state.gfile ? t("g_sending") : t("sending");
+    try{
+      const file = state.gfile ? await fileToPayload(state.gfile) : null;
+      const r=await fetch(SALON.bookingApi,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"gift",code,fromName:fn,fromPhone:fp,toName:tn,toPhone:tp,message:note,services:list.map(s=>nameOf(s)).join(sep),total,lang:LANG,file})});
+      const j=await r.json(); if(j && j.ok) link=j.fileUrl||null;
+    }catch(err){}
+    btn.disabled=false; btn.innerHTML=t("g_confirm");
+  }
+  const rcpt = state.gfile ? (t("g_rcpt_ok")+(link?"\n"+t("g_rcpt_link")+": "+link:"")) : t("g_rcpt_later");
+  const msg=t("g_msg_head")+"\n"+t("g_code")+": "+code+"\n\n"+t("g_from_l")+": "+fn+" — "+fp+"\n"+t("g_to_l")+": "+tn+" — "+tp
+    +(note?"\n"+t("g_note_l")+": "+note:"")+"\n\n"+t("services")+":\n"+lines+"\n\n"+t("total")+": "+total+" "+cur+"\n\n"+rcpt;
+  location.href="https://wa.me/"+SALON.whatsapp+"?text="+encodeURIComponent(msg);
 });
 
 applyLang();
