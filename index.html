@@ -545,6 +545,7 @@ ar:{
   g_attach:"إرفاق الإيصال", g_nofile:"لم يُرفق إيصال", g_summary:"ملخص الهدية", g_confirm:"فتح واتساب وإرسال طلب الهدية", g_note:"نرد عليك بتأكيد الهدية بعد استلام الإيصال.",
   g_sending:"جارٍ رفع الإيصال…", g_err_svc:"اختر خدمة واحدة على الأقل.", g_file_big:"حجم الملف كبير، اختر صورة أصغر من 8 ميغابايت.",
   g_msg_head:"طلب هدية — HAYBAH Grooming & Spa", g_code:"رقم الهدية", g_from_l:"من", g_to_l:"إلى", g_note_l:"رسالة الإهداء",
+  wa_tap:"✔ تم تثبيت الموعد — اضغط لفتح واتساب", g_wa_tap:"✔ تم حفظ الطلب — اضغط لفتح واتساب",
   g_rcpt_ok:"✔ تم إرفاق إيصال الدفع", g_rcpt_link:"رابط الإيصال", g_rcpt_later:"سأرسل إيصال الدفع في هذه المحادثة.",
   msg_head:"طلب حجز — HAYBAH Grooming & Spa", msg_name:"الاسم", msg_phone:"الهاتف", nd_tab:"العيد الوطني", nd_tag:"عرض العيد الوطني",
   cats:{hair:"الشعر", face:"الوجه", nails:"الأظافر", body:"الجسم", packs:"الباقات", nd:"العيد الوطني"},
@@ -579,6 +580,7 @@ en:{
   g_attach:"Attach receipt", g_nofile:"No receipt attached", g_summary:"Gift summary", g_confirm:"Open WhatsApp &amp; send gift request", g_note:"We confirm the gift once we receive the receipt.",
   g_sending:"Uploading receipt…", g_err_svc:"Choose at least one service.", g_file_big:"The file is too large. Choose one under 8 MB.",
   g_msg_head:"Gift request — HAYBAH Grooming & Spa", g_code:"Gift number", g_from_l:"From", g_to_l:"To", g_note_l:"Gift message",
+  wa_tap:"✔ Slot held — tap to open WhatsApp", g_wa_tap:"✔ Request saved — tap to open WhatsApp",
   g_rcpt_ok:"✔ Payment receipt attached", g_rcpt_link:"Receipt link", g_rcpt_later:"I'll send the payment receipt in this chat.",
   msg_head:"Booking request — HAYBAH Grooming & Spa", msg_name:"Name", msg_phone:"Phone", nd_tab:"National Day", nd_tag:"National Day offer",
   cats:{hair:"Hair", face:"Face", nails:"Nails", body:"Body", packs:"Packages", nd:"National Day"},
@@ -888,7 +890,7 @@ function renderReceipt(){
   if(state.time!=null){ rt.textContent=fmt12(state.time); rt.style.direction="ltr"; rt.style.textAlign=LANG==="ar"?"right":"left"; }
   else { rt.innerHTML=""; const e=document.createElement("span"); e.className="empty"; e.textContent=t("pick_time"); rt.appendChild(e); }
   $("r-total").textContent=omr(list.reduce((a,s)=>a+s.p,0));
-  $("submit").disabled = !(list.length && state.day && state.time!=null);
+  $("submit").disabled = !(list.length && state.day && state.time!=null); clearWA("submit");
 }
 
 /* ----- submit ----- */
@@ -921,8 +923,18 @@ $("book-form").addEventListener("submit",async e=>{
     renderDays(); renderSlots(); renderReceipt(); toast(t("err_taken")); goStep("step-time"); return;
   }
   neededRes().forEach(r=>state.taken.add(state.day+"|"+state.time+"|"+r));
-  location.href=url;
+  goWA(url, "submit", "wa_tap");
 });
+
+/* Open WhatsApp. After an upload the phone may block the automatic jump,
+   so a tappable button replaces the submit button as a guaranteed way through. */
+function goWA(url, btnId, labelKey){
+  const btn=$(btnId); clearWA(btnId);
+  const a=document.createElement("a"); a.className="btn wa-go"; a.href=url; a.id=btnId+"-wa";
+  a.innerHTML=t(labelKey); btn.hidden=true; btn.after(a);
+  location.href=url;
+}
+function clearWA(btnId){ const old=$(btnId+"-wa"); if(old) old.remove(); const b=$(btnId); if(b) b.hidden=false; }
 
 /* ----- gift ----- */
 const giftChosen = () => ALL.filter(s=>state.gift.has(s.id));
@@ -935,7 +947,7 @@ function renderGift(){
   } else { const e=document.createElement("span"); e.className="empty"; e.textContent=t("no_svc"); sv.appendChild(e); }
   $("g-r-total").textContent=omr(list.reduce((a,s)=>a+s.p,0));
   $("g-pay-amt").textContent=omr(list.reduce((a,s)=>a+s.p,0));
-  $("g-submit").disabled=!list.length;
+  $("g-submit").disabled=!list.length; clearWA("g-submit");
   $("g-fname").textContent = state.gfile ? state.gfile.name : t("g_nofile");
 }
 $("g-pay-phone").textContent=GIFT_PAY.phone.replace(/(\d{4})(\d{4})/,"$1 $2");
@@ -991,7 +1003,7 @@ $("gift-form").addEventListener("submit",async e=>{
   const rcpt = state.gfile ? (t("g_rcpt_ok")+(link?"\n"+t("g_rcpt_link")+": "+link:"")) : t("g_rcpt_later");
   const msg=t("g_msg_head")+"\n"+t("g_code")+": "+code+"\n\n"+t("g_from_l")+": "+fn+" — "+fp+"\n"+t("g_to_l")+": "+tn+" — "+tp
     +(note?"\n"+t("g_note_l")+": "+note:"")+"\n\n"+t("services")+":\n"+lines+"\n\n"+t("total")+": "+total+" "+cur+"\n\n"+rcpt;
-  location.href="https://wa.me/"+SALON.whatsapp+"?text="+encodeURIComponent(msg);
+  goWA("https://wa.me/"+SALON.whatsapp+"?text="+encodeURIComponent(msg), "g-submit", "g_wa_tap");
 });
 
 applyLang();
