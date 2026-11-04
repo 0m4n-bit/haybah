@@ -253,6 +253,13 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .file:focus-within{border-color:var(--char)}
 .pay-note{display:block;font-size:14px;line-height:1.75;background:var(--cement-2);border-radius:12px;padding:12px 14px;margin:0}
 .pay-note b{font-weight:600}
+.pay{display:grid;gap:10px}
+.pay-card{display:grid;gap:2px;border:1.5px solid var(--char);border-radius:14px;padding:6px 16px}
+.pay-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-block:10px;border-bottom:1px solid var(--seam)}
+.pay-row:last-child{border-bottom:0}
+.pay-lab{font-size:13.5px;color:var(--stone);flex:1 1 140px}
+.pay-val{font-weight:700;font-size:17px}
+.ltr-val{direction:ltr;unicode-bidi:isolate;font-family:var(--f-latin);letter-spacing:.04em}
 .code{font-family:var(--f-latin);font-weight:700;letter-spacing:.08em}
 @media (max-width:700px){ .gift-band{grid-template-columns:1fr;text-align:start} }
 .toast{position:fixed;inset:auto 0 0 0;padding:14px max(16px,env(safe-area-inset-left,0px)) calc(14px + env(safe-area-inset-bottom,0px));background:var(--char);color:var(--on-char);text-align:center;font-weight:600;transform:translateY(100%);transition:transform .3s;z-index:20}
@@ -464,7 +471,14 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
       <div id="g-step-pay">
         <h3 class="step-title"><span class="n">3</span><span data-i="g_s3"></span></h3>
         <div class="who">
-          <p class="pay-note" id="g-pay-note"></p>
+          <div class="pay">
+            <p class="pay-note" id="g-pay-note"></p>
+            <div class="pay-card">
+              <div class="pay-row"><span class="pay-lab" data-i="g_pay_how"></span><span class="pay-val ltr-val" id="g-pay-phone"></span><button type="button" class="btn sm ghost" id="g-copy" data-i="copy_num"></button></div>
+              <div class="pay-row"><span class="pay-lab" data-i="g_pay_name"></span><span class="pay-val ltr-val" id="g-pay-name"></span></div>
+              <div class="pay-row"><span class="pay-lab" data-i="g_pay_amt"></span><span class="pay-val"><span class="num" id="g-pay-amt">0</span> <small data-cur></small></span></div>
+            </div>
+          </div>
           <div class="file">
             <input type="file" id="g-file" accept="image/*,application/pdf">
             <label for="g-file" class="btn sm ghost" data-i="g_attach"></label>
@@ -496,6 +510,7 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 
 <script>
 /* ===== Salon settings ===== */
+const GIFT_PAY = { phone:"92383483", name:"Talal Alhadi" };
 const SALON = { bookingApi:"https://script.google.com/macros/s/AKfycbycDzO3xlN1xW-5yP4nvJb_9AD_ZhTYQSEZSZlYGL38x4PUf9a751hgtEdoOCTPhBvJ/exec", whatsapp:"96897464675", openHour:10, closeHour:22, slotMinutes:30, daysAhead:14, closedWeekdays:[5] };
 /* National Day offers: set active to false when the offer ends */
 const NATIONAL_DAY = { endsOn:"2026-11-30", packageDiscount:0.30 };
@@ -526,7 +541,7 @@ ar:{
   gift_nav:"إهداء", gift_title:"أهدِ تجربة هيبة", gift_teaser:"اختر الخدمات التي تريد إهداءها، ونتواصل مع صاحب الهدية لحجز موعده.", gift_cta:"أرسل هدية", home:"الرئيسية",
   gift_intro:"اختر الخدمات، واكتب بياناتك وبيانات من تهديه، ثم أرسل الطلب عبر واتساب. بعد تأكيد الدفع نتواصل مع صاحب الهدية لحجز موعده.",
   g_s1:"اختر الخدمات المُهداة", g_s2:"بيانات الهدية", g_from:"من (المُهدي)", g_to:"إلى (المُهدى إليه)", g_msg:"رسالة الإهداء (اختياري)", g_msg_ph:"مثال: كل عام وأنت بخير",
-  g_s3:"الدفع والإيصال", g_pay:"<b>لتأكيد الهدية يجب إرسال إيصال الدفع.</b> أرفق صورة الإيصال هنا، أو أرسلها في محادثة واتساب بعد إرسال الطلب.",
+  g_s3:"الدفع والإيصال", g_pay:"<b>لتأكيد الهدية يجب إرسال إيصال الدفع.</b> حوّل المبلغ ثم أرفق صورة الإيصال هنا، أو أرسلها في محادثة واتساب بعد إرسال الطلب.", g_pay_how:"التحويل عبر رقم الهاتف", g_pay_name:"باسم", g_pay_amt:"المبلغ", copy_num:"نسخ الرقم", copied_num:"تم نسخ الرقم",
   g_attach:"إرفاق الإيصال", g_nofile:"لم يُرفق إيصال", g_summary:"ملخص الهدية", g_confirm:"فتح واتساب وإرسال طلب الهدية", g_note:"نرد عليك بتأكيد الهدية بعد استلام الإيصال.",
   g_sending:"جارٍ رفع الإيصال…", g_err_svc:"اختر خدمة واحدة على الأقل.", g_file_big:"حجم الملف كبير، اختر صورة أصغر من 8 ميغابايت.",
   g_msg_head:"طلب هدية — HAYBAH Grooming & Spa", g_code:"رقم الهدية", g_from_l:"من", g_to_l:"إلى", g_note_l:"رسالة الإهداء",
@@ -560,7 +575,7 @@ en:{
   gift_nav:"Gift", gift_title:"Gift a HAYBAH experience", gift_teaser:"Pick the services you'd like to gift, and we'll contact the recipient to book their visit.", gift_cta:"Send a gift", home:"Home",
   gift_intro:"Choose the services, add your details and the recipient's, then send the request on WhatsApp. Once payment is confirmed, we contact the recipient to book.",
   g_s1:"Choose the gifted services", g_s2:"Gift details", g_from:"From (you)", g_to:"To (recipient)", g_msg:"Gift message (optional)", g_msg_ph:"e.g. Happy birthday!",
-  g_s3:"Payment & receipt", g_pay:"<b>To confirm the gift, the payment receipt is required.</b> Attach the receipt here, or send it in the WhatsApp chat after sending the request.",
+  g_s3:"Payment & receipt", g_pay:"<b>To confirm the gift, the payment receipt is required.</b> Transfer the amount, then attach the receipt here or send it in the WhatsApp chat after sending the request.", g_pay_how:"Transfer by phone number", g_pay_name:"Account name", g_pay_amt:"Amount", copy_num:"Copy number", copied_num:"Number copied",
   g_attach:"Attach receipt", g_nofile:"No receipt attached", g_summary:"Gift summary", g_confirm:"Open WhatsApp &amp; send gift request", g_note:"We confirm the gift once we receive the receipt.",
   g_sending:"Uploading receipt…", g_err_svc:"Choose at least one service.", g_file_big:"The file is too large. Choose one under 8 MB.",
   g_msg_head:"Gift request — HAYBAH Grooming & Spa", g_code:"Gift number", g_from_l:"From", g_to_l:"To", g_note_l:"Gift message",
@@ -919,9 +934,13 @@ function renderGift(){
     sv.appendChild(ul);
   } else { const e=document.createElement("span"); e.className="empty"; e.textContent=t("no_svc"); sv.appendChild(e); }
   $("g-r-total").textContent=omr(list.reduce((a,s)=>a+s.p,0));
+  $("g-pay-amt").textContent=omr(list.reduce((a,s)=>a+s.p,0));
   $("g-submit").disabled=!list.length;
   $("g-fname").textContent = state.gfile ? state.gfile.name : t("g_nofile");
 }
+$("g-pay-phone").textContent=GIFT_PAY.phone.replace(/(\d{4})(\d{4})/,"$1 $2");
+$("g-pay-name").textContent=GIFT_PAY.name;
+$("g-copy").onclick=()=>{ navigator.clipboard.writeText(GIFT_PAY.phone).then(()=>toast(t("copied_num"))).catch(()=>{ const r=document.createRange(); r.selectNodeContents($("g-pay-phone")); const sl=getSelection(); sl.removeAllRanges(); sl.addRange(r); }); };
 $("g-file").addEventListener("change",e=>{
   const f=e.target.files[0]||null;
   if(f && f.size>8*1024*1024){ toast(t("g_file_big")); e.target.value=""; state.gfile=null; }
