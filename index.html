@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>HAYBAH Grooming & Spa | هيبة للعناية الرجالية</title>
+<meta name="description" content="HAYBAH Grooming & Spa — Men's grooming in Al Amerat, Muscat. Book online.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Ubuntu:wght@400;500;700&display=swap">
+<style>
+/* Layout: a sheet of light cement with charcoal type like the embossed logo. Hero, National Day offers, packages, then the booking counter with a live receipt. */
+:root{
+  --cement:#d5d3ce;     /* light cement ground */
+  --cement-2:#c9c6c0;   /* raised panels */
+  --seam:#aeaaa3;       /* hairlines */
+  --stone:#66625d;      /* secondary text */
+  --char:#262524;       /* dark cement, near black */
+  --char-2:#3b3936;
+  --on-char:#e8e6e1;
+  --warn:#8a3b26;
+  --om-red:#b3322b; --om-white:#f1efea; --om-green:#2e6a3b; /* National Day ribbon only */
+  --f-display:"Alexandria","IBM Plex Sans Arabic",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif;
+  --f-latin:"Ubuntu","Segoe UI",system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{background-color:var(--cement);color:var(--char);font-family:var(--f-body);font-size:16px;line-height:1.7;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.2 0 0 0 0 0.2 0 0 0 0 0.2 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1120px;margin-inline:auto}
+.wrap[dir="ltr"]{font-family:var(--f-latin)}
+a{color:inherit}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--char);outline-offset:3px}
+.latin{font-family:var(--f-latin);letter-spacing:.14em;text-transform:uppercase}
+.num{font-family:var(--f-latin);font-variant-numeric:tabular-nums}
+[dir="ltr"] h1,[dir="ltr"] h2,[dir="ltr"] h3{font-family:var(--f-latin)}
+
+/* header */
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:20px;border-bottom:1px solid var(--seam)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--char);direction:ltr}
+.brand svg{width:50px;height:50px;flex:none}
+.brand b{display:block;font-family:var(--f-latin);font-weight:700;font-size:21px;letter-spacing:.12em;line-height:1}
+.brand small{display:block;font-family:var(--f-latin);font-weight:500;font-size:10.5px;letter-spacing:.2em;margin-top:5px}
+.head-actions{display:flex;align-items:center;gap:10px}
+.lang{display:flex;border:1.5px solid var(--char);border-radius:999px;overflow:hidden;direction:ltr}
+.lang button{border:0;background:transparent;padding:6px 12px;cursor:pointer;font-size:13.5px;font-weight:600;line-height:1.4}
+.lang button[aria-pressed="true"]{background:var(--char);color:var(--on-char)}
+.lang .ar-l{font-family:var(--f-body)}
+.lang .en-l{font-family:var(--f-latin)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:1.5px solid var(--char);background:var(--char);color:var(--on-char);
+  font-weight:600;padding:12px 22px;border-radius:999px;cursor:pointer;text-decoration:none;transition:background .2s,color .2s}
+.btn:hover{background:var(--char-2);border-color:var(--char-2)}
+.btn.ghost{background:transparent;color:var(--char)}
+.btn.ghost:hover{background:var(--char);color:var(--on-char)}
+.btn[disabled]{opacity:.35;cursor:not-allowed}
+.btn.sm{padding:7px 15px;font-size:14px}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:48px;align-items:end;padding-block:60px 50px}
+.eyebrow{font-family:var(--f-latin);font-weight:500;font-size:12px;letter-spacing:.28em;color:var(--stone);text-transform:uppercase}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(34px,5.6vw,64px);line-height:1.2;margin:14px 0 0;text-wrap:balance}
+[dir="ltr"] h1{font-size:clamp(32px,5vw,58px);letter-spacing:-.01em}
+.hero p.sub{font-size:15px;color:var(--stone);margin:16px 0 0}
+.hero-side{border-inline-start:1.5px solid var(--char);padding-inline-start:26px;display:grid;gap:16px}
+.hero-side p{margin:0;color:var(--stone);max-width:38ch}
+.hero-side .row{display:flex;gap:10px;flex-wrap:wrap}
+.hours{display:grid;gap:2px;font-size:14px}
+.hours b{font-weight:600}
+
+section h2{font-family:var(--f-display);font-weight:600;font-size:clamp(24px,3vw,32px);margin:0;text-wrap:balance}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:26px}
+.sec-head .alt{font-size:13px;color:var(--stone)}
+.band{border-top:1px solid var(--seam);padding-block:56px}
+
+/* National Day */
+.nd{position:relative;background:var(--char);color:var(--on-char);border-radius:26px;padding:34px 30px 30px;overflow:hidden}
+.ribbon{position:absolute;inset:0 0 auto 0;height:8px;display:flex}
+.ribbon i{flex:1}
+.ribbon i:nth-child(1){background:var(--om-red)}.ribbon i:nth-child(2){background:var(--om-white)}.ribbon i:nth-child(3){background:var(--om-green)}
+.nd-top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:26px}
+.nd-top h2{font-size:clamp(26px,3.6vw,40px)}
+.nd-top p{margin:6px 0 0;opacity:.7;font-size:14.5px}
+.nd-disc{display:flex;align-items:center;gap:12px;border:1.5px solid var(--on-char);border-radius:999px;padding:8px 18px 8px 10px}
+[dir="rtl"] .nd-disc{padding:8px 10px 8px 18px}
+.nd-disc .pct{font-family:var(--f-latin);font-weight:700;font-size:28px;line-height:1;background:var(--on-char);color:var(--char);border-radius:999px;padding:8px 12px}
+.nd-disc span:last-child{font-weight:600;font-size:14.5px;line-height:1.35}
+.nd-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:14px}
+.nd-col{display:grid;gap:14px}
+.offer{border:1px solid rgba(232,230,225,.22);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.offer-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.offer h3{margin:0;font-family:var(--f-display);font-weight:600;font-size:17px}
+.offer .each{font-size:12.5px;opacity:.65}
+.offer-price{font-family:var(--f-latin);font-weight:700;font-size:44px;line-height:.9;white-space:nowrap}
+.offer-price small{font-family:var(--f-body);font-size:14px;font-weight:500;opacity:.7;margin-inline-start:4px}
+[dir="ltr"] .offer-price small{font-family:var(--f-latin)}
+.offer ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px 18px;flex:1}
+.offer li{display:flex;gap:8px;align-items:baseline;font-size:14.5px}
+.offer li::before{content:"";width:8px;height:8px;border:1.5px solid var(--on-char);border-radius:50%;flex:none;transform:translateY(-1px)}
+.offer .btn{background:var(--on-char);color:var(--char);border-color:var(--on-char);align-self:flex-start}
+.offer .btn:hover{background:var(--cement);border-color:var(--cement)}
+
+/* packages */
+.packs{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.pack{position:relative;display:flex;flex-direction:column;gap:14px;background:var(--cement-2);border:1.5px solid var(--char);border-radius:22px;padding:22px 20px 18px}
+.pack-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pack-head h3{margin:0;font-family:var(--f-display);font-weight:600;font-size:18px}
+.pack-head h3 .num{font-weight:700;font-size:22px}
+.tag-off{font-family:var(--f-latin);font-weight:700;font-size:12px;background:var(--char);color:var(--on-char);border-radius:999px;padding:3px 10px}
+.pack ul{margin:0;padding:0;list-style:none;display:grid;gap:6px;flex:1}
+.pack li{display:flex;gap:8px;align-items:baseline;font-size:14.5px}
+.pack li::before{content:"";width:9px;height:9px;border:1.5px solid var(--char);border-radius:50%;flex:none;transform:translateY(-1px)}
+.pack-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--seam);padding-top:14px}
+.price-big{font-family:var(--f-latin);font-weight:700;font-size:28px;line-height:1;display:grid;gap:3px}
+.price-big small{font-family:var(--f-body);font-size:13px;font-weight:500;color:var(--stone);margin-inline-start:4px}
+[dir="ltr"] .price-big small{font-family:var(--f-latin)}
+.was{font-family:var(--f-latin);font-size:13.5px;font-weight:500;color:var(--stone);text-decoration:line-through}
+
+/* booking */
+.book{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:32px;align-items:start}
+.steps{display:grid;gap:40px;min-width:0}
+.step-title{display:flex;align-items:center;gap:12px;margin:0 0 16px;font-family:var(--f-display);font-weight:600;font-size:18px;flex-wrap:wrap}
+.step-title .n{font-family:var(--f-latin);font-weight:500;font-size:13px;background:var(--char);color:var(--on-char);width:28px;height:28px;display:grid;place-items:center;border-radius:50%;flex:none}
+.step-title .hint{font-family:var(--f-body);font-size:13px;color:var(--stone);font-weight:400}
+[dir="ltr"] .step-title .hint{font-family:var(--f-latin)}
+
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tab{border:1.5px solid var(--char);background:transparent;border-radius:999px;padding:6px 16px;cursor:pointer;font-size:14.5px;font-weight:500}
+.tab[aria-selected="true"]{background:var(--char);color:var(--on-char)}
+.tab .c{font-family:var(--f-latin);font-size:12px;margin-inline-start:6px;opacity:.7}
+.tab.hot::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--om-red);margin-inline-end:7px;transform:translateY(-1px)}
+
+.svc-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.svc{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;text-align:start;background:var(--cement-2);border:1.5px solid transparent;border-radius:14px;padding:12px 14px;cursor:pointer;transition:border-color .2s}
+.svc:hover{border-color:var(--seam)}
+.svc .box{width:20px;height:20px;border:1.5px solid var(--char);border-radius:50%;display:grid;place-items:center}
+.svc[aria-pressed="true"]{border-color:var(--char)}
+.svc[aria-pressed="true"] .box{background:var(--char)}
+.svc[aria-pressed="true"] .box::after{content:"";width:5px;height:9px;border:solid var(--on-char);border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.svc .names{min-width:0}
+.svc .main{display:block;font-weight:500;font-size:15px}
+.svc .sub{display:block;font-size:12.5px;color:var(--stone)}
+.svc .sub.ltr{font-family:var(--f-latin);direction:ltr;text-align:right}
+[dir="ltr"] .svc .sub.ltr{text-align:left}
+.svc .sub.rtl{direction:rtl;text-align:left;font-family:var(--f-body)}
+[dir="rtl"] .svc .sub.rtl{text-align:right}
+.svc .pr{font-family:var(--f-latin);font-weight:700;font-size:17px;white-space:nowrap;text-align:end;line-height:1.25}
+.svc .pr small{font-size:11px;font-weight:500;color:var(--stone);margin-inline-start:3px}
+.svc .pr .was{display:block;font-size:12px}
+
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin}
+.day{flex:none;width:76px;padding:12px 0;text-align:center;background:var(--cement-2);border:1.5px solid transparent;border-radius:14px;cursor:pointer}
+.day:hover{border-color:var(--seam)}
+.day .w{display:block;font-size:12.5px;color:var(--stone)}
+.day .d{display:block;font-family:var(--f-latin);font-size:24px;font-weight:500;line-height:1.3;font-variant-numeric:tabular-nums}
+.day .m{display:block;font-family:var(--f-latin);font-size:10.5px;letter-spacing:.16em;color:var(--stone)}
+.day[aria-pressed="true"]{background:var(--char);color:var(--on-char)}
+.day[aria-pressed="true"] .w,.day[aria-pressed="true"] .m{color:var(--on-char);opacity:.8}
+
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px}
+.slot{padding:9px 0;text-align:center;font-family:var(--f-latin);font-variant-numeric:tabular-nums;font-size:14.5px;background:transparent;border:1.5px solid var(--seam);border-radius:999px;cursor:pointer;direction:ltr}
+.slot:hover:not([disabled]){border-color:var(--char)}
+.slot[aria-pressed="true"]{background:var(--char);border-color:var(--char);color:var(--on-char)}
+.slot[disabled]{color:var(--seam);cursor:not-allowed;text-decoration:line-through}
+.period{font-size:12.5px;color:var(--stone);margin:14px 0 8px}
+.period:first-child{margin-top:0}
+
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:grid;gap:6px;min-width:0}
+.field.full{grid-column:1/-1}
+.field label{font-size:13.5px;color:var(--stone)}
+.field input,.field textarea{background:var(--cement-2);border:1.5px solid transparent;border-radius:12px;padding:12px 14px;width:100%}
+.field input::placeholder,.field textarea::placeholder{color:var(--stone);opacity:.7}
+.field input:focus,.field textarea:focus{border-color:var(--char);outline:none}
+.field textarea{min-height:84px;resize:vertical}
+.field .err{font-size:12.5px;color:var(--warn);min-height:1em}
+#f-phone{direction:ltr;font-family:var(--f-latin);letter-spacing:.04em}
+[dir="rtl"] #f-phone{text-align:right}
+
+/* receipt */
+.receipt{position:sticky;top:calc(env(safe-area-inset-top,0px) + 20px);background:var(--char);color:var(--on-char);border-radius:22px;padding:24px;display:grid;gap:18px}
+.receipt h3{margin:0;font-family:var(--f-display);font-weight:600;font-size:18px}
+.receipt dl{margin:0;display:grid;gap:12px}
+.receipt dt{font-size:12.5px;opacity:.65}
+.receipt dd{margin:2px 0 0;font-weight:500}
+.receipt ul{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:4px}
+.receipt li{display:flex;justify-content:space-between;gap:10px;font-size:14px}
+.receipt li .num{opacity:.8;white-space:nowrap}
+.receipt .empty{opacity:.45}
+.total{display:flex;justify-content:space-between;align-items:baseline;border-top:1px dashed rgba(232,230,225,.3);padding-top:14px}
+.total span:first-child{font-size:14px;opacity:.75}
+.total .num{font-size:26px;font-weight:700}
+.total small{font-size:13px;opacity:.7;margin-inline-start:4px}
+.receipt .btn{width:100%;background:var(--on-char);color:var(--char);border-color:var(--on-char)}
+.receipt .btn:hover{background:var(--cement);border-color:var(--cement)}
+.receipt .btn.ghost{background:transparent;color:var(--on-char)}
+.receipt .note{font-size:12.5px;opacity:.65;margin:0}
+.sent{display:grid;gap:10px;font-size:14px}
+.sent pre{white-space:pre-wrap;background:rgba(255,255,255,.06);border-radius:10px;padding:12px;margin:0;font-family:var(--f-body);font-size:13px;max-height:200px;overflow:auto}
+
+/* contact */
+.contact{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.c-item{display:grid;gap:4px;align-content:start;padding:18px;border:1.5px solid var(--char);border-radius:18px;text-decoration:none;min-width:0}
+a.c-item:hover{background:var(--char);color:var(--on-char)}
+a.c-item:hover .c-lab{color:var(--on-char);opacity:.7}
+.c-lab{font-size:12.5px;color:var(--stone)}
+.c-val{font-weight:600;overflow-wrap:anywhere}
+.c-val.ltr{direction:ltr;font-family:var(--f-latin);font-weight:500}
+[dir="rtl"] .c-val.ltr{text-align:right}
+.c-item svg{width:22px;height:22px;margin-bottom:6px}
+
+footer{border-top:1px solid var(--seam);padding-block:26px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--stone);font-size:13.5px}
+
+.toast{position:fixed;inset:auto 0 0 0;padding:14px max(16px,env(safe-area-inset-left,0px)) calc(14px + env(safe-area-inset-bottom,0px));background:var(--char);color:var(--on-char);text-align:center;font-weight:600;transform:translateY(100%);transition:transform .3s;z-index:20}
+.toast.show{transform:none}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;gap:28px;padding-block:44px 40px}
+  .hero-side{border-inline-start:0;padding-inline-start:0;border-top:1.5px solid var(--char);padding-top:22px}
+  .book,.nd-grid{grid-template-columns:1fr}
+  .receipt{position:static}
+  .contact{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  .svc-list,.fields{grid-template-columns:1fr}
+  .contact{grid-template-columns:1fr}
+  .nd{padding:30px 18px 20px}
+  .brand small{display:none}
+  .brand b{font-size:18px}
+  .brand svg{width:42px;height:42px}
+  header .btn{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+</head>
+<body>
+
+<div class="wrap" id="app" dir="rtl" lang="ar">
+  <header>
+    <a class="brand" href="#top" aria-label="HAYBAH Grooming & Spa">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M43 9.5 C27 6 10 17 10.5 35 C11 49 22 57.5 35 57" fill="none" stroke="var(--char)" stroke-width="4.2" stroke-linecap="round"/>
+        <path d="M45.5 9.5 C53.5 13.5 57.5 22 57.5 32 C57.5 43 51 51.5 42 55.5" fill="none" stroke="var(--char)" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="12.5" cy="16" r="3.2" fill="var(--char)"/><circle cx="17.5" cy="9.5" r="2.2" fill="var(--char)"/>
+        <circle cx="11" cy="8.5" r="1.5" fill="var(--char)"/><circle cx="21.5" cy="15" r="1.1" fill="var(--char)"/>
+      </svg>
+      <span><b>HAYBAH</b><small>GROOMING &amp; SPA</small></span>
+    </a>
+    <div class="head-actions">
+      <div class="lang" role="group" aria-label="Language / اللغة">
+        <button type="button" id="lang-ar" class="ar-l">عربي</button>
+        <button type="button" id="lang-en" class="en-l">EN</button>
+      </div>
+      <a class="btn sm" href="#booking" data-i="book_now"></a>
+    </div>
+  </header>
+
+  <section class="hero" id="top">
+    <div>
+      <div class="eyebrow">Men's Grooming &amp; Spa · Al Amerat</div>
+      <h1 data-i="h1"></h1>
+      <p class="sub" data-i="h1_sub"></p>
+    </div>
+    <div class="hero-side">
+      <p data-i="hero_p"></p>
+      <div class="hours">
+        <span><b data-i="sat_thu"></b> · <span class="num">10 AM – 10 PM</span></span>
+        <span><b data-i="fri"></b> · <span data-i="closed"></span></span>
+      </div>
+      <div class="row">
+        <a class="btn" href="#booking" data-i="start"></a>
+        <a class="btn ghost" href="#offers" id="see-offers" data-i="see_offers"></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="offers" class="band" hidden>
+    <div class="nd">
+      <div class="ribbon" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="nd-top">
+        <div>
+          <h2 data-i="nd_title"></h2>
+          <p data-i="nd_sub"></p>
+        </div>
+        <div class="nd-disc"><span class="pct">30%</span><span data-i="nd_disc"></span></div>
+      </div>
+      <div class="nd-grid" id="nd-grid"></div>
+    </div>
+  </section>
+
+  <section class="band" id="packages">
+    <div class="sec-head">
+      <h2 data-i="packs_title"></h2>
+      <span class="alt" data-i="packs_alt"></span>
+    </div>
+    <div class="packs" id="packs"></div>
+  </section>
+
+  <section class="band" id="booking">
+    <div class="sec-head">
+      <h2 data-i="book_title"></h2>
+      <span class="alt" data-i="book_alt"></span>
+    </div>
+
+    <form class="book" id="book-form" novalidate>
+      <div class="steps">
+        <div>
+          <h3 class="step-title"><span class="n">1</span><span data-i="s1"></span> <span class="hint" data-i="s1_hint"></span></h3>
+          <div class="tabs" id="tabs" role="tablist"></div>
+          <div class="svc-list" id="svc-list"></div>
+        </div>
+        <div>
+          <h3 class="step-title"><span class="n">2</span><span data-i="s2"></span> <span class="hint" data-i="s2_hint"></span></h3>
+          <div class="days" id="days" role="group"></div>
+        </div>
+        <div>
+          <h3 class="step-title"><span class="n">3</span><span data-i="s3"></span></h3>
+          <div id="slots"></div>
+        </div>
+        <div>
+          <h3 class="step-title"><span class="n">4</span><span data-i="s4"></span></h3>
+          <div class="fields">
+            <div class="field">
+              <label for="f-name" data-i="name"></label>
+              <input id="f-name" autocomplete="name">
+              <span class="err" id="e-name"></span>
+            </div>
+            <div class="field">
+              <label for="f-phone" data-i="phone"></label>
+              <input id="f-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+968 9X XX XX XX">
+              <span class="err" id="e-phone"></span>
+            </div>
+            <div class="field full">
+              <label for="f-notes" data-i="notes"></label>
+              <textarea id="f-notes"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="receipt" aria-live="polite">
+        <h3 data-i="summary"></h3>
+        <dl>
+          <div><dt data-i="services"></dt><dd id="r-svc"></dd></div>
+          <div><dt data-i="day"></dt><dd id="r-day"></dd></div>
+          <div><dt data-i="time"></dt><dd id="r-time"></dd></div>
+        </dl>
+        <div class="total"><span data-i="total"></span><span><span class="num" id="r-total">0</span><small data-i="cur"></small></span></div>
+        <button class="btn" type="submit" id="submit" data-i="confirm"></button>
+        <div class="sent" id="sent" hidden></div>
+        <p class="note" data-i="note"></p>
+      </aside>
+    </form>
+  </section>
+
+  <section class="band" id="contact">
+    <div class="sec-head">
+      <h2 data-i="contact"></h2>
+      <span class="alt" data-i="contact_alt"></span>
+    </div>
+    <div class="contact">
+      <a class="c-item" href="https://wa.me/96897464675" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/><path d="M9 9.5c.3 1.8 2.7 4.3 4.6 4.6l1-1 1.9.8v1.4c-3.6.6-8.5-4.3-7.9-7.9H10l.8 1.9z" stroke-width="1.2"/></svg>
+        <span class="c-lab" data-i="wa"></span><span class="c-val ltr">+968 9746 4675</span>
+      </a>
+      <a class="c-item" href="https://www.instagram.com/haybah.oman/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".9" fill="currentColor"/></svg>
+        <span class="c-lab" data-i="ig"></span><span class="c-val ltr">@haybah.oman</span>
+      </a>
+      <a class="c-item" href="https://maps.app.goo.gl/buFXv7QqGTRkZQHF7?g_st=ic" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>
+        <span class="c-lab" data-i="loc"></span><span class="c-val" data-i="loc_val"></span>
+      </a>
+      <div class="c-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+        <span class="c-lab" data-i="hours"></span><span class="c-val" data-i="hours_val"></span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span data-i="foot_name"></span>
+    <span data-i="foot_cur"></span>
+  </footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ===== Salon settings ===== */
+const SALON = { whatsapp:"96897464675", openHour:10, closeHour:22, slotMinutes:30, daysAhead:14, closedWeekdays:[5] };
+/* National Day offers: set active to false when the offer ends */
+const NATIONAL_DAY = { endsOn:"2026-11-30", packageDiscount:0.30 };
+NATIONAL_DAY.active = new Date() <= new Date(NATIONAL_DAY.endsOn+"T23:59:59+04:00");
+
+const T = {
+ar:{
+  book_now:"احجز موعدك", h1:"الاهتمام بالتفاصيل<br>يصنع الفرق.", h1_sub:"Attention to detail makes the difference.",
+  hero_p:"حلاقة، عناية بالبشرة، أظافر، وحمّام مغربي في مكان واحد. اختر خدمتك والوقت المناسب، ونؤكد حجزك عبر واتساب.",
+  sat_thu:"السبت – الخميس", fri:"الجمعة", closed:"مغلق", start:"ابدأ الحجز", see_offers:"عروض العيد الوطني",
+  nd_title:"عروض العيد الوطني العُماني", nd_sub:"أسعار خاصة على خدمات العناية، طوال شهر نوفمبر حتى 30 نوفمبر.",
+  nd_disc:"خصم على جميع<br>الباقات", nd_personal:"عروض العناية الشخصية", nd_each:"سعر كل خدمة",
+  nd_packs:"عروض الباقات", nd_face:"عروض تنظيف البشرة", book_offer:"احجز العرض",
+  packs_title:"باقات العروض", packs_alt:"Packages", package:"الباقة", book_it:"احجزها",
+  book_title:"احجز موعدك", book_alt:"Book an appointment",
+  s1:"اختر الخدمة", s1_hint:"يمكنك اختيار أكثر من خدمة أو باقة", s2:"اختر اليوم", s2_hint:"الجمعة مغلق", s3:"اختر الوقت", s4:"بياناتك",
+  name:"الاسم", phone:"رقم الهاتف", notes:"ملاحظات (اختياري)", name_ph:"اسمك الكريم", notes_ph:"مثال: عدد الأشخاص، أو طلب خاص",
+  summary:"ملخص الحجز", services:"الخدمات", day:"اليوم", time:"الوقت", total:"الإجمالي", cur:"ر.ع",
+  confirm:"تأكيد الحجز عبر واتساب", note:"يصلنا طلبك على واتساب ونرد عليك بتأكيد الموعد.",
+  contact:"تواصل معنا", contact_alt:"Visit us", wa:"واتساب", ig:"إنستغرام", loc:"الموقع · افتح في الخرائط", loc_val:"مسقط، العامرات",
+  hours:"الدوام", hours_val:"السبت – الخميس، 10 ص – 10 م<br>الجمعة مغلق",
+  foot_name:"HAYBAH Grooming &amp; Spa · هيبة للعناية الرجالية", foot_cur:"جميع الأسعار بالريال العُماني",
+  no_svc:"لم تختر خدمة بعد", pick_time:"اختر وقتاً", today:"اليوم", morning:"صباحاً", afternoon:"بعد الظهر", evening:"مساءً",
+  err_name:"اكتب اسمك حتى نسجّل الحجز باسمك.", err_phone:"اكتب رقماً صحيحاً للتواصل معك.",
+  ready:"طلبك جاهز. اضغط الزر لفتح واتساب وإرساله.", open_wa:"فتح واتساب وإرسال الطلب", copy:"نسخ نص الطلب", copied:"تم نسخ الطلب", select_text:"حدّد النص وانسخه",
+  msg_head:"طلب حجز — HAYBAH Grooming & Spa", msg_name:"الاسم", msg_phone:"الهاتف", nd_tab:"العيد الوطني", nd_tag:"عرض العيد الوطني",
+  cats:{hair:"الشعر", face:"الوجه", nails:"الأظافر", body:"الجسم", packs:"الباقات", nd:"العيد الوطني"},
+  days:["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"],
+  months:["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"]
+},
+en:{
+  book_now:"Book now", h1:"Attention to detail<br>makes the difference.", h1_sub:"الاهتمام بالتفاصيل يصنع الفرق.",
+  hero_p:"Haircuts, skin care, nails and Moroccan bath under one roof. Pick your service and time, and we'll confirm your booking on WhatsApp.",
+  sat_thu:"Saturday – Thursday", fri:"Friday", closed:"Closed", start:"Start booking", see_offers:"National Day offers",
+  nd_title:"Oman National Day Offers", nd_sub:"Special prices on grooming services all November, until 30 November.",
+  nd_disc:"off all<br>packages", nd_personal:"Personal care offers", nd_each:"Price per service",
+  nd_packs:"Package offer", nd_face:"Facial offer", book_offer:"Book this offer",
+  packs_title:"Packages", packs_alt:"باقات العروض", package:"Package", book_it:"Book it",
+  book_title:"Book an appointment", book_alt:"احجز موعدك",
+  s1:"Choose your services", s1_hint:"Pick one or more services or packages", s2:"Choose a day", s2_hint:"Closed on Fridays", s3:"Choose a time", s4:"Your details",
+  name:"Name", phone:"Phone number", notes:"Notes (optional)", name_ph:"Your name", notes_ph:"e.g. number of people, or a special request",
+  summary:"Booking summary", services:"Services", day:"Day", time:"Time", total:"Total", cur:"OMR",
+  confirm:"Confirm on WhatsApp", note:"Your request reaches us on WhatsApp and we reply to confirm your appointment.",
+  contact:"Contact us", contact_alt:"تواصل معنا", wa:"WhatsApp", ig:"Instagram", loc:"Location · open in Maps", loc_val:"Al Amerat, Muscat",
+  hours:"Opening hours", hours_val:"Sat – Thu, 10 AM – 10 PM<br>Friday closed",
+  foot_name:"HAYBAH Grooming &amp; Spa · Al Amerat, Muscat", foot_cur:"All prices in Omani Rial",
+  no_svc:"No service selected yet", pick_time:"Pick a time", today:"Today", morning:"Morning", afternoon:"Afternoon", evening:"Evening",
+  err_name:"Enter your name so we can book under it.", err_phone:"Enter a valid phone number so we can reach you.",
+  ready:"Your request is ready. Tap the button to open WhatsApp and send it.", open_wa:"Open WhatsApp and send", copy:"Copy request text", copied:"Request copied", select_text:"Select the text and copy it",
+  msg_head:"Booking request — HAYBAH Grooming & Spa", msg_name:"Name", msg_phone:"Phone", nd_tab:"National Day", nd_tag:"National Day offer",
+  cats:{hair:"Hair", face:"Face", nails:"Nails", body:"Body", packs:"Packages", nd:"National Day"},
+  days:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+  months:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+}};
+
+const CATS = [
+  {key:"hair", items:[
+    {id:"hc", ar:"قص شعر", en:"Haircut", p:2},
+    {id:"bt", ar:"حلاقة اللحية", en:"Beard Trim", p:1.5},
+    {id:"hsp", ar:"هيد سبا مع بروتين", en:"Head Spa with Protein Treatment", p:30},
+    {id:"hen", ar:"حناء للشعر واللحية", en:"Hair & Beard Henna", p:4},
+    {id:"col", ar:"صبغة للشعر واللحية", en:"Hair & Beard Coloring", p:5},
+    {id:"thr", ar:"إزالة شعر الوجه بالخيط", en:"Facial Threading", p:2},
+    {id:"hot", ar:"حمام زيت", en:"Hot Oil Treatment", p:5}]},
+  {key:"face", items:[
+    {id:"ef", ar:"تنظيف بشرة سريع", en:"Express Facial", p:8},
+    {id:"dfc", ar:"تنظيف بشرة عميق", en:"Deep Facial Cleansing", p:15},
+    {id:"hyd", ar:"هيدرافيشل", en:"HydraFacial", p:20},
+    {id:"ghyd", ar:"جولد هيدرافيشل", en:"Gold HydraFacial", p:30}]},
+  {key:"nails", items:[
+    {id:"man", ar:"مانيكير", en:"Manicure", p:6},
+    {id:"ped", ar:"باديكير", en:"Pedicure", p:8},
+    {id:"mp", ar:"مانيكير وباديكير", en:"Manicure & Pedicure", p:12},
+    {id:"fsp", ar:"سبا القدمين مع باديكير", en:"Foot Spa with Pedicure", p:15},
+    {id:"enc", ar:"باقة الأظافر السريعة", en:"Express Nail Care Package", p:8}]},
+  {key:"body", items:[
+    {id:"cmb", ar:"حمام مغربي كلاسيكي", en:"Classic Moroccan Bath", p:10},
+    {id:"rmb", ar:"الحمام المغربي الملكي", en:"Royal Moroccan Bath", p:15},
+    {id:"ref", ar:"ريفلكسولوجي القدمين", en:"Foot Reflexology", p:8}]}
+];
+const PK = { ef:["تنظيف بشرة سريع","Express Facial"], mb:["حمام مغربي","Moroccan Bath"], mp:["مانيكير وباديكير","Manicure & Pedicure"],
+  rf:["ريفلكسولوجي للقدمين","Foot Reflexology"], hc:["قص شعر","Haircut"], bs:["حلاقة لحية","Beard Trim"], bsh:["تشذيب اللحية","Beard Shaping"],
+  bp:["علاج بروتين برازيلي","Brazilian Protein Treatment"], fc:["تنظيف البشرة","Facial Cleansing"] };
+const PACKS = [
+  {id:"pA", letter:"A", base:35, items:["ef","mb","mp","rf"]},
+  {id:"pB", letter:"B", base:25, items:["ef","mp","rf","hc","bs"]},
+  {id:"pC", letter:"C", base:25, items:["hc","bsh","bp"]},
+  {id:"pD", letter:"D", base:15, items:["hc","bsh","fc"]},
+  {id:"pE", letter:"E", base:30, items:["hc","bsh","mb","mp","fc"]}
+];
+const ND_GROUPS = [
+  {key:"personal", title:"nd_personal", each:true, p:6, items:[
+    {id:"nd1", ar:"تنظيف الوجه العادي", en:"Normal Facial"},
+    {id:"nd2", ar:"تنظيف الوجه العميق", en:"Deep Facial Cleansing"},
+    {id:"nd3", ar:"تنظيف المسام", en:"Pore Cleansing"},
+    {id:"nd4", ar:"مانيكير", en:"Manicure"},
+    {id:"nd5", ar:"باديكير", en:"Pedicure"},
+    {id:"nd6", ar:"حمّام مغربي", en:"Moroccan Bath"},
+    {id:"nd7", ar:"تهذيب الشعر واللحية مع حمام زيت ساخن", en:"Hair & Beard Trim with Hot Oil Treatment"},
+    {id:"nd8", ar:"سبا القدمين", en:"Foot Spa"},
+    {id:"nd9", ar:"سبا الرأس", en:"Head Spa"}]},
+  {key:"pkg", title:"nd_packs", p:8, items:[{id:"nd10", ar:"مانيكير + باديكير", en:"Manicure + Pedicure"}]},
+  {key:"face", title:"nd_face", p:12, items:[{id:"nd11", ar:"هايدرا فيشل", en:"HydraFacial"}]}
+];
+
+/* derived catalogue */
+const packPrice = k => NATIONAL_DAY.active ? Math.round(k.base*(1-NATIONAL_DAY.packageDiscount)*1000)/1000 : k.base;
+const PACK_ITEMS = PACKS.map(k=>({id:k.id, pack:k, p:packPrice(k), was:NATIONAL_DAY.active?k.base:null}));
+const ND_ITEMS = ND_GROUPS.flatMap(g=>g.items.map(s=>({...s, p:g.p, nd:true})));
+const TABS = [
+  ...(NATIONAL_DAY.active ? [{key:"nd", items:ND_ITEMS}] : []),
+  ...CATS, {key:"packs", items:PACK_ITEMS}
+];
+const ALL = TABS.flatMap(t=>t.items);
+
+let LANG = "ar";
+try{ const s=localStorage.getItem("haybah-lang"); if(s==="en"||s==="ar") LANG=s; }catch(e){}
+const state = { svc:new Set(), tab:TABS[0].key, day:null, time:null };
+const $ = id => document.getElementById(id);
+const t = k => T[LANG][k];
+const pad = n => String(n).padStart(2,"0");
+const key = d => d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const fmt12 = m => { const h=Math.floor(m/60), mm=m%60, h12=((h+11)%12)+1; return h12+":"+pad(mm)+(h<12?" AM":" PM"); };
+const omr = v => String(parseFloat(v.toFixed(3)));
+const reduceMotion = () => matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+function nameOf(s){
+  if(s.pack) return t("package")+" "+s.pack.letter;
+  return LANG==="ar" ? s.ar : s.en;
+}
+const packList = k => k.items.map(i=>PK[i][LANG==="ar"?0:1]);
+
+/* ----- static text & language ----- */
+function applyLang(){
+  const app=$("app");
+  app.dir = LANG==="ar" ? "rtl" : "ltr"; app.lang = LANG;
+  document.documentElement.lang = LANG;
+  document.querySelectorAll("[data-i]").forEach(el=>{ el.innerHTML = t(el.dataset.i); });
+  $("f-name").placeholder=t("name_ph"); $("f-notes").placeholder=t("notes_ph");
+  $("lang-ar").setAttribute("aria-pressed", LANG==="ar"); $("lang-en").setAttribute("aria-pressed", LANG==="en");
+  $("days").setAttribute("aria-label", t("s2"));
+  ["e-name","e-phone"].forEach(id=>$(id).textContent="");
+  renderOffers(); renderPacks(); renderTabs(); renderDays(); renderSlots(); renderReceipt();
+}
+function setLang(l){ LANG=l; try{localStorage.setItem("haybah-lang",l);}catch(e){} applyLang(); }
+$("lang-ar").onclick=()=>setLang("ar"); $("lang-en").onclick=()=>setLang("en");
+
+function goBook(tab){ state.tab=tab; renderTabs(); renderReceipt(); $("booking").scrollIntoView({behavior:reduceMotion()?"auto":"smooth"}); }
+
+/* ----- National Day ----- */
+function renderOffers(){
+  $("offers").hidden = !NATIONAL_DAY.active;
+  $("see-offers").hidden = !NATIONAL_DAY.active;
+  if(!NATIONAL_DAY.active) return;
+  const grid=$("nd-grid"); grid.innerHTML="";
+  const mk = g => {
+    const el=document.createElement("div"); el.className="offer";
+    el.innerHTML='<div class="offer-head"><div><h3></h3><div class="each"></div></div><div class="offer-price"><span></span><small></small></div></div><ul></ul><button type="button" class="btn sm"></button>';
+    el.querySelector("h3").textContent=t(g.title);
+    el.querySelector(".each").textContent=g.each?t("nd_each"):"";
+    el.querySelector(".offer-price span").textContent=g.p;
+    el.querySelector(".offer-price small").textContent=t("cur");
+    const ul=el.querySelector("ul"); g.items.forEach(s=>{const li=document.createElement("li"); li.textContent=nameOf(s); ul.appendChild(li);});
+    const b=el.querySelector(".btn"); b.id="nd-book-"+g.key; b.textContent=t("book_offer");
+    b.onclick=()=>{ if(g.items.length===1) state.svc.add(g.items[0].id); goBook("nd"); };
+    return el;
+  };
+  const [personal, pkg, face] = ND_GROUPS;
+  const col=document.createElement("div"); col.className="nd-col"; col.append(mk(pkg), mk(face));
+  grid.append(mk(personal), col);
+}
+
+/* ----- packages ----- */
+function renderPacks(){
+  const box=$("packs"); box.innerHTML="";
+  PACK_ITEMS.forEach(s=>{
+    const k=s.pack;
+    const el=document.createElement("article"); el.className="pack";
+    el.innerHTML='<div class="pack-head"><h3><span class="lbl"></span> <span class="num"></span></h3></div><ul></ul><div class="pack-foot"><span class="price-big"></span><button type="button" class="btn sm"></button></div>';
+    el.querySelector(".lbl").textContent=t("package");
+    el.querySelector("h3 .num").textContent=k.letter;
+    if(s.was){ const tg=document.createElement("span"); tg.className="tag-off"; tg.textContent="−30%"; el.querySelector(".pack-head").appendChild(tg); }
+    const ul=el.querySelector("ul"); packList(k).forEach(x=>{const li=document.createElement("li"); li.textContent=x; ul.appendChild(li);});
+    const pb=el.querySelector(".price-big");
+    if(s.was){ const w=document.createElement("span"); w.className="was"; w.textContent=s.was+" "+t("cur"); pb.appendChild(w); }
+    const now=document.createElement("span"); now.textContent=omr(s.p); const sm=document.createElement("small"); sm.textContent=t("cur"); now.appendChild(sm); pb.appendChild(now);
+    const b=el.querySelector(".btn"); b.id="pack-"+k.id; b.textContent=t("book_it");
+    b.onclick=()=>{ state.svc.add(s.id); goBook("packs"); };
+    box.appendChild(el);
+  });
+}
+
+/* ----- service picker ----- */
+function renderTabs(){
+  const box=$("tabs"); box.innerHTML="";
+  TABS.forEach(c=>{
+    const b=document.createElement("button"); b.type="button"; b.className="tab"+(c.key==="nd"?" hot":""); b.id="tab-"+c.key; b.setAttribute("role","tab");
+    b.setAttribute("aria-selected", state.tab===c.key);
+    b.append(t("cats")[c.key]);
+    const n=c.items.filter(s=>state.svc.has(s.id)).length;
+    if(n){ const s=document.createElement("span"); s.className="c"; s.textContent="("+n+")"; b.appendChild(s); }
+    b.onclick=()=>{ state.tab=c.key; renderTabs(); };
+    box.appendChild(b);
+  });
+  renderList();
+}
+function renderList(){
+  const box=$("svc-list"); box.innerHTML="";
+  TABS.find(c=>c.key===state.tab).items.forEach(s=>{
+    const b=document.createElement("button"); b.type="button"; b.className="svc"; b.id="svc-"+s.id;
+    b.setAttribute("aria-pressed", state.svc.has(s.id));
+    b.innerHTML='<span class="box"></span><span class="names"><span class="main"></span><span class="sub"></span></span><span class="pr"></span>';
+    b.querySelector(".main").textContent=nameOf(s);
+    const sub=b.querySelector(".sub");
+    if(s.pack){ sub.textContent=packList(s.pack).join(LANG==="ar"?"، ":", "); }
+    else if(LANG==="ar"){ sub.textContent=s.en; sub.classList.add("ltr"); }
+    else { sub.textContent=s.ar; sub.classList.add("rtl"); }
+    const pr=b.querySelector(".pr");
+    if(s.was){ const w=document.createElement("span"); w.className="was"; w.textContent=s.was; pr.appendChild(w); }
+    pr.append(omr(s.p)); const sm=document.createElement("small"); sm.textContent=t("cur"); pr.appendChild(sm);
+    b.onclick=()=>{ state.svc.has(s.id)?state.svc.delete(s.id):state.svc.add(s.id); renderTabs(); renderReceipt(); };
+    box.appendChild(b);
+  });
+}
+
+/* ----- days & times ----- */
+function slotsFor(d){
+  const now=new Date(), today=key(d)===key(now), nowMin=now.getHours()*60+now.getMinutes(), out=[];
+  for(let m=SALON.openHour*60;m<SALON.closeHour*60;m+=SALON.slotMinutes) out.push({m, past: today && m<=nowMin+30});
+  return out;
+}
+function availableDays(){
+  const out=[], now=new Date();
+  for(let i=0;out.length<SALON.daysAhead && i<60;i++){
+    const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()+i);
+    if(SALON.closedWeekdays.includes(d.getDay())) continue;
+    if(i===0 && slotsFor(d).every(s=>s.past)) continue;
+    out.push(d);
+  }
+  return out;
+}
+function renderDays(){
+  const box=$("days"); box.innerHTML="";
+  const days=availableDays();
+  if(!state.day && days[0]) state.day=key(days[0]);
+  days.forEach(d=>{
+    const b=document.createElement("button"); b.type="button"; b.className="day"; b.id="day-"+key(d);
+    b.setAttribute("aria-pressed", state.day===key(d));
+    b.innerHTML='<span class="w"></span><span class="d"></span><span class="m"></span>';
+    b.querySelector(".w").textContent = key(d)===key(new Date()) ? t("today") : t("days")[d.getDay()];
+    b.querySelector(".d").textContent=d.getDate();
+    b.querySelector(".m").textContent=T.en.months[d.getMonth()].toUpperCase();
+    b.onclick=()=>{ state.day=key(d); state.time=null; renderDays(); renderSlots(); renderReceipt(); };
+    box.appendChild(b);
+  });
+}
+function renderSlots(){
+  const box=$("slots"); box.innerHTML="";
+  if(!state.day) return;
+  const [y,mo,da]=state.day.split("-").map(Number);
+  const list=slotsFor(new Date(y,mo-1,da));
+  [["morning",0,720],["afternoon",720,1020],["evening",1020,1440]].forEach(([k,a,b])=>{
+    const items=list.filter(s=>s.m>=a&&s.m<b); if(!items.length) return;
+    const p=document.createElement("div"); p.className="period"; p.textContent=t(k);
+    const grid=document.createElement("div"); grid.className="slots";
+    items.forEach(s=>{
+      const btn=document.createElement("button"); btn.type="button"; btn.className="slot"; btn.id="slot-"+s.m;
+      btn.textContent=fmt12(s.m); btn.disabled=s.past;
+      btn.setAttribute("aria-pressed", state.time===s.m);
+      btn.onclick=()=>{ state.time=s.m; renderSlots(); renderReceipt(); };
+      grid.appendChild(btn);
+    });
+    box.append(p,grid);
+  });
+}
+
+/* ----- receipt ----- */
+function dayLabel(){
+  if(!state.day) return "";
+  const [y,mo,da]=state.day.split("-").map(Number); const d=new Date(y,mo-1,da);
+  const full = LANG==="ar" ? t("days")[d.getDay()] : ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][d.getDay()];
+  return LANG==="ar" ? full+" "+da+" "+t("months")[d.getMonth()] : full+", "+da+" "+t("months")[d.getMonth()];
+}
+const chosen = () => ALL.filter(s=>state.svc.has(s.id));
+function renderReceipt(){
+  const sv=$("r-svc"); sv.innerHTML="";
+  const list=chosen();
+  if(list.length){
+    const ul=document.createElement("ul");
+    list.forEach(s=>{ const li=document.createElement("li"); const a=document.createElement("span"); a.textContent=nameOf(s)+(s.nd?" ★":""); const b=document.createElement("span"); b.className="num"; b.textContent=omr(s.p); li.append(a,b); ul.appendChild(li); });
+    sv.appendChild(ul);
+  } else { const e=document.createElement("span"); e.className="empty"; e.textContent=t("no_svc"); sv.appendChild(e); }
+  const rd=$("r-day"); rd.textContent = state.day ? dayLabel() : "—";
+  const rt=$("r-time");
+  if(state.time!=null){ rt.textContent=fmt12(state.time); rt.style.direction="ltr"; rt.style.textAlign=LANG==="ar"?"right":"left"; }
+  else { rt.innerHTML=""; const e=document.createElement("span"); e.className="empty"; e.textContent=t("pick_time"); rt.appendChild(e); }
+  $("r-total").textContent=omr(list.reduce((a,s)=>a+s.p,0));
+  $("submit").disabled = !(list.length && state.day && state.time!=null);
+  $("sent").hidden=true;
+}
+
+/* ----- submit ----- */
+function toast(m){ const el=$("toast"); el.textContent=m; el.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(()=>el.classList.remove("show"),2600); }
+$("book-form").addEventListener("submit",e=>{
+  e.preventDefault();
+  const name=$("f-name").value.trim(), phone=$("f-phone").value.trim(), notes=$("f-notes").value.trim();
+  let ok=true;
+  $("e-name").textContent = name ? "" : (ok=false, t("err_name"));
+  $("e-phone").textContent = /^[+\d][\d\s-]{6,}$/.test(phone) ? "" : (ok=false, t("err_phone"));
+  if(!ok){ (name?$("f-phone"):$("f-name")).focus(); return; }
+  const list=chosen(), cur=t("cur"), sep=LANG==="ar"?"، ":", ";
+  const lines=list.map(s=>"• "+nameOf(s)+(s.pack?" ("+packList(s.pack).join(sep)+")":"")+(s.nd?" — "+t("nd_tag"):"")+" — "+omr(s.p)+" "+cur).join("\n");
+  const total=omr(list.reduce((a,s)=>a+s.p,0));
+  const msg=t("msg_head")+"\n\n"+t("msg_name")+": "+name+"\n"+t("msg_phone")+": "+phone+"\n"+t("day")+": "+dayLabel()+"\n"+t("time")+": "+fmt12(state.time)
+    +"\n\n"+t("services")+":\n"+lines+"\n\n"+t("total")+": "+total+" "+cur+(notes?"\n\n"+t("notes").replace(/ \(.*\)/,"")+": "+notes:"");
+  const sent=$("sent"); sent.hidden=false; sent.innerHTML="";
+  const p=document.createElement("div"); p.textContent=t("ready");
+  const a=document.createElement("a"); a.className="btn"; a.target="_blank"; a.rel="noopener";
+  a.href="https://wa.me/"+SALON.whatsapp+"?text="+encodeURIComponent(msg); a.textContent=t("open_wa");
+  const c=document.createElement("button"); c.type="button"; c.className="btn ghost"; c.textContent=t("copy");
+  const pre=document.createElement("pre"); pre.textContent=msg; pre.dir=LANG==="ar"?"rtl":"ltr";
+  c.onclick=()=>{ navigator.clipboard.writeText(msg).then(()=>toast(t("copied"))).catch(()=>{ const r=document.createRange(); r.selectNodeContents(pre); const s=getSelection(); s.removeAllRanges(); s.addRange(r); toast(t("select_text")); }); };
+  sent.append(p,a,c,pre);
+});
+
+applyLang();
+</script>
+
+</body>
+</html>
