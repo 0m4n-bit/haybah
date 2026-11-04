@@ -120,7 +120,7 @@ section h2{font-family:var(--f-display);font-weight:600;font-size:clamp(24px,3vw
 /* booking */
 .book{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:32px;align-items:start}
 .steps{display:grid;gap:40px;min-width:0}
-.steps>div{min-width:0}
+.steps>div{min-width:0;scroll-margin-top:calc(env(safe-area-inset-top,0px) + 16px)}
 .step-title{display:flex;align-items:center;gap:12px;margin:0 0 16px;font-family:var(--f-display);font-weight:600;font-size:18px;flex-wrap:wrap}
 .step-title .n{font-family:var(--f-latin);font-weight:500;font-size:13px;background:var(--char);color:var(--on-char);width:28px;height:28px;display:grid;place-items:center;border-radius:50%;flex:none}
 .step-title .hint{font-family:var(--f-body);font-size:13px;color:var(--stone);font-weight:400}
@@ -306,11 +306,11 @@ footer{border-top:1px solid var(--seam);padding-block:26px;display:flex;justify-
           <h3 class="step-title"><span class="n">2</span><span data-i="s2"></span> <span class="hint" data-i="s2_hint"></span></h3>
           <div class="days" id="days" role="group"></div>
         </div>
-        <div>
+        <div id="step-time">
           <h3 class="step-title"><span class="n">3</span><span data-i="s3"></span></h3>
           <div id="slots"></div>
         </div>
-        <div>
+        <div id="step-details">
           <h3 class="step-title"><span class="n">4</span><span data-i="s4"></span></h3>
           <div class="fields">
             <div class="field">
@@ -526,6 +526,10 @@ function applyLang(){
 function setLang(l){ LANG=l; try{localStorage.setItem("haybah-lang",l);}catch(e){} applyLang(); }
 $("lang-ar").onclick=()=>setLang("ar"); $("lang-en").onclick=()=>setLang("en");
 
+function goStep(id, after){
+  $(id).scrollIntoView({behavior:reduceMotion()?"auto":"smooth", block:"start"});
+  if(after) setTimeout(after, reduceMotion()?0:450);
+}
 function goBook(tab){ state.tab=tab; renderTabs(); renderReceipt(); $("booking").scrollIntoView({behavior:reduceMotion()?"auto":"smooth"}); }
 
 /* ----- National Day ----- */
@@ -631,7 +635,7 @@ function renderDays(){
     b.querySelector(".w").textContent = key(d)===key(new Date()) ? t("today") : t("days")[d.getDay()];
     b.querySelector(".d").textContent=d.getDate();
     b.querySelector(".m").textContent=T.en.months[d.getMonth()].toUpperCase();
-    b.onclick=()=>{ state.day=key(d); state.time=null; renderDays(); renderSlots(); renderReceipt(); };
+    b.onclick=()=>{ state.day=key(d); state.time=null; renderDays(); renderSlots(); renderReceipt(); goStep("step-time"); };
     box.appendChild(b);
   });
 }
@@ -648,7 +652,7 @@ function renderSlots(){
       const btn=document.createElement("button"); btn.type="button"; btn.className="slot"; btn.id="slot-"+s.m;
       btn.textContent=fmt12(s.m); btn.disabled=s.past;
       btn.setAttribute("aria-pressed", state.time===s.m);
-      btn.onclick=()=>{ state.time=s.m; renderSlots(); renderReceipt(); };
+      btn.onclick=()=>{ state.time=s.m; renderSlots(); renderReceipt(); goStep("step-details", ()=>{ if(!$("f-name").value.trim()) $("f-name").focus({preventScroll:true}); }); };
       grid.appendChild(btn);
     });
     box.append(p,grid);
