@@ -164,6 +164,11 @@ section h2{font-family:var(--f-display);font-weight:600;font-size:clamp(24px,3vw
 .slot:hover:not([disabled]){border-color:var(--char)}
 .slot[aria-pressed="true"]{background:var(--char);border-color:var(--char);color:var(--on-char)}
 .slot[disabled]{color:var(--seam);cursor:not-allowed;text-decoration:line-through}
+.slot.booked{display:grid;gap:0;line-height:1.25;padding:6px 0;background:var(--cement-2);border-color:transparent;color:var(--stone);text-decoration:none}
+.slot.booked .tm{text-decoration:line-through;text-decoration-thickness:1.5px}
+.slot.booked .bk{font-family:var(--f-body);font-size:11px;font-weight:600}
+.day.full{opacity:.45}
+.day .full-tag{display:block;font-size:10.5px;font-weight:600}
 .period{font-size:12.5px;color:var(--stone);margin:14px 0 8px}
 .period:first-child{margin-top:0}
 
@@ -213,6 +218,26 @@ a.c-item:hover .c-lab{color:var(--on-char);opacity:.7}
 
 footer{border-top:1px solid var(--seam);padding-block:26px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--stone);font-size:13.5px}
 
+/* continue bar */
+.cart{position:fixed;inset:auto 0 0 0;z-index:15;background:var(--char);color:var(--on-char);
+  padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));transform:translateY(110%);transition:transform .3s}
+.cart.show{transform:none}
+.cart-in{max-width:1120px;margin-inline:auto;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.cart-info{display:grid;line-height:1.35;min-width:0}
+.cart-info small{opacity:.7;font-size:13px}
+.cart-info b{font-family:var(--f-latin);font-size:20px}
+.cart .btn{background:var(--on-char);color:var(--char);border-color:var(--on-char);white-space:nowrap}
+.cart .btn:hover{background:var(--cement);border-color:var(--cement)}
+body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+/* appointment view */
+.appt{padding-block:34px 64px}
+.appt-top{display:grid;gap:10px;margin-bottom:30px}
+.back{justify-self:start;display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600;text-decoration:none;border-bottom:1.5px solid var(--char);padding-bottom:2px}
+.back svg{width:16px;height:16px}
+[dir="rtl"] .back svg{transform:scaleX(-1)}
+.appt-top h2{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,4vw,42px);margin:0}
+[dir="ltr"] .appt-top h2{font-family:var(--f-latin)}
+.edit-link{font-size:13px;font-weight:600;color:var(--on-char);opacity:.8}
 .toast{position:fixed;inset:auto 0 0 0;padding:14px max(16px,env(safe-area-inset-left,0px)) calc(14px + env(safe-area-inset-bottom,0px));background:var(--char);color:var(--on-char);text-align:center;font-weight:600;transform:translateY(100%);transition:transform .3s;z-index:20}
 .toast.show{transform:none}
 
@@ -248,6 +273,7 @@ footer{border-top:1px solid var(--seam);padding-block:26px;display:flex;justify-
     </div>
   </header>
 
+  <main id="view-home">
   <section class="hero" id="top">
     <div>
       <div class="eyebrow">Men's Grooming &amp; Spa · Al Amerat</div>
@@ -291,58 +317,11 @@ footer{border-top:1px solid var(--seam);padding-block:26px;display:flex;justify-
 
   <section class="band" id="booking">
     <div class="sec-head">
-      <h2 data-i="book_title"></h2>
-      <span class="alt" data-i="book_alt"></span>
+      <h2 data-i="choose_title"></h2>
+      <span class="alt" data-i="s1_hint"></span>
     </div>
-
-    <form class="book" id="book-form" novalidate>
-      <div class="steps">
-        <div>
-          <h3 class="step-title"><span class="n">1</span><span data-i="s1"></span> <span class="hint" data-i="s1_hint"></span></h3>
-          <div class="tabs" id="tabs" role="tablist"></div>
-          <div class="svc-list" id="svc-list"></div>
-        </div>
-        <div>
-          <h3 class="step-title"><span class="n">2</span><span data-i="s2"></span> <span class="hint" data-i="s2_hint"></span></h3>
-          <div class="days" id="days" role="group"></div>
-        </div>
-        <div id="step-time">
-          <h3 class="step-title"><span class="n">3</span><span data-i="s3"></span></h3>
-          <div id="slots"></div>
-        </div>
-        <div id="step-details">
-          <h3 class="step-title"><span class="n">4</span><span data-i="s4"></span></h3>
-          <div class="fields">
-            <div class="field">
-              <label for="f-name" data-i="name"></label>
-              <input id="f-name" autocomplete="name">
-              <span class="err" id="e-name"></span>
-            </div>
-            <div class="field">
-              <label for="f-phone" data-i="phone"></label>
-              <input id="f-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+968 9X XX XX XX">
-              <span class="err" id="e-phone"></span>
-            </div>
-            <div class="field full">
-              <label for="f-notes" data-i="notes"></label>
-              <textarea id="f-notes"></textarea>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <aside class="receipt" aria-live="polite">
-        <h3 data-i="summary"></h3>
-        <dl>
-          <div><dt data-i="services"></dt><dd id="r-svc"></dd></div>
-          <div><dt data-i="day"></dt><dd id="r-day"></dd></div>
-          <div><dt data-i="time"></dt><dd id="r-time"></dd></div>
-        </dl>
-        <div class="total"><span data-i="total"></span><span><span class="num" id="r-total">0</span><small data-i="cur"></small></span></div>
-        <button class="btn" type="submit" id="submit" data-i="confirm"></button>
-        <p class="note" data-i="note"></p>
-      </aside>
-    </form>
+    <div class="tabs" id="tabs" role="tablist"></div>
+    <div class="svc-list" id="svc-list"></div>
   </section>
 
   <section class="band" id="contact">
@@ -369,17 +348,73 @@ footer{border-top:1px solid var(--seam);padding-block:26px;display:flex;justify-
       </div>
     </div>
   </section>
+  </main>
+
+<main class="appt" id="view-appt" hidden>
+  <div class="appt-top">
+    <a class="back" href="#booking"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span data-i="back"></span></a>
+    <h2 data-i="appt_title"></h2>
+  </div>
+  <form class="book" id="book-form" novalidate>
+    <div class="steps">
+      <div id="step-day">
+        <h3 class="step-title"><span class="n">1</span><span data-i="s2"></span> <span class="hint" data-i="s2_hint"></span></h3>
+        <div class="days" id="days" role="group"></div>
+      </div>
+      <div id="step-time">
+        <h3 class="step-title"><span class="n">2</span><span data-i="s3"></span></h3>
+        <div id="slots"></div>
+      </div>
+      <div id="step-details">
+        <h3 class="step-title"><span class="n">3</span><span data-i="s4"></span></h3>
+        <div class="fields">
+          <div class="field">
+            <label for="f-name" data-i="name"></label>
+            <input id="f-name" autocomplete="name">
+            <span class="err" id="e-name"></span>
+          </div>
+          <div class="field">
+            <label for="f-phone" data-i="phone"></label>
+            <input id="f-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+968 9X XX XX XX">
+            <span class="err" id="e-phone"></span>
+          </div>
+          <div class="field full">
+            <label for="f-notes" data-i="notes"></label>
+            <textarea id="f-notes"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="receipt" aria-live="polite">
+      <h3 data-i="summary"></h3>
+      <dl>
+        <div><dt><span data-i="services"></span> · <a class="edit-link" href="#booking" data-i="edit"></a></dt><dd id="r-svc"></dd></div>
+        <div><dt data-i="day"></dt><dd id="r-day"></dd></div>
+        <div><dt data-i="time"></dt><dd id="r-time"></dd></div>
+      </dl>
+      <div class="total"><span data-i="total"></span><span><span class="num" id="r-total">0</span><small data-i="cur"></small></span></div>
+      <button class="btn" type="submit" id="submit" data-i="confirm"></button>
+      <p class="note" data-i="note"></p>
+    </aside>
+  </form>
+</main>
+
 
   <footer>
     <span data-i="foot_name"></span>
     <span data-i="foot_cur"></span>
   </footer>
 </div>
+<div class="cart" id="cart" aria-live="polite"><div class="cart-in">
+  <div class="cart-info"><small id="cart-count"></small><span><b id="cart-total">0</b> <small data-cur></small></span></div>
+  <a class="btn" href="#appointment" id="cart-go" data-i="cart_go"></a>
+</div></div>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
 /* ===== Salon settings ===== */
-const SALON = { whatsapp:"96897464675", openHour:10, closeHour:22, slotMinutes:30, daysAhead:14, closedWeekdays:[5] };
+const SALON = { bookingApi:"", whatsapp:"96897464675", openHour:10, closeHour:22, slotMinutes:30, daysAhead:14, closedWeekdays:[5] };
 /* National Day offers: set active to false when the offer ends */
 const NATIONAL_DAY = { endsOn:"2026-11-30", packageDiscount:0.30 };
 NATIONAL_DAY.active = new Date() <= new Date(NATIONAL_DAY.endsOn+"T23:59:59+04:00");
@@ -394,7 +429,7 @@ ar:{
   nd_packs:"عروض الباقات", nd_face:"عروض تنظيف البشرة", book_offer:"احجز العرض",
   packs_title:"باقات العروض", packs_alt:"Packages", package:"الباقة", book_it:"احجزها",
   book_title:"احجز موعدك", book_alt:"Book an appointment",
-  s1:"اختر الخدمة", s1_hint:"يمكنك اختيار أكثر من خدمة أو باقة", s2:"اختر اليوم", s2_hint:"الجمعة مغلق", s3:"اختر الوقت", s4:"بياناتك",
+  s1_hint:"يمكنك اختيار أكثر من خدمة أو باقة", s2:"اختر اليوم", s2_hint:"الجمعة مغلق", s3:"اختر الوقت", s4:"بياناتك",
   name:"الاسم", phone:"رقم الهاتف", notes:"ملاحظات (اختياري)", name_ph:"اسمك الكريم", notes_ph:"مثال: عدد الأشخاص، أو طلب خاص",
   summary:"ملخص الحجز", services:"الخدمات", day:"اليوم", time:"الوقت", total:"الإجمالي", cur:"ر.ع",
   confirm:"فتح واتساب وإرسال الحجز", note:"يصلنا طلبك على واتساب ونرد عليك بتأكيد الموعد.",
@@ -404,6 +439,8 @@ ar:{
   no_svc:"لم تختر خدمة بعد", pick_time:"اختر وقتاً", today:"اليوم", morning:"صباحاً", afternoon:"بعد الظهر", evening:"مساءً",
   err_name:"اكتب اسمك حتى نسجّل الحجز باسمك.", err_phone:"اكتب رقماً صحيحاً للتواصل معك.",
   ready:"طلبك جاهز. اضغط الزر لفتح واتساب وإرساله.", open_wa:"فتح واتساب وإرسال الطلب", copy:"نسخ نص الطلب", copied:"تم نسخ الطلب", select_text:"حدّد النص وانسخه",
+  choose_title:"اختر خدماتك", cart_go:"متابعة لحجز الموعد", back:"تعديل الخدمات", edit:"تعديل", appt_title:"حجز الموعد",
+  booked:"محجوز", full:"مكتمل", sending:"جارٍ تثبيت الموعد…", err_taken:"هذا الوقت حُجز للتو، اختر وقتاً آخر.", sel_n:n=>n===1?"خدمة واحدة":n===2?"خدمتان":n+" خدمات",
   msg_head:"طلب حجز — HAYBAH Grooming & Spa", msg_name:"الاسم", msg_phone:"الهاتف", nd_tab:"العيد الوطني", nd_tag:"عرض العيد الوطني",
   cats:{hair:"الشعر", face:"الوجه", nails:"الأظافر", body:"الجسم", packs:"الباقات", nd:"العيد الوطني"},
   days:["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"],
@@ -418,7 +455,7 @@ en:{
   nd_packs:"Package offer", nd_face:"Facial offer", book_offer:"Book this offer",
   packs_title:"Packages", packs_alt:"باقات العروض", package:"Package", book_it:"Book it",
   book_title:"Book an appointment", book_alt:"احجز موعدك",
-  s1:"Choose your services", s1_hint:"Pick one or more services or packages", s2:"Choose a day", s2_hint:"Closed on Fridays", s3:"Choose a time", s4:"Your details",
+  s1_hint:"Pick one or more services or packages", s2:"Choose a day", s2_hint:"Closed on Fridays", s3:"Choose a time", s4:"Your details",
   name:"Name", phone:"Phone number", notes:"Notes (optional)", name_ph:"Your name", notes_ph:"e.g. number of people, or a special request",
   summary:"Booking summary", services:"Services", day:"Day", time:"Time", total:"Total", cur:"OMR",
   confirm:"Open WhatsApp &amp; send booking", note:"Your request reaches us on WhatsApp and we reply to confirm your appointment.",
@@ -428,6 +465,8 @@ en:{
   no_svc:"No service selected yet", pick_time:"Pick a time", today:"Today", morning:"Morning", afternoon:"Afternoon", evening:"Evening",
   err_name:"Enter your name so we can book under it.", err_phone:"Enter a valid phone number so we can reach you.",
   ready:"Your request is ready. Tap the button to open WhatsApp and send it.", open_wa:"Open WhatsApp and send", copy:"Copy request text", copied:"Request copied", select_text:"Select the text and copy it",
+  choose_title:"Choose your services", cart_go:"Continue to appointment", back:"Edit services", edit:"Edit", appt_title:"Book your appointment",
+  booked:"Booked", full:"Full", sending:"Securing your slot…", err_taken:"That time was just booked. Please pick another.", sel_n:n=>n===1?"1 service":n+" services",
   msg_head:"Booking request — HAYBAH Grooming & Spa", msg_name:"Name", msg_phone:"Phone", nd_tab:"National Day", nd_tag:"National Day offer",
   cats:{hair:"Hair", face:"Face", nails:"Nails", body:"Body", packs:"Packages", nd:"National Day"},
   days:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
@@ -496,7 +535,7 @@ const ALL = TABS.flatMap(t=>t.items);
 
 let LANG = "ar";
 try{ const s=localStorage.getItem("haybah-lang"); if(s==="en"||s==="ar") LANG=s; }catch(e){}
-const state = { svc:new Set(), tab:TABS[0].key, day:null, time:null };
+const state = { svc:new Set(), tab:TABS[0].key, day:null, time:null, taken:new Set(), view:"home" };
 const $ = id => document.getElementById(id);
 const t = k => T[LANG][k];
 const pad = n => String(n).padStart(2,"0");
@@ -517,11 +556,12 @@ function applyLang(){
   app.dir = LANG==="ar" ? "rtl" : "ltr"; app.lang = LANG;
   document.documentElement.lang = LANG;
   document.querySelectorAll("[data-i]").forEach(el=>{ el.innerHTML = t(el.dataset.i); });
+  document.querySelectorAll("[data-cur]").forEach(el=>el.textContent=t("cur"));
   $("f-name").placeholder=t("name_ph"); $("f-notes").placeholder=t("notes_ph");
   $("lang-ar").setAttribute("aria-pressed", LANG==="ar"); $("lang-en").setAttribute("aria-pressed", LANG==="en");
   $("days").setAttribute("aria-label", t("s2"));
   ["e-name","e-phone"].forEach(id=>$(id).textContent="");
-  renderOffers(); renderPacks(); renderTabs(); renderDays(); renderSlots(); renderReceipt();
+  renderOffers(); renderPacks(); renderTabs(); renderDays(); renderSlots(); renderReceipt(); renderCart();
 }
 function setLang(l){ LANG=l; try{localStorage.setItem("haybah-lang",l);}catch(e){} applyLang(); }
 $("lang-ar").onclick=()=>setLang("ar"); $("lang-en").onclick=()=>setLang("en");
@@ -530,7 +570,41 @@ function goStep(id, after){
   $(id).scrollIntoView({behavior:reduceMotion()?"auto":"smooth", block:"start"});
   if(after) setTimeout(after, reduceMotion()?0:450);
 }
-function goBook(tab){ state.tab=tab; renderTabs(); renderReceipt(); $("booking").scrollIntoView({behavior:reduceMotion()?"auto":"smooth"}); }
+function goBook(tab){ state.tab=tab; renderTabs(); renderReceipt(); renderCart(); $("booking").scrollIntoView({behavior:reduceMotion()?"auto":"smooth"}); }
+
+/* ----- views: services page / appointment page ----- */
+function route(){
+  const wantAppt = location.hash==="#appointment";
+  if(wantAppt && !state.svc.size){ location.replace("#booking"); return; }
+  const v = wantAppt ? "appt" : "home";
+  const changed = v!==state.view; state.view=v;
+  $("view-home").hidden = v!=="home";
+  $("view-appt").hidden = v!=="appt";
+  if(v==="appt"){ if(changed) window.scrollTo(0,0); renderDays(); renderSlots(); renderReceipt(); loadTaken(); }
+  else if(changed && location.hash){ const el=document.getElementById(location.hash.slice(1)); if(el) el.scrollIntoView(); }
+  renderCart();
+}
+window.addEventListener("hashchange", route);
+function renderCart(){
+  const list=chosen(), show = state.view==="home" && list.length>0;
+  $("cart").classList.toggle("show", show);
+  document.body.classList.toggle("has-cart", show);
+  $("cart-count").textContent = list.length ? t("sel_n")(list.length) : "";
+  $("cart-total").textContent = omr(list.reduce((a,s)=>a+s.p,0));
+}
+
+/* ----- booked slots (shared through the booking sheet) ----- */
+async function loadTaken(){
+  if(!SALON.bookingApi) return;
+  try{
+    const r=await fetch(SALON.bookingApi+"?action=taken",{cache:"no-store"});
+    const j=await r.json();
+    state.taken=new Set((j.taken||[]).map(x=>x.date+"|"+x.time));
+    if(state.time!=null && state.taken.has(state.day+"|"+state.time)) state.time=null;
+    renderDays(); renderSlots(); renderReceipt();
+  }catch(e){ /* sheet unreachable: show all slots */ }
+}
+setInterval(()=>{ if(state.view==="appt" && !document.hidden) loadTaken(); }, 60000);
 
 /* ----- National Day ----- */
 function renderOffers(){
@@ -603,7 +677,7 @@ function renderList(){
     const pr=b.querySelector(".pr");
     if(s.was){ const w=document.createElement("span"); w.className="was"; w.textContent=s.was; pr.appendChild(w); }
     pr.append(omr(s.p)); const sm=document.createElement("small"); sm.textContent=t("cur"); pr.appendChild(sm);
-    b.onclick=()=>{ state.svc.has(s.id)?state.svc.delete(s.id):state.svc.add(s.id); renderTabs(); renderReceipt(); };
+    b.onclick=()=>{ state.svc.has(s.id)?state.svc.delete(s.id):state.svc.add(s.id); renderTabs(); renderReceipt(); renderCart(); };
     box.appendChild(b);
   });
 }
@@ -635,6 +709,8 @@ function renderDays(){
     b.querySelector(".w").textContent = key(d)===key(new Date()) ? t("today") : t("days")[d.getDay()];
     b.querySelector(".d").textContent=d.getDate();
     b.querySelector(".m").textContent=T.en.months[d.getMonth()].toUpperCase();
+    const open=slotsFor(d).filter(x=>!x.past && !state.taken.has(key(d)+"|"+x.m));
+    if(!open.length){ b.classList.add("full"); b.querySelector(".m").textContent=t("full"); }
     b.onclick=()=>{ state.day=key(d); state.time=null; renderDays(); renderSlots(); renderReceipt(); goStep("step-time"); };
     box.appendChild(b);
   });
@@ -650,7 +726,13 @@ function renderSlots(){
     const grid=document.createElement("div"); grid.className="slots";
     items.forEach(s=>{
       const btn=document.createElement("button"); btn.type="button"; btn.className="slot"; btn.id="slot-"+s.m;
-      btn.textContent=fmt12(s.m); btn.disabled=s.past;
+      const isBooked=state.taken.has(state.day+"|"+s.m);
+      if(isBooked && !s.past){
+        btn.classList.add("booked"); btn.disabled=true;
+        btn.innerHTML='<span class="tm"></span><span class="bk"></span>';
+        btn.querySelector(".tm").textContent=fmt12(s.m); btn.querySelector(".bk").textContent=t("booked");
+        btn.setAttribute("aria-label", fmt12(s.m)+" — "+t("booked"));
+      } else { btn.textContent=fmt12(s.m); btn.disabled=s.past; }
       btn.setAttribute("aria-pressed", state.time===s.m);
       btn.onclick=()=>{ state.time=s.m; renderSlots(); renderReceipt(); goStep("step-details", ()=>{ if(!$("f-name").value.trim()) $("f-name").focus({preventScroll:true}); }); };
       grid.appendChild(btn);
@@ -685,7 +767,7 @@ function renderReceipt(){
 
 /* ----- submit ----- */
 function toast(m){ const el=$("toast"); el.textContent=m; el.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(()=>el.classList.remove("show"),2600); }
-$("book-form").addEventListener("submit",e=>{
+$("book-form").addEventListener("submit",async e=>{
   e.preventDefault();
   const name=$("f-name").value.trim(), phone=$("f-phone").value.trim(), notes=$("f-notes").value.trim();
   let ok=true;
@@ -698,11 +780,26 @@ $("book-form").addEventListener("submit",e=>{
   const msg=t("msg_head")+"\n\n"+t("msg_name")+": "+name+"\n"+t("msg_phone")+": "+phone+"\n"+t("day")+": "+dayLabel()+"\n"+t("time")+": "+fmt12(state.time)
     +"\n\n"+t("services")+":\n"+lines+"\n\n"+t("total")+": "+total+" "+cur+(notes?"\n\n"+t("notes").replace(/ \(.*\)/,"")+": "+notes:"");
   const url="https://wa.me/"+SALON.whatsapp+"?text="+encodeURIComponent(msg);
-  const w=window.open(url,"_blank","noopener");
-  if(!w) location.href=url;
+  if(!SALON.bookingApi){ const w=window.open(url,"_blank","noopener"); if(!w) location.href=url; return; }
+  const btn=$("submit"); btn.disabled=true; btn.textContent=t("sending");
+  let res=null;
+  try{
+    const r=await fetch(SALON.bookingApi,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify({date:state.day,time:state.time,timeLabel:fmt12(state.time),name,phone,
+        services:list.map(s=>nameOf(s)).join(sep),total,notes,lang:LANG})});
+    res=await r.json();
+  }catch(err){ res=null; }
+  btn.textContent=t("confirm");
+  if(res && res.ok===false && res.reason==="taken"){
+    state.taken.add(state.day+"|"+state.time); state.time=null;
+    renderDays(); renderSlots(); renderReceipt(); toast(t("err_taken")); goStep("step-time"); return;
+  }
+  state.taken.add(state.day+"|"+state.time);
+  location.href=url;
 });
 
 applyLang();
+route();
 </script>
 
 </body>
