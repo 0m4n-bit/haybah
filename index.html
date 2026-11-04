@@ -414,7 +414,7 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 
 <script>
 /* ===== Salon settings ===== */
-const SALON = { bookingApi:"", whatsapp:"96897464675", openHour:10, closeHour:22, slotMinutes:30, daysAhead:14, closedWeekdays:[5] };
+const SALON = { bookingApi:"https://script.google.com/macros/s/AKfycbycDzO3xlN1xW-5yP4nvJb_9AD_ZhTYQSEZSZlYGL38x4PUf9a751hgtEdoOCTPhBvJ/exec", whatsapp:"96897464675", openHour:10, closeHour:22, slotMinutes:30, daysAhead:14, closedWeekdays:[5] };
 /* National Day offers: set active to false when the offer ends */
 const NATIONAL_DAY = { endsOn:"2026-11-30", packageDiscount:0.30 };
 NATIONAL_DAY.active = new Date() <= new Date(NATIONAL_DAY.endsOn+"T23:59:59+04:00");
