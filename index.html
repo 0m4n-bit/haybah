@@ -340,7 +340,6 @@ footer{border-top:1px solid var(--seam);padding-block:26px;display:flex;justify-
         </dl>
         <div class="total"><span data-i="total"></span><span><span class="num" id="r-total">0</span><small data-i="cur"></small></span></div>
         <button class="btn" type="submit" id="submit" data-i="confirm"></button>
-        <div class="sent" id="sent" hidden></div>
         <p class="note" data-i="note"></p>
       </aside>
     </form>
@@ -398,7 +397,7 @@ ar:{
   s1:"اختر الخدمة", s1_hint:"يمكنك اختيار أكثر من خدمة أو باقة", s2:"اختر اليوم", s2_hint:"الجمعة مغلق", s3:"اختر الوقت", s4:"بياناتك",
   name:"الاسم", phone:"رقم الهاتف", notes:"ملاحظات (اختياري)", name_ph:"اسمك الكريم", notes_ph:"مثال: عدد الأشخاص، أو طلب خاص",
   summary:"ملخص الحجز", services:"الخدمات", day:"اليوم", time:"الوقت", total:"الإجمالي", cur:"ر.ع",
-  confirm:"تأكيد الحجز عبر واتساب", note:"يصلنا طلبك على واتساب ونرد عليك بتأكيد الموعد.",
+  confirm:"فتح واتساب وإرسال الحجز", note:"يصلنا طلبك على واتساب ونرد عليك بتأكيد الموعد.",
   contact:"تواصل معنا", contact_alt:"Visit us", wa:"واتساب", ig:"إنستغرام", loc:"الموقع · افتح في الخرائط", loc_val:"مسقط، العامرات",
   hours:"الدوام", hours_val:"السبت – الخميس، 10 ص – 10 م<br>الجمعة مغلق",
   foot_name:"HAYBAH Grooming &amp; Spa · هيبة للعناية الرجالية", foot_cur:"جميع الأسعار بالريال العُماني",
@@ -422,7 +421,7 @@ en:{
   s1:"Choose your services", s1_hint:"Pick one or more services or packages", s2:"Choose a day", s2_hint:"Closed on Fridays", s3:"Choose a time", s4:"Your details",
   name:"Name", phone:"Phone number", notes:"Notes (optional)", name_ph:"Your name", notes_ph:"e.g. number of people, or a special request",
   summary:"Booking summary", services:"Services", day:"Day", time:"Time", total:"Total", cur:"OMR",
-  confirm:"Confirm on WhatsApp", note:"Your request reaches us on WhatsApp and we reply to confirm your appointment.",
+  confirm:"Open WhatsApp &amp; send booking", note:"Your request reaches us on WhatsApp and we reply to confirm your appointment.",
   contact:"Contact us", contact_alt:"تواصل معنا", wa:"WhatsApp", ig:"Instagram", loc:"Location · open in Maps", loc_val:"Al Amerat, Muscat",
   hours:"Opening hours", hours_val:"Sat – Thu, 10 AM – 10 PM<br>Friday closed",
   foot_name:"HAYBAH Grooming &amp; Spa · Al Amerat, Muscat", foot_cur:"All prices in Omani Rial",
@@ -678,7 +677,6 @@ function renderReceipt(){
   else { rt.innerHTML=""; const e=document.createElement("span"); e.className="empty"; e.textContent=t("pick_time"); rt.appendChild(e); }
   $("r-total").textContent=omr(list.reduce((a,s)=>a+s.p,0));
   $("submit").disabled = !(list.length && state.day && state.time!=null);
-  $("sent").hidden=true;
 }
 
 /* ----- submit ----- */
@@ -695,14 +693,9 @@ $("book-form").addEventListener("submit",e=>{
   const total=omr(list.reduce((a,s)=>a+s.p,0));
   const msg=t("msg_head")+"\n\n"+t("msg_name")+": "+name+"\n"+t("msg_phone")+": "+phone+"\n"+t("day")+": "+dayLabel()+"\n"+t("time")+": "+fmt12(state.time)
     +"\n\n"+t("services")+":\n"+lines+"\n\n"+t("total")+": "+total+" "+cur+(notes?"\n\n"+t("notes").replace(/ \(.*\)/,"")+": "+notes:"");
-  const sent=$("sent"); sent.hidden=false; sent.innerHTML="";
-  const p=document.createElement("div"); p.textContent=t("ready");
-  const a=document.createElement("a"); a.className="btn"; a.target="_blank"; a.rel="noopener";
-  a.href="https://wa.me/"+SALON.whatsapp+"?text="+encodeURIComponent(msg); a.textContent=t("open_wa");
-  const c=document.createElement("button"); c.type="button"; c.className="btn ghost"; c.textContent=t("copy");
-  const pre=document.createElement("pre"); pre.textContent=msg; pre.dir=LANG==="ar"?"rtl":"ltr";
-  c.onclick=()=>{ navigator.clipboard.writeText(msg).then(()=>toast(t("copied"))).catch(()=>{ const r=document.createRange(); r.selectNodeContents(pre); const s=getSelection(); s.removeAllRanges(); s.addRange(r); toast(t("select_text")); }); };
-  sent.append(p,a,c,pre);
+  const url="https://wa.me/"+SALON.whatsapp+"?text="+encodeURIComponent(msg);
+  const w=window.open(url,"_blank","noopener");
+  if(!w) location.href=url;
 });
 
 applyLang();
