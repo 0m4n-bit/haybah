@@ -352,7 +352,7 @@ ar: { title: "نظام المحاسبة", gate_p: "للموظفين فقط. اك
   ends: "تنتهي", starts: "تبدأ", days_left: n => n <= 0 ? "آخر يوم" : "باقي " + n + " يوم",
   mem_h: "العضويات الشهرية", mem_new: "+ اشتراك جديد", m_phone: "رقم الهاتف", m_tier: "الباقة", m_activate_new: "حفظ وتفعيل العضوية", m_cancel_form: "إلغاء",
   m_pending: "طلبات بانتظار التفعيل", m_active: "العضويات الحالية", m_none_pend: "ما في طلبات جديدة.", m_none: "ما في عضويات بعد.",
-  m_activate: "تفعيل", m_reject: "إلغاء الطلب", m_freeze: "تجميد", m_unfreeze: "إلغاء التجميد", m_cancel: "إلغاء العضوية", m_card: "إرسال البطاقة", m_card_wait: "جارٍ تجهيز البطاقة…", m_card_fail: "تعذّر تجهيز البطاقة، جرّب مرة ثانية.", m_confirm_cancel: (n, tn) => "إلغاء عضوية " + n + " (" + tn + ")؟\nما تقدر ترجعها بعد الإلغاء.", m_remind: "تذكير واتساب", m_receipt: "الإيصال", m_wa: "واتساب",
+  m_activate: "تفعيل", m_reject: "إلغاء الطلب", m_freeze: "تجميد", m_unfreeze: "إلغاء التجميد", m_cancel: "إلغاء العضوية", m_card: "إرسال البطاقة", m_card_wait: "جارٍ تجهيز البطاقة…", m_card_fail: "تعذّر تجهيز البطاقة، جرّب مرة ثانية.", m_msg_copied: "انسخت الرسالة — الصقها مع الصورة لو ما ظهرت", m_confirm_cancel: (n, tn) => "إلغاء عضوية " + n + " (" + tn + ")؟\nما تقدر ترجعها بعد الإلغاء.", m_remind: "تذكير واتساب", m_receipt: "الإيصال", m_wa: "واتساب",
   m_done: "تم", m_active_n: "نشطة", m_pend_n: "بانتظار التفعيل", m_soon_n: "تنتهي خلال 3 أيام", m_need: "اكتب الاسم والرقم واختر الباقة وطريقة الدفع",
   m_confirm_reject: "متأكد تبغى تلغي هذا الطلب؟", m_confirm_freeze: "التجميد مسموح مرة وحدة في السنة. تجمّد العضوية الحين؟", m_activated: "تفعّلت العضوية", m_pay_pref: "طلب الدفع:", m_month: "شهرياً", m_frz_used: "التجميد مستخدم هذي السنة",
   mst: { "نشطة": "نشطة", "بانتظار التفعيل": "بانتظار التفعيل", "مجمّدة": "مجمّدة", "منتهية": "منتهية", "تبدأ لاحقاً": "تجديد يبدأ لاحقاً", "ملغاة": "ملغاة" } },
@@ -374,7 +374,7 @@ en: { title: "Accounting", gate_p: "Staff only. Enter the PIN to sign in.", ente
   ends: "Ends", starts: "Starts", days_left: n => n <= 0 ? "Last day" : n + " days left",
   mem_h: "Monthly memberships", mem_new: "+ New membership", m_phone: "Phone", m_tier: "Plan", m_activate_new: "Save & activate", m_cancel_form: "Cancel",
   m_pending: "Requests awaiting activation", m_active: "Current memberships", m_none_pend: "No new requests.", m_none: "No memberships yet.",
-  m_activate: "Activate", m_reject: "Cancel request", m_freeze: "Freeze", m_unfreeze: "Unfreeze", m_cancel: "Cancel membership", m_card: "Send card", m_card_wait: "Preparing the card…", m_card_fail: "Couldn't prepare the card. Try again.", m_confirm_cancel: (n, tn) => "Cancel " + n + "'s membership (" + tn + ")?\nThis can't be undone.", m_remind: "WhatsApp reminder", m_receipt: "Receipt", m_wa: "WhatsApp",
+  m_activate: "Activate", m_reject: "Cancel request", m_freeze: "Freeze", m_unfreeze: "Unfreeze", m_cancel: "Cancel membership", m_card: "Send card", m_card_wait: "Preparing the card…", m_card_fail: "Couldn't prepare the card. Try again.", m_msg_copied: "Message copied — paste it with the image if it doesn't show", m_confirm_cancel: (n, tn) => "Cancel " + n + "'s membership (" + tn + ")?\nThis can't be undone.", m_remind: "WhatsApp reminder", m_receipt: "Receipt", m_wa: "WhatsApp",
   m_done: "Done", m_active_n: "Active", m_pend_n: "Awaiting activation", m_soon_n: "Ending within 3 days", m_need: "Enter the name and phone, and choose the plan and payment",
   m_confirm_reject: "Cancel this request?", m_confirm_freeze: "Freezing is allowed once a year. Freeze this membership now?", m_activated: "Membership activated", m_pay_pref: "Wants to pay:", m_month: "/ month", m_frz_used: "Freeze used this year",
   mst: { "نشطة": "Active", "بانتظار التفعيل": "Awaiting activation", "مجمّدة": "Frozen", "منتهية": "Expired", "تبدأ لاحقاً": "Renewal starts later", "ملغاة": "Cancelled" } }
@@ -733,13 +733,22 @@ async function memberCardPdf(m, btn) {
     const blob = await buildCardImage(m);
     const fname = ("HAYBAH-" + CARD_LOOK[m.tier].name + "-" + m.id + "-" + m.name).replace(/[\\/:*?"<>|]+/g, "").replace(/\s+/g, "-") + ".png";
     const file = new File([blob], fname, { type: "image/png" });
-    const [yy, mo, dd] = String(m.end || "").split("-");
-    const text = "أهلاً " + m.name + " 🌿\nهذي بطاقة عضويتك " + m.tierName + " في هيبة" + (m.end ? "، صالحة حتى " + dd + "/" + mo + "/" + yy : "") + ".\nأظهرها للموظف عند زيارتك.";
+    const text = cardMessage(m);
+    try { await navigator.clipboard.writeText(text); toast(t("m_msg_copied")); } catch (e) {}
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try { await navigator.share({ files: [file], text }); } catch (e) { if (e && e.name !== "AbortError") download(blob, fname); }
     } else download(blob, fname);
   } catch (e) { toast(t("m_card_fail"), true); }
   btn.disabled = false; btn.textContent = lbl;
+}
+// رسالة قصيرة بالعربي والإنجليزي ترافق صورة البطاقة
+function cardMessage(m) {
+  const d = iso => { const [y, mo, da] = String(iso || "").split("-"); return da + "/" + mo + "/" + y; };
+  const later = m.status === "تبدأ لاحقاً" && m.start;
+  return (later ? "تم تفعيل عضويتك " + m.tierName + " في هيبة ✅ تبدأ من " + d(m.start) + " وصالحة حتى " + d(m.end) + "."
+                : "تم تفعيل عضويتك " + m.tierName + " في هيبة ✅ تقدر تستخدمها من اليوم، وصالحة حتى " + d(m.end) + ".")
+    + "\n" + (later ? "Your " + m.tierName + " membership is active ✅ It starts on " + d(m.start) + " and is valid until " + d(m.end) + "."
+                     : "Your " + m.tierName + " membership is active ✅ You can use it from today, valid until " + d(m.end) + ".");
 }
 function download(blob, name) { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000); }
 
