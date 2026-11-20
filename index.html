@@ -266,6 +266,42 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .ltr-val{direction:ltr;unicode-bidi:isolate;font-family:var(--f-latin);letter-spacing:.04em}
 .code{font-family:var(--f-latin);font-weight:700;letter-spacing:.08em}
 @media (max-width:700px){ .gift-band{grid-template-columns:1fr;text-align:start} }
+/* memberships */
+.mem-intro{margin:-12px 0 24px;color:var(--stone);max-width:60ch}
+.tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:stretch}
+.tier{display:flex;flex-direction:column;gap:16px;background:var(--cement-2);border:1.5px solid var(--char);border-radius:22px;padding:22px 20px 18px;text-align:start;color:var(--char);min-width:0}
+.tier.vip{background:var(--char);color:var(--on-char)}
+.tier-name{margin:0;font-family:var(--f-latin);font-weight:700;font-size:19px;letter-spacing:.08em;padding-inline-end:32px}
+.tier-price{font-family:var(--f-latin);font-weight:700;font-size:40px;line-height:1;display:flex;align-items:baseline;gap:6px}
+.tier-price small{font-family:var(--f-body);font-weight:500;font-size:13.5px;opacity:.7}
+[dir="ltr"] .tier-price small{font-family:var(--f-latin)}
+.tier ul{margin:0;padding:0;list-style:none;display:grid;gap:9px;flex:1;align-content:start}
+.tier li{display:grid;grid-template-columns:14px 1fr;gap:8px;font-size:14.5px;line-height:1.55}
+.tier li::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;margin-top:9px}
+.tier li.or{opacity:.72;font-size:13.5px}
+.tier li.or::before{background:transparent;border:1.5px solid currentColor;width:4px;height:4px}
+.tier li.perk{font-weight:600}
+.tier .btn{align-self:stretch}
+.tier.vip .btn{background:var(--on-char);color:var(--char);border-color:var(--on-char)}
+.tier.vip .btn:hover{background:var(--cement)}
+button.tier{cursor:pointer;font:inherit;position:relative}
+button.tier[aria-pressed="true"]{box-shadow:0 0 0 3px var(--cement),0 0 0 6px var(--char)}
+button.tier .pick{position:absolute;top:16px;inset-inline-end:16px;width:24px;height:24px;border-radius:50%;border:1.5px solid currentColor;display:grid;place-items:center}
+button.tier[aria-pressed="true"] .pick::after{content:"";width:12px;height:12px;border-radius:50%;background:currentColor}
+.terms{margin-top:22px;border:1.5px solid var(--char);border-radius:18px;padding:4px 20px}
+.terms summary{cursor:pointer;font-family:var(--f-display);font-weight:600;padding-block:14px;list-style-position:inside}
+[dir="ltr"] .terms summary{font-family:var(--f-latin)}
+.terms ul{margin:0 0 16px;padding-inline-start:20px;display:grid;gap:6px;color:var(--stone);font-size:14.5px}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opt{border:1.5px solid var(--char);background:transparent;border-radius:999px;padding:9px 18px;font-weight:600;cursor:pointer}
+.opt[aria-pressed="true"]{background:var(--char);color:var(--on-char)}
+.check{display:flex;gap:12px;align-items:center;background:var(--cement-2);border:1.5px solid transparent;border-radius:12px;padding:12px 14px;cursor:pointer}
+.check:has(input:checked){border-color:var(--char)}
+.check input{width:20px;height:20px;accent-color:var(--char);flex:none;margin:0}
+.check small{display:block;color:var(--stone);font-size:12.5px}
+.mem-status{font-size:13px;color:var(--stone);margin:6px 2px 0;min-height:1em}
+.mem-status.ok{color:#2f7d4b;font-weight:600}
+@media (max-width:900px){ .tiers{grid-template-columns:1fr} }
 .toast{position:fixed;inset:auto 0 0 0;padding:14px max(16px,env(safe-area-inset-left,0px)) calc(14px + env(safe-area-inset-bottom,0px));background:var(--char);color:var(--on-char);text-align:center;font-weight:600;transform:translateY(100%);transition:transform .3s;z-index:20}
 .toast.show{transform:none}
 
@@ -317,6 +353,7 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
       <div class="row">
         <a class="btn" href="#booking" data-i="start"></a>
         <a class="btn ghost" href="#offers" id="see-offers" data-i="see_offers"></a>
+        <a class="btn ghost" href="#memberships" data-i="mem_nav"></a>
         <a class="btn gift-btn" href="#gift"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="9" width="17" height="11.5" rx="1.2"/><path d="M2 6h20v3H2zM12 6v14.5M12 6C10.5 2.5 6 2 6 4.5S10 6 12 6zM12 6c1.5-3.5 6-4 6-1.5S14 6 12 6z"/></svg><span data-i="gift_nav"></span></a>
       </div>
     </div>
@@ -342,6 +379,16 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
       <span class="alt" data-i="packs_alt"></span>
     </div>
     <div class="packs" id="packs"></div>
+  </section>
+
+  <section class="band" id="memberships">
+    <div class="sec-head">
+      <h2 data-i="mem_title"></h2>
+      <span class="alt" data-i="mem_alt"></span>
+    </div>
+    <p class="mem-intro" data-i="mem_sub"></p>
+    <div class="tiers" id="tiers"></div>
+    <details class="terms"><summary data-i="mem_terms"></summary><ul id="mem-terms"></ul></details>
   </section>
 
   <section class="band" id="booking">
@@ -414,6 +461,10 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
             <label for="f-phone" data-i="phone"></label>
             <input id="f-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+968 9X XX XX XX">
             <span class="err" id="e-phone"></span>
+          </div>
+          <div class="field full">
+            <label class="check" for="f-member"><input type="checkbox" id="f-member"><span><span data-i="b_member"></span><small data-i="b_member_hint"></small></span></label>
+            <p class="mem-status" id="f-mem-status" aria-live="polite"></p>
           </div>
           <div class="field full">
             <label for="f-notes" data-i="notes"></label>
@@ -501,6 +552,62 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
   </form>
 </main>
 
+<main class="appt" id="view-mem" hidden>
+  <div class="appt-top">
+    <a class="back" href="#memberships"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span data-i="home"></span></a>
+    <h2 data-i="m_page_title"></h2>
+    <p class="hero-note" data-i="m_intro" style="margin:0;color:var(--stone);max-width:60ch"></p>
+  </div>
+  <form class="book" id="mem-form" novalidate>
+    <div class="steps">
+      <div id="m-step-plan">
+        <h3 class="step-title"><span class="n">1</span><span data-i="m_s1"></span></h3>
+        <div class="tiers" id="m-tiers"></div>
+      </div>
+      <div id="m-step-who">
+        <h3 class="step-title"><span class="n">2</span><span data-i="m_s2"></span></h3>
+        <div class="fields">
+          <div class="field"><label for="m-name" data-i="name"></label><input id="m-name" autocomplete="name"><span class="err" id="me-name"></span></div>
+          <div class="field"><label for="m-phone" data-i="phone"></label><input id="m-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+968 9X XX XX XX" class="ltr-in"><span class="err" id="me-phone"></span></div>
+          <div class="field full"><label for="m-notes" data-i="notes"></label><textarea id="m-notes"></textarea></div>
+        </div>
+      </div>
+      <div id="m-step-pay">
+        <h3 class="step-title"><span class="n">3</span><span data-i="m_s3"></span></h3>
+        <div class="who">
+          <div class="opts" role="group" id="m-pay-opts">
+            <button type="button" class="opt" data-pay="transfer" data-i="m_pay_tr"></button>
+            <button type="button" class="opt" data-pay="salon" data-i="m_pay_salon"></button>
+          </div>
+          <p class="pay-note" id="m-pay-note"></p>
+          <div class="pay" id="m-transfer">
+            <div class="pay-card">
+              <div class="pay-row"><span class="pay-lab" data-i="g_pay_how"></span><span class="pay-val ltr-val" id="m-pay-phone"></span><button type="button" class="btn sm ghost" id="m-copy" data-i="copy_num"></button></div>
+              <div class="pay-row"><span class="pay-lab" data-i="g_pay_name"></span><span class="pay-val ltr-val" id="m-pay-name"></span></div>
+              <div class="pay-row"><span class="pay-lab" data-i="g_pay_amt"></span><span class="pay-val"><span class="num" id="m-pay-amt">0</span> <small data-cur></small></span></div>
+            </div>
+            <div class="file">
+              <input type="file" id="m-file" accept="image/*,application/pdf">
+              <label for="m-file" class="btn sm ghost" data-i="g_attach"></label>
+              <span class="fname" id="m-fname"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="receipt" aria-live="polite">
+      <h3 data-i="m_summary"></h3>
+      <dl>
+        <div><dt data-i="m_plan"></dt><dd id="m-r-plan"></dd></div>
+        <div><dt data-i="m_pay_l"></dt><dd id="m-r-pay"></dd></div>
+      </dl>
+      <div class="total"><span data-i="total"></span><span><span class="num" id="m-r-total">0</span><small id="m-r-unit"></small></span></div>
+      <button class="btn" type="submit" id="m-submit" data-i="m_confirm"></button>
+      <p class="note" data-i="m_note"></p>
+    </aside>
+  </form>
+</main>
+
   <footer>
     <span data-i="foot_name"></span>
     <span data-i="foot_cur"></span>
@@ -516,6 +623,12 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 /* ===== Salon settings ===== */
 const GIFT_PAY = { phone:"92383483", name:"Talal Alhadi" };
 const SALON = { bookingApi:"https://script.google.com/macros/s/AKfycbycDzO3xlN1xW-5yP4nvJb_9AD_ZhTYQSEZSZlYGL38x4PUf9a751hgtEdoOCTPhBvJ/exec", whatsapp:"96897464675", openHour:10, closeHour:22, slotMinutes:30, daysAhead:14, closedWeekdays:[5] };
+/* Monthly memberships — same settings as the Apps Script */
+const MEMBER_TIERS = [
+  { key:"basic", name:"HAYBAH BASIC", price:4, disc:15 },
+  { key:"plus", name:"HAYBAH PLUS", price:12, disc:20 },
+  { key:"vip", name:"HAYBAH VIP", price:25, disc:25 }
+];
 /* National Day offers: set active to false when the offer ends */
 const NATIONAL_DAY = { endsOn:"2026-11-30", packageDiscount:0.30 };
 NATIONAL_DAY.active = new Date() <= new Date(NATIONAL_DAY.endsOn+"T23:59:59+04:00");
@@ -551,6 +664,19 @@ ar:{
   g_msg_head:"طلب هدية — HAYBAH Grooming & Spa", g_code:"رقم الهدية", g_from_l:"من", g_to_l:"إلى", g_note_l:"رسالة الإهداء",
   wa_tap:"✔ تم تثبيت الموعد — اضغط لفتح واتساب", g_wa_tap:"✔ تم حفظ الطلب — اضغط لفتح واتساب",
   g_rcpt_ok:"✔ تم إرفاق إيصال الدفع", g_rcpt_link:"رابط الإيصال", g_rcpt_later:"سأرسل إيصال الدفع في هذه المحادثة.",
+  mem_nav:"العضويات الشهرية", mem_title:"عضويات هيبة الشهرية", mem_alt:"Monthly memberships", mem_sub:"اشتراك شهري يغطي حلاقتك كل شهر، مع خصم على باقي الخدمات وأولوية في الحجز.",
+  mem_month:"ر.ع شهرياً", mem_join:"اشترك", mem_disc:n=>"خصم "+n+"% على باقي الخدمات", mem_prio:"أولوية في الحجز", mem_terms:"شروط العضوية",
+  mem_inc:{ basic:["2 قص شعر + 2 حلاقة لحية", "أو 4 قص شعر فقط، أو 4 حلاقة لحية فقط"],
+    plus:["2 قص شعر + 2 حلاقة لحية", "+ خدمة واحدة من: تنظيف الوجه العادي، أو الحمّام المغربي العادي، أو مانيكير وباديكير"],
+    vip:["4 قص شعر + 4 حلاقة لحية", "+ خدمتان مختلفتان من: تنظيف الوجه العادي، والحمّام المغربي العادي، ومانيكير وباديكير"] },
+  mem_terms_list:["مدة العضوية 30 يوماً من تاريخ التفعيل، وتتفعّل بعد تأكيد الدفع.","الخدمات التي لا تُستخدم خلال الشهر لا تنتقل للشهر التالي.","العضوية شخصية وخاصة بصاحبها ولا تنتقل لغيره.","يلزم حجز موعد مثل باقي العملاء، وللأعضاء أولوية في الحجز.","نرسل لك تذكيراً بالتجديد قبل نهاية العضوية بـ 3 أيام.","يمكن تجميد العضوية مرة واحدة في السنة عند السفر.","خصم الأعضاء على خدمات الصالون بأسعارها العادية، ولا يشمل الباقات والعروض."],
+  m_page_title:"اشترك في عضوية هيبة", m_intro:"اختر الباقة واكتب بياناتك، وادفع بالتحويل أو في الصالون. نفعّل عضويتك بعد تأكيد الدفع ونرسل لك التأكيد على واتساب.",
+  m_s1:"اختر الباقة", m_s2:"بياناتك", m_s3:"طريقة الدفع", m_pay_tr:"تحويل الآن", m_pay_salon:"الدفع في الصالون",
+  m_pay_note_tr:"<b>حوّل مبلغ الاشتراك</b> ثم أرفق صورة الإيصال هنا، أو أرسلها في محادثة واتساب بعد إرسال الطلب.",
+  m_pay_note_salon:"ادفع في زيارتك القادمة للصالون (نقداً أو بطاقة)، ونفعّل العضوية وقتها.",
+  m_summary:"ملخص الاشتراك", m_plan:"الباقة", m_pay_l:"الدفع", m_confirm:"فتح واتساب وإرسال طلب الاشتراك", m_note:"تتفعّل العضوية بعد تأكيد الدفع، ومدتها 30 يوماً من التفعيل.",
+  m_err_plan:"اختر الباقة.", m_err_pay:"اختر طريقة الدفع.", m_msg_head:"طلب عضوية — HAYBAH Grooming & Spa", m_id:"رقم الطلب", m_wa_tap:"✔ تم حفظ الطلب — اضغط لفتح واتساب", m_none:"لم تختر باقة بعد",
+  b_member:"أنا عضو في هيبة", b_member_hint:"للأعضاء أولوية في الحجز", b_mem_check:"جارٍ التحقق من العضوية…", b_mem_ok:(n,e)=>"✔ عضوية "+n+" نشطة حتى "+e, b_mem_no:"ما لقينا عضوية نشطة بهذا الرقم — نتأكد منها في الصالون.", b_mem_phone:"اكتب رقم هاتفك المسجّل في العضوية.", msg_member:"العضوية",
   msg_head:"طلب حجز — HAYBAH Grooming & Spa", msg_name:"الاسم", msg_phone:"الهاتف", nd_tab:"العيد الوطني", nd_tag:"عرض العيد الوطني",
   cats:{hair:"الشعر", face:"الوجه", nails:"الأظافر", body:"الجسم", packs:"الباقات", nd:"العيد الوطني"},
   days:["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"],
@@ -586,6 +712,19 @@ en:{
   g_msg_head:"Gift request — HAYBAH Grooming & Spa", g_code:"Gift number", g_from_l:"From", g_to_l:"To", g_note_l:"Gift message",
   wa_tap:"✔ Slot held — tap to open WhatsApp", g_wa_tap:"✔ Request saved — tap to open WhatsApp",
   g_rcpt_ok:"✔ Payment receipt attached", g_rcpt_link:"Receipt link", g_rcpt_later:"I'll send the payment receipt in this chat.",
+  mem_nav:"Memberships", mem_title:"HAYBAH monthly memberships", mem_alt:"عضويات هيبة الشهرية", mem_sub:"A monthly plan that covers your cuts, plus a discount on other services and priority booking.",
+  mem_month:"OMR / month", mem_join:"Join", mem_disc:n=>n+"% off other services", mem_prio:"Priority booking", mem_terms:"Membership terms",
+  mem_inc:{ basic:["2 haircuts + 2 beard trims", "or 4 haircuts only, or 4 beard trims only"],
+    plus:["2 haircuts + 2 beard trims", "+ one of: Normal Facial, Classic Moroccan Bath, or Manicure & Pedicure"],
+    vip:["4 haircuts + 4 beard trims", "+ two different services from: Normal Facial, Classic Moroccan Bath, Manicure & Pedicure"] },
+  mem_terms_list:["A membership lasts 30 days from activation, and is activated once payment is confirmed.","Services not used during the month don't carry over to the next month.","The membership is personal and can't be transferred.","Members still book an appointment like everyone else, with priority booking.","We send a renewal reminder 3 days before the membership ends.","A membership can be frozen once a year while travelling.","The member discount applies to salon services at regular prices, not to packages or offers."],
+  m_page_title:"Join a HAYBAH membership", m_intro:"Pick a plan, add your details, and pay by transfer or at the salon. We activate your membership once payment is confirmed and confirm it on WhatsApp.",
+  m_s1:"Choose a plan", m_s2:"Your details", m_s3:"Payment", m_pay_tr:"Transfer now", m_pay_salon:"Pay at the salon",
+  m_pay_note_tr:"<b>Transfer the membership fee</b>, then attach the receipt here or send it in the WhatsApp chat after sending the request.",
+  m_pay_note_salon:"Pay on your next visit (cash or card) and we'll activate it then.",
+  m_summary:"Membership summary", m_plan:"Plan", m_pay_l:"Payment", m_confirm:"Open WhatsApp &amp; send membership request", m_note:"The membership is activated once payment is confirmed and lasts 30 days.",
+  m_err_plan:"Choose a plan.", m_err_pay:"Choose how you'll pay.", m_msg_head:"Membership request — HAYBAH Grooming & Spa", m_id:"Request number", m_wa_tap:"✔ Request saved — tap to open WhatsApp", m_none:"No plan selected yet",
+  b_member:"I'm a HAYBAH member", b_member_hint:"Members get priority booking", b_mem_check:"Checking membership…", b_mem_ok:(n,e)=>"✔ "+n+" membership active until "+e, b_mem_no:"We couldn't find an active membership for this number — we'll check at the salon.", b_mem_phone:"Enter the phone number on your membership.", msg_member:"Membership",
   msg_head:"Booking request — HAYBAH Grooming & Spa", msg_name:"Name", msg_phone:"Phone", nd_tab:"National Day", nd_tag:"National Day offer",
   cats:{hair:"Hair", face:"Face", nails:"Nails", body:"Body", packs:"Packages", nd:"National Day"},
   days:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
@@ -659,7 +798,7 @@ const ALL = TABS.flatMap(t=>t.items);
 
 let LANG = "ar";
 try{ const s=localStorage.getItem("haybah-lang"); if(s==="en"||s==="ar") LANG=s; }catch(e){}
-const state = { svc:new Set(), tab:TABS[0].key, day:null, time:null, taken:new Set(), view:"home", gift:new Set(), gtab:TABS[0].key, gfile:null };
+const state = { svc:new Set(), tab:TABS[0].key, day:null, time:null, taken:new Set(), view:"home", gift:new Set(), gtab:TABS[0].key, gfile:null, mtier:null, mpay:null, mfile:null, member:null };
 const $ = id => document.getElementById(id);
 const t = k => T[LANG][k];
 const pad = n => String(n).padStart(2,"0");
@@ -687,6 +826,7 @@ function applyLang(){
   ["e-name","e-phone"].forEach(id=>$(id).textContent="");
   renderOffers(); renderPacks(); renderTabs(); renderDays(); renderSlots(); renderReceipt(); renderCart();
   $("g-msg").placeholder=t("g_msg_ph"); $("g-pay-note").innerHTML=t("g_pay"); renderTabs("gift"); renderGift();
+  renderTiers(); renderMem(); renderMemStatus();
 }
 function setLang(l){ LANG=l; try{localStorage.setItem("haybah-lang",l);}catch(e){} applyLang(); }
 $("lang-ar").onclick=()=>setLang("ar"); $("lang-en").onclick=()=>setLang("en");
@@ -701,12 +841,15 @@ function goBook(tab){ state.tab=tab; renderTabs(); renderReceipt(); renderCart()
 function route(){
   const wantAppt = location.hash==="#appointment";
   if(wantAppt && !state.svc.size){ location.replace("#booking"); return; }
-  const v = wantAppt ? "appt" : location.hash==="#gift" ? "gift" : "home";
+  const mm = /^#membership(?:-(basic|plus|vip))?$/.exec(location.hash);
+  const v = wantAppt ? "appt" : location.hash==="#gift" ? "gift" : mm ? "mem" : "home";
   const changed = v!==state.view; state.view=v;
   $("view-home").hidden = v!=="home";
   $("view-appt").hidden = v!=="appt";
   $("view-gift").hidden = v!=="gift";
+  $("view-mem").hidden = v!=="mem";
   if(v==="gift" && changed) window.scrollTo(0,0);
+  if(v==="mem"){ if(mm[1]) state.mtier=mm[1]; renderMem(); if(changed) window.scrollTo(0,0); }
   if(v==="appt"){ if(changed) window.scrollTo(0,0); renderDays(); renderSlots(); renderReceipt(); loadTaken(); }
   else if(changed && location.hash){ const el=document.getElementById(location.hash.slice(1)); if(el) el.scrollIntoView(); }
   renderCart();
@@ -909,7 +1052,9 @@ $("book-form").addEventListener("submit",async e=>{
   const list=chosen(), cur=t("cur"), sep=LANG==="ar"?"، ":", ";
   const lines=list.map(s=>"• "+nameOf(s)+(s.pack?" ("+packList(s.pack).join(sep)+")":"")+(s.nd?" — "+t("nd_tag"):"")+" — "+omr(s.p)+" "+cur).join("\n");
   const total=omr(list.reduce((a,s)=>a+s.p,0));
-  const msg=t("msg_head")+"\n\n"+t("msg_name")+": "+name+"\n"+t("msg_phone")+": "+phone+"\n"+t("day")+": "+dayLabel()+"\n"+t("time")+": "+fmt12(state.time)
+  const isMember=$("f-member").checked, mem=state.member && state.member.found && state.member.status==="نشطة" ? state.member : null;
+  const memLine = isMember ? "\n⭐ "+t("msg_member")+": "+(mem ? mem.tierName+" ("+mem.id+")" : t("b_member")) : "";
+  const msg=t("msg_head")+"\n\n"+t("msg_name")+": "+name+"\n"+t("msg_phone")+": "+phone+memLine+"\n"+t("day")+": "+dayLabel()+"\n"+t("time")+": "+fmt12(state.time)
     +"\n\n"+t("services")+":\n"+lines+"\n\n"+t("total")+": "+total+" "+cur+(notes?"\n\n"+t("notes").replace(/ \(.*\)/,"")+": "+notes:"");
   const url="https://wa.me/"+SALON.whatsapp+"?text="+encodeURIComponent(msg);
   if(!SALON.bookingApi){ const w=window.open(url,"_blank","noopener"); if(!w) location.href=url; return; }
@@ -918,7 +1063,7 @@ $("book-form").addEventListener("submit",async e=>{
   try{
     const r=await fetch(SALON.bookingApi,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
       body:JSON.stringify({res:neededRes(),date:state.day,time:state.time,timeLabel:fmt12(state.time),name,phone,
-        services:list.map(s=>nameOf(s)).join(sep),total,notes,lang:LANG})});
+        services:list.map(s=>nameOf(s)).join(sep),total,notes,lang:LANG,member:isMember})});
     res=await r.json();
   }catch(err){ res=null; }
   btn.textContent=t("confirm");
@@ -1009,6 +1154,94 @@ $("gift-form").addEventListener("submit",async e=>{
     +(note?"\n"+t("g_note_l")+": "+note:"")+"\n\n"+t("services")+":\n"+lines+"\n\n"+t("total")+": "+total+" "+cur+"\n\n"+rcpt;
   goWA("https://wa.me/"+SALON.whatsapp+"?text="+encodeURIComponent(msg), "g-submit", "g_wa_tap");
 });
+
+/* ----- monthly memberships ----- */
+const tierOf = k => MEMBER_TIERS.find(x=>x.key===k);
+function tierCard(tr, pick){
+  const el=document.createElement(pick?"button":"article"); el.className="tier"+(tr.key==="vip"?" vip":"");
+  if(pick){ el.type="button"; el.id="m-tier-"+tr.key; el.setAttribute("aria-pressed", state.mtier===tr.key); const p=document.createElement("span"); p.className="pick"; el.appendChild(p); }
+  const h=document.createElement("h3"); h.className="tier-name"; h.textContent=tr.name;
+  const pr=document.createElement("div"); pr.className="tier-price"; pr.append(String(tr.price)); const sm=document.createElement("small"); sm.textContent=t("mem_month"); pr.appendChild(sm);
+  const ul=document.createElement("ul");
+  const inc=t("mem_inc")[tr.key];
+  inc.forEach((x,i)=>{ const li=document.createElement("li"); li.textContent=x; if(tr.key==="basic" && i===1) li.className="or"; ul.appendChild(li); });
+  [[t("mem_disc")(tr.disc),"perk"],[t("mem_prio"),"perk"]].forEach(([x,c])=>{ const li=document.createElement("li"); li.textContent=x; li.className=c; ul.appendChild(li); });
+  el.append(h,pr,ul);
+  if(pick) el.onclick=()=>{ state.mtier=tr.key; history.replaceState(null,"","#membership-"+tr.key); renderMem(); };
+  else { const a=document.createElement("a"); a.className="btn sm"; a.href="#membership-"+tr.key; a.id="join-"+tr.key; a.textContent=t("mem_join"); el.appendChild(a); }
+  return el;
+}
+function renderTiers(){
+  const box=$("tiers"); box.innerHTML=""; MEMBER_TIERS.forEach(tr=>box.appendChild(tierCard(tr,false)));
+  const ul=$("mem-terms"); ul.innerHTML=""; t("mem_terms_list").forEach(x=>{ const li=document.createElement("li"); li.textContent=x; ul.appendChild(li); });
+}
+function renderMem(){
+  const box=$("m-tiers"); box.innerHTML=""; MEMBER_TIERS.forEach(tr=>box.appendChild(tierCard(tr,true)));
+  const tr=tierOf(state.mtier);
+  document.querySelectorAll("#m-pay-opts .opt").forEach(b=>b.setAttribute("aria-pressed", state.mpay===b.dataset.pay));
+  $("m-pay-note").hidden=!state.mpay; $("m-pay-note").innerHTML = state.mpay ? t(state.mpay==="salon"?"m_pay_note_salon":"m_pay_note_tr") : "";
+  $("m-transfer").hidden = state.mpay!=="transfer";
+  $("m-pay-amt").textContent = tr ? tr.price : 0;
+  $("m-fname").textContent = state.mfile ? state.mfile.name : t("g_nofile");
+  const rp=$("m-r-plan"); rp.innerHTML="";
+  if(tr){ rp.textContent=tr.name; rp.style.fontFamily="var(--f-latin)"; } else { const e=document.createElement("span"); e.className="empty"; e.textContent=t("m_none"); rp.appendChild(e); rp.style.fontFamily=""; }
+  $("m-r-pay").textContent = state.mpay ? t(state.mpay==="salon"?"m_pay_salon":"m_pay_tr") : "—";
+  $("m-r-total").textContent = tr ? tr.price : 0; $("m-r-unit").textContent = t("mem_month");
+  $("m-submit").disabled = !tr; clearWA("m-submit");
+}
+document.querySelectorAll("#m-pay-opts .opt").forEach(b=>b.onclick=()=>{ state.mpay=b.dataset.pay; renderMem(); });
+$("m-pay-phone").textContent=GIFT_PAY.phone.replace(/(\d{4})(\d{4})/,"$1 $2");
+$("m-pay-name").textContent=GIFT_PAY.name;
+$("m-copy").onclick=()=>{ navigator.clipboard.writeText(GIFT_PAY.phone).then(()=>toast(t("copied_num"))).catch(()=>{}); };
+$("m-file").addEventListener("change",e=>{
+  const f=e.target.files[0]||null;
+  if(f && f.size>8*1024*1024){ toast(t("g_file_big")); e.target.value=""; state.mfile=null; } else state.mfile=f;
+  renderMem();
+});
+$("mem-form").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const tr=tierOf(state.mtier); if(!tr){ toast(t("m_err_plan")); goStep("m-step-plan"); return; }
+  const name=$("m-name").value.trim(), phone=$("m-phone").value.trim(), notes=$("m-notes").value.trim();
+  $("me-name").textContent = name ? "" : t("err_name");
+  $("me-phone").textContent = PHONE_RE.test(phone) ? "" : t("err_phone");
+  if(!name){ $("m-name").focus(); return; } if(!PHONE_RE.test(phone)){ $("m-phone").focus(); return; }
+  if(!state.mpay){ toast(t("m_err_pay")); goStep("m-step-pay"); return; }
+  const btn=$("m-submit"); let id=null, link=null;
+  if(SALON.bookingApi){
+    btn.disabled=true; btn.textContent = state.mfile && state.mpay==="transfer" ? t("g_sending") : t("sending");
+    try{
+      const file = state.mfile && state.mpay==="transfer" ? await fileToPayload(state.mfile) : null;
+      const r=await fetch(SALON.bookingApi,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({action:"membership",tier:tr.key,name,phone,pay:state.mpay,notes,lang:LANG,file})});
+      const j=await r.json(); if(j && j.ok){ id=j.id; link=j.fileUrl||null; }
+    }catch(err){}
+    btn.disabled=false; btn.innerHTML=t("m_confirm");
+  }
+  const rcpt = state.mpay==="salon" ? t("m_pay_salon") : state.mfile ? (t("g_rcpt_ok")+(link?"\n"+t("g_rcpt_link")+": "+link:"")) : t("g_rcpt_later");
+  const msg=t("m_msg_head")+(id?"\n"+t("m_id")+": "+id:"")+"\n\n"+t("msg_name")+": "+name+"\n"+t("msg_phone")+": "+phone
+    +"\n"+t("m_plan")+": "+tr.name+" — "+tr.price+" "+t("mem_month")+(notes?"\n"+t("notes").replace(/ \(.*\)/,"")+": "+notes:"")+"\n\n"+rcpt;
+  goWA("https://wa.me/"+SALON.whatsapp+"?text="+encodeURIComponent(msg), "m-submit", "m_wa_tap");
+});
+
+/* member check on the booking page */
+function renderMemStatus(){
+  const el=$("f-mem-status"), m=state.member; el.classList.remove("ok");
+  if(!$("f-member").checked){ el.textContent=""; return; }
+  if(m==="loading"){ el.textContent=t("b_mem_check"); return; }
+  if(!m){ el.textContent = PHONE_RE.test($("f-phone").value.trim()) ? "" : t("b_mem_phone"); return; }
+  if(m.found && m.status==="نشطة"){ const [y,mo,d]=m.end.split("-").map(Number); el.textContent=t("b_mem_ok")(m.tierName, d+" "+t("months")[mo-1]); el.classList.add("ok"); }
+  else el.textContent=t("b_mem_no");
+}
+async function checkMember(){
+  const phone=$("f-phone").value.trim();
+  if(!$("f-member").checked || !PHONE_RE.test(phone) || !SALON.bookingApi){ state.member=null; renderMemStatus(); return; }
+  state.member="loading"; renderMemStatus();
+  try{ const r=await fetch(SALON.bookingApi+"?action=member&phone="+encodeURIComponent(phone),{cache:"no-store"}); const j=await r.json(); state.member=j&&j.ok?j:null; }
+  catch(err){ state.member=null; }
+  renderMemStatus();
+}
+$("f-member").addEventListener("change",checkMember);
+$("f-phone").addEventListener("change",()=>{ if($("f-member").checked) checkMember(); });
 
 applyLang();
 route();

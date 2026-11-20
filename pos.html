@@ -157,6 +157,40 @@ tr.cur td{font-weight:700}
 .toast.show{transform:none}
 .toast.bad{background:var(--warn)}
 
+/* memberships */
+.mem-check{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:-4px}
+.mem-card{background:var(--char);color:var(--on-char);border-radius:14px;padding:10px 14px;display:grid;gap:6px}
+.mem-card.off{background:var(--warn)}
+.mem-card .top{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline}
+.mem-card .tn{font-family:var(--f-latin);font-weight:700;letter-spacing:.04em}
+.mem-card small{opacity:.8;font-size:12.5px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips span{background:rgba(255,255,255,.12);border-radius:999px;padding:2px 10px;font-size:12.5px}
+.panel .chips span{background:var(--cement)}
+.mem-card .chips span{background:rgba(255,255,255,.14);color:var(--on-char)}
+.chips span.no{opacity:.45;text-decoration:line-through}
+.tab.mem{background:var(--char);color:var(--on-char)}
+.tab.mem[aria-selected="false"]{background:transparent;color:var(--char)}
+.svc .tag{font-size:11.5px;color:var(--stone);font-weight:600}
+.svc[disabled]{opacity:.4;cursor:not-allowed}
+.line.mem{background:var(--cement)}
+.line .mtag{display:block;font-size:11.5px;color:var(--stone);font-weight:600}
+.line .price[readonly]{background:transparent;border-color:transparent;color:var(--stone)}
+.mlist{display:grid;gap:8px}
+.mrow{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--cement);border-radius:14px;padding:10px 12px}
+.mrow .who b{display:block}
+.mrow .who .ph{font-family:var(--f-latin);font-size:13px;color:var(--stone);direction:ltr;unicode-bidi:isolate}
+.mrow .tn{font-family:var(--f-latin);font-weight:700;font-size:13.5px}
+.mrow .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.mrow .seg button{padding:5px 8px;font-size:13px;flex:0 0 auto}
+.st{display:inline-block;border-radius:999px;padding:1px 9px;font-size:12px;font-weight:700;background:var(--paper)}
+.st.on{background:var(--ok);color:#fff} .st.wait{background:var(--om-red);color:#fff} .st.frz{background:var(--stone);color:#fff} .st.soon{background:#b7791f;color:#fff}
+.new-mem{display:grid;gap:10px;background:#fff;border-radius:14px;padding:14px;margin-bottom:12px}
+.tiers button{display:grid;gap:0;line-height:1.3}
+.tiers button small{font-family:var(--f-latin);font-weight:500;font-size:12px;opacity:.8}
+a.lnk{color:inherit;font-weight:600;font-size:13px}
+@media (max-width:640px){ .mrow{grid-template-columns:1fr} .mrow .acts{justify-content:flex-start} }
+
 @media (max-width:860px){
   .pos{grid-template-columns:1fr}
   .bill{position:static}
@@ -216,9 +250,12 @@ tr.cur td{font-weight:700}
         <div class="field"><label class="lab" for="c-name" data-i="c_name"></label><input id="c-name" autocomplete="off"></div>
         <div class="field"><label class="lab" for="c-phone" data-i="c_phone"></label><input id="c-phone" class="ltr-in" type="tel" inputmode="tel" autocomplete="off" placeholder="9XXX XXXX"></div>
       </div>
+      <div class="mem-check"><button class="btn sm ghost" type="button" id="mem-check" data-i="mem_check"></button><span class="muted" id="mem-msg" style="font-size:13px"></span></div>
+      <div class="mem-card" id="mem-card" hidden></div>
       <div><span class="lab" data-i="services"></span><div class="lines" id="lines"></div></div>
       <div class="totals">
         <div class="row"><span data-i="subtotal"></span><span><span class="num" id="sub">0</span> <span data-i="cur"></span></span></div>
+        <div class="row" id="mdisc-row" hidden><span id="mdisc-lab"></span><span><span class="num" id="mdisc">0</span> <span data-i="cur"></span></span></div>
         <div class="row"><label for="disc" data-i="discount"></label><input class="disc" id="disc" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0"></div>
         <div class="row grand"><span data-i="total"></span><span><b id="total">0</b><small data-i="cur"></small></span></div>
       </div>
@@ -230,6 +267,24 @@ tr.cur td{font-weight:700}
   </main>
 
   <div class="reports">
+    <section class="panel" id="members" aria-labelledby="mem-h">
+      <h2 id="mem-h"><span data-i="mem_h"></span> <button class="btn sm" type="button" id="mem-new-btn" data-i="mem_new"></button></h2>
+      <form class="new-mem" id="mem-new" hidden novalidate>
+        <div class="fields">
+          <div class="field"><label class="lab" for="nm-name" data-i="c_name"></label><input id="nm-name" autocomplete="off"></div>
+          <div class="field"><label class="lab" for="nm-phone" data-i="m_phone"></label><input id="nm-phone" class="ltr-in" type="tel" inputmode="tel" autocomplete="off" placeholder="9XXX XXXX"></div>
+        </div>
+        <div><span class="lab" data-i="m_tier"></span><div class="seg tiers" id="nm-tier"></div></div>
+        <div><span class="lab" data-i="payment"></span><div class="seg" id="nm-pay"></div></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" type="submit" id="nm-save" data-i="m_activate_new"></button><button class="btn ghost" type="button" id="nm-cancel" data-i="m_cancel_form"></button></div>
+      </form>
+      <div class="pays" id="mem-kpis"></div>
+      <div class="sub-h" id="mem-pend-h" data-i="m_pending"></div>
+      <div class="mlist" id="mem-pend"></div>
+      <div class="sub-h" style="margin-top:14px" data-i="m_active"></div>
+      <div class="mlist" id="mem-list"></div>
+    </section>
+
     <section class="panel" id="today" aria-labelledby="today-h">
       <h2 id="today-h"><span data-i="today_h"></span> <button class="btn sm ghost" type="button" id="refresh" data-i="refresh"></button></h2>
       <div class="kpis">
@@ -290,7 +345,17 @@ ar: { title: "نظام المحاسبة", gate_p: "للموظفين فقط. اك
   no_today: "ما في فواتير اليوم بعد.", month_of: "مبيعات شهر ", month_income: "إجمالي دخل الشهر", per_staff_month: "دخل كل موظف هذا الشهر", days_h: "دخل كل يوم في هذا الشهر",
   months_h: "سجل الشهور", months_note: "محفوظ بالتاريخ في الجدول، ويصلك ملخصه آخر كل شهر", no_data: "ما في بيانات بعد.", share: "من الإجمالي", to_bill: "إلى الفاتورة ↓",
   n_svc: n => n === 1 ? "خدمة واحدة" : n === 2 ? "خدمتان" : n + " خدمات", other: "أخرى",
-  cats: { nd: "عروض العيد الوطني", hair: "الشعر", face: "الوجه", nails: "الأظافر", body: "الجسم", packs: "الباقات" } },
+  cats: { mem: "العضوية", nd: "عروض العيد الوطني", hair: "الشعر", face: "الوجه", nails: "الأظافر", body: "الجسم", packs: "الباقات" },
+  mem_check: "تحقق من العضوية", mem_need_phone: "اكتب رقم هاتف العميل أول", mem_loading: "جارٍ البحث…", mem_none: "ما في عضوية بهذا الرقم", mem_found: "عضو",
+  mem_disc: n => "خصم العضوية " + n + "%", mem_disc_note: n => "خصم " + n + "% على باقي الخدمات (ما يشمل الباقات والعروض)", mem_not_active: "العضوية مو نشطة — ما تقدر تستخدم رصيدها",
+  mem_tag: "من رصيد العضوية", hair_l: "قص شعر", beard_l: "حلاقة لحية", flex_l: n => "حلاقات باقية (شعر أو لحية): " + n, left_n: n => "باقي " + n, picks_l: n => "خدمات مختارة باقية: " + n,
+  ends: "تنتهي", starts: "تبدأ", days_left: n => n <= 0 ? "آخر يوم" : "باقي " + n + " يوم",
+  mem_h: "العضويات الشهرية", mem_new: "+ اشتراك جديد", m_phone: "رقم الهاتف", m_tier: "الباقة", m_activate_new: "حفظ وتفعيل العضوية", m_cancel_form: "إلغاء",
+  m_pending: "طلبات بانتظار التفعيل", m_active: "العضويات الحالية", m_none_pend: "ما في طلبات جديدة.", m_none: "ما في عضويات بعد.",
+  m_activate: "تفعيل", m_reject: "إلغاء الطلب", m_freeze: "تجميد", m_unfreeze: "إلغاء التجميد", m_remind: "تذكير واتساب", m_receipt: "الإيصال", m_wa: "واتساب",
+  m_done: "تم", m_active_n: "نشطة", m_pend_n: "بانتظار التفعيل", m_soon_n: "تنتهي خلال 3 أيام", m_need: "اكتب الاسم والرقم واختر الباقة وطريقة الدفع",
+  m_confirm_reject: "متأكد تبغى تلغي هذا الطلب؟", m_confirm_freeze: "التجميد مسموح مرة وحدة في السنة. تجمّد العضوية الحين؟", m_activated: "تفعّلت العضوية", m_pay_pref: "طلب الدفع:", m_month: "شهرياً", m_frz_used: "التجميد مستخدم هذي السنة",
+  mst: { "نشطة": "نشطة", "بانتظار التفعيل": "بانتظار التفعيل", "مجمّدة": "مجمّدة", "منتهية": "منتهية", "تبدأ لاحقاً": "تجديد يبدأ لاحقاً", "ملغاة": "ملغاة" } },
 en: { title: "Accounting", gate_p: "Staff only. Enter the PIN to sign in.", enter: "Sign in", pin_empty: "Enter the PIN.", pin_bad: "Wrong PIN.", pin_fail: "Couldn't sign in. Try again.", offline: "No internet connection, or the sheet isn't ready.",
   today_sales: "Today's sales", invoices: "Invoices", cur: "OMR", logout: "Sign out", services: "Services", tap_hint: "Tap a service to add it to the bill", custom: "+ Other service",
   new_bill: "New bill", staff: "Staff", c_name: "Customer name", c_name_ph: "e.g. Salim", c_phone: "Phone (optional)", subtotal: "Subtotal", discount: "Discount (OMR)", total: "Total",
@@ -302,8 +367,29 @@ en: { title: "Accounting", gate_p: "Staff only. Enter the PIN to sign in.", ente
   no_today: "No bills today yet.", month_of: "Sales — ", month_income: "Total income this month", per_staff_month: "Income per staff this month", days_h: "Income per day this month",
   months_h: "Monthly history", months_note: "Saved by date in the sheet, and emailed to you at the end of each month", no_data: "No data yet.", share: "of total", to_bill: "To the bill ↓",
   n_svc: n => n === 1 ? "1 service" : n + " services", other: "Other",
-  cats: { nd: "National Day offers", hair: "Hair", face: "Face", nails: "Nails", body: "Body", packs: "Packages" } }
+  cats: { mem: "Membership", nd: "National Day offers", hair: "Hair", face: "Face", nails: "Nails", body: "Body", packs: "Packages" },
+  mem_check: "Check membership", mem_need_phone: "Enter the customer's phone first", mem_loading: "Searching…", mem_none: "No membership for this number", mem_found: "Member",
+  mem_disc: n => "Member discount " + n + "%", mem_disc_note: n => n + "% off other services (not packages or offers)", mem_not_active: "Membership isn't active — its balance can't be used",
+  mem_tag: "From membership", hair_l: "Haircut", beard_l: "Beard trim", flex_l: n => "Cuts left (hair or beard): " + n, left_n: n => n + " left", picks_l: n => "Chosen services left: " + n,
+  ends: "Ends", starts: "Starts", days_left: n => n <= 0 ? "Last day" : n + " days left",
+  mem_h: "Monthly memberships", mem_new: "+ New membership", m_phone: "Phone", m_tier: "Plan", m_activate_new: "Save & activate", m_cancel_form: "Cancel",
+  m_pending: "Requests awaiting activation", m_active: "Current memberships", m_none_pend: "No new requests.", m_none: "No memberships yet.",
+  m_activate: "Activate", m_reject: "Cancel request", m_freeze: "Freeze", m_unfreeze: "Unfreeze", m_remind: "WhatsApp reminder", m_receipt: "Receipt", m_wa: "WhatsApp",
+  m_done: "Done", m_active_n: "Active", m_pend_n: "Awaiting activation", m_soon_n: "Ending within 3 days", m_need: "Enter the name and phone, and choose the plan and payment",
+  m_confirm_reject: "Cancel this request?", m_confirm_freeze: "Freezing is allowed once a year. Freeze this membership now?", m_activated: "Membership activated", m_pay_pref: "Wants to pay:", m_month: "/ month", m_frz_used: "Freeze used this year",
+  mst: { "نشطة": "Active", "بانتظار التفعيل": "Awaiting activation", "مجمّدة": "Frozen", "منتهية": "Expired", "تبدأ لاحقاً": "Renewal starts later", "ملغاة": "Cancelled" } }
 };
+
+/* العضويات الشهرية — نفس الإعدادات في Apps Script */
+const TIERS = {
+  basic: { name: "HAYBAH BASIC", price: 4, disc: 15, hair: 2, beard: 2, flex: true, picks: 0 },
+  plus: { name: "HAYBAH PLUS", price: 12, disc: 20, hair: 2, beard: 2, picks: 1 },
+  vip: { name: "HAYBAH VIP", price: 25, disc: 25, hair: 4, beard: 4, picks: 2 }
+};
+const PICKS = { facial: ["تنظيف الوجه العادي", "Normal Facial"], bath: ["الحمام المغربي العادي", "Classic Moroccan Bath"], mp: ["مانيكير وباديكير", "Manicure & Pedicure"] };
+const DISC_CATS = ["hair", "face", "nails", "body"];   // خصم الأعضاء على هذي الأقسام فقط (ما يشمل الباقات والعروض)
+const hbValid = (T, h, b) => !T.flex ? h <= T.hair && b <= T.beard : h + b <= T.hair + T.beard && (h === 0 || b === 0 || (h <= T.hair && b <= T.beard));
+const phoneKey = p => String(p || "").replace(/\D/g, "").slice(-8);
 
 /* [عربي, English, السعر, السعر قبل الخصم] */
 const CATS = [
@@ -322,13 +408,14 @@ if (OFFERS_ON) CATS.unshift({ key: "nd", hot: true, items: [
 /* ===== الحالة ===== */
 const $ = id => document.getElementById(id);
 const omr = v => String(Math.round((Number(v) || 0) * 1000) / 1000);
-const st = { tab: CATS[0].key, lines: [], staff: null, pay: null, saving: false, data: null };
+const st = { tab: CATS[0].key, lines: [], staff: null, pay: null, saving: false, data: null, member: null, nmTier: null, nmPay: null, mpay: {} };
 const store = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} }, del: k => { try { localStorage.removeItem(k); } catch (e) {} } };
 let PIN = store.get("haybah-pos-pin") || "";
 let LANG = store.get("haybah-pos-lang") === "en" ? "en" : "ar";
 if (STAFF.includes(store.get("haybah-pos-staff"))) st.staff = store.get("haybah-pos-staff");
 const t = k => T[LANG][k];
-const payLabel = ar => { const p = PAYMENTS.find(x => x[0] === ar); return p ? p[LANG === "ar" ? 0 : 1] : ar; };
+const payLabel = ar => { const p = PAYMENTS.concat([["عضوية", "Membership"]]).find(x => x[0] === ar); return p ? p[LANG === "ar" ? 0 : 1] : ar; };
+const staffLabel = n => n === "العضويات" && LANG === "en" ? "Memberships" : n;
 const locale = () => LANG === "ar" ? "ar-OM-u-nu-latn" : "en-GB";
 
 function toast(msg, bad) { const el = $("toast"); el.textContent = msg; el.classList.toggle("bad", !!bad); el.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove("show"), bad ? 4500 : 2500); }
@@ -369,17 +456,49 @@ function openApp(d) { $("gate").hidden = true; $("app").hidden = false; renderAl
 
 /* ===== الخدمات ===== */
 const nameOf = it => LANG === "ar" ? it[0] : it[1];
+const memActive = () => st.member && st.member.status === "نشطة";
+const tabList = () => (memActive() ? [{ key: "mem", mem: true }] : []).concat(CATS);
 function renderTabs() {
   const box = $("tabs"); box.innerHTML = "";
-  CATS.forEach(c => {
-    const b = document.createElement("button"); b.type = "button"; b.className = "tab" + (c.hot ? " hot" : ""); b.setAttribute("role", "tab");
+  if (!tabList().some(c => c.key === st.tab)) st.tab = CATS[0].key;
+  tabList().forEach(c => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "tab" + (c.hot ? " hot" : "") + (c.mem ? " mem" : ""); b.setAttribute("role", "tab");
     b.setAttribute("aria-selected", st.tab === c.key); b.textContent = t("cats")[c.key];
     b.onclick = () => { st.tab = c.key; renderTabs(); renderGrid(); };
     box.appendChild(b);
   });
 }
+// خدمات العضوية: ما ينحسب لها سعر، وتنخصم من الرصيد
+function memItems() {
+  const m = st.member, T = TIERS[m.tier];
+  const list = [["hair", "قص شعر (عضوية)", "Haircut (membership)"], ["beard", "حلاقة لحية (عضوية)", "Beard trim (membership)"]];
+  if (T.picks) Object.keys(PICKS).forEach(k => list.push(["pick:" + k, PICKS[k][0] + " (عضوية)", PICKS[k][1] + " (membership)"]));
+  return list;
+}
+function memLeft(use) {
+  const m = st.member, T = TIERS[m.tier], q = u => st.lines.filter(l => l.use === u).reduce((a, l) => a + l.qty, 0);
+  const h = m.used.hair + q("hair"), b = m.used.beard + q("beard");
+  if (use === "hair") { let n = 0; while (hbValid(T, h + n + 1, b)) n++; return n; }
+  if (use === "beard") { let n = 0; while (hbValid(T, h, b + n + 1)) n++; return n; }
+  const picked = m.used.picks.concat(st.lines.filter(l => l.use && l.use.startsWith("pick:")).map(l => l.use.slice(5)));
+  return picked.length < T.picks && !picked.includes(use.slice(5)) ? 1 : 0;
+}
 function renderGrid() {
   const box = $("grid"); box.innerHTML = "";
+  if (st.tab === "mem") {
+    memItems().forEach(([use, ar, en]) => {
+      const left = memLeft(use);
+      const b = document.createElement("button"); b.type = "button"; b.className = "svc"; b.disabled = !left;
+      const n = document.createElement("span"); n.className = "n"; n.textContent = LANG === "ar" ? ar : en;
+      const p = document.createElement("span"); p.className = "tag"; p.textContent = t("left_n")(left);
+      b.append(n, p);
+      const q = st.lines.filter(l => l.use === use).reduce((a, l) => a + l.qty, 0);
+      if (q) { const c = document.createElement("span"); c.className = "cnt"; c.textContent = q; b.appendChild(c); }
+      b.onclick = () => { if (memLeft(use) > 0) addLine(ar, en, 0, "mem", use); };
+      box.appendChild(b);
+    });
+    return;
+  }
   CATS.find(c => c.key === st.tab).items.forEach(it => {
     const [ar, en, price, was] = it;
     const b = document.createElement("button"); b.type = "button"; b.className = "svc";
@@ -390,16 +509,16 @@ function renderGrid() {
     b.append(n, p);
     const q = st.lines.filter(l => l.ar === ar).reduce((a, l) => a + l.qty, 0);
     if (q) { const c = document.createElement("span"); c.className = "cnt"; c.textContent = q; b.appendChild(c); }
-    b.onclick = () => addLine(ar, en, price);
+    b.onclick = () => addLine(ar, en, price, st.tab);
     box.appendChild(b);
   });
   const c = document.createElement("button"); c.type = "button"; c.className = "svc custom"; c.textContent = t("custom");
   c.onclick = () => { st.lines.push({ ar: "", en: "", price: 0, qty: 1, custom: true }); $("done").hidden = true; renderLines(true); };
   box.appendChild(c);
 }
-function addLine(ar, en, price) {
-  const l = st.lines.find(x => x.ar === ar && !x.custom && x.price === price);
-  if (l) l.qty++; else st.lines.push({ ar, en, price, qty: 1 });
+function addLine(ar, en, price, cat, use) {
+  const l = st.lines.find(x => x.ar === ar && !x.custom && x.price === price && (x.use || "") === (use || ""));
+  if (l) l.qty++; else st.lines.push({ ar, en, price, qty: 1, cat: cat || "", use: use || "" });
   $("done").hidden = true; renderLines(); renderGrid();
 }
 
@@ -423,16 +542,18 @@ function renderLines(focusLast) {
       inp.oninput = () => { l.ar = l.en = inp.value; }; nm.appendChild(inp);
       if (focusLast && i === st.lines.length - 1) queueMicrotask(() => inp.focus());
     } else nm.textContent = LANG === "ar" ? l.ar : l.en;
+    if (l.use) { row.classList.add("mem"); const tg = document.createElement("span"); tg.className = "mtag"; tg.textContent = t("mem_tag"); nm.appendChild(tg); }
     const q = document.createElement("div"); q.className = "qty";
     const minus = document.createElement("button"); minus.type = "button"; minus.textContent = "−"; minus.setAttribute("aria-label", "−");
     const n = document.createElement("span"); n.textContent = l.qty;
     const plus = document.createElement("button"); plus.type = "button"; plus.textContent = "+"; plus.setAttribute("aria-label", "+");
     minus.onclick = () => { if (l.qty > 1) l.qty--; else st.lines.splice(i, 1); renderLines(); renderGrid(); };
-    plus.onclick = () => { l.qty++; renderLines(); renderGrid(); };
+    plus.onclick = () => { if (l.use && memLeft(l.use) <= 0) return; l.qty++; renderLines(); renderGrid(); };
     q.append(minus, n, plus);
     const pr = document.createElement("input"); pr.className = "price"; pr.type = "number"; pr.inputMode = "decimal"; pr.min = "0"; pr.step = "0.5"; pr.value = l.price || ""; pr.placeholder = "0";
     pr.setAttribute("aria-label", t("th_total"));
     pr.oninput = () => { l.price = Math.max(0, parseFloat(pr.value) || 0); updateTotals(); };
+    if (l.use) { pr.readOnly = true; pr.value = "0"; pr.tabIndex = -1; }
     const rm = document.createElement("button"); rm.type = "button"; rm.className = "rm"; rm.textContent = "×"; rm.setAttribute("aria-label", "×");
     rm.onclick = () => { st.lines.splice(i, 1); renderLines(); renderGrid(); };
     row.append(nm, q, pr, rm); box.appendChild(row);
@@ -440,8 +561,11 @@ function renderLines(focusLast) {
   updateTotals();
 }
 const subTotal = () => st.lines.reduce((a, l) => a + l.price * l.qty, 0);
+// خصم الأعضاء: نسبة الباقة على خدمات الشعر والوجه والأظافر والجسم بأسعارها العادية
+const memDisc = () => !memActive() ? 0 : Math.round(st.lines.filter(l => !l.use && DISC_CATS.includes(l.cat)).reduce((a, l) => a + l.price * l.qty, 0) * TIERS[st.member.tier].disc / 100 * 1000) / 1000;
 function updateTotals() {
-  const sub = subTotal(), disc = Math.min(sub, Math.max(0, parseFloat($("disc").value) || 0));
+  const sub = subTotal(), md = memDisc(), disc = Math.min(sub, md + Math.max(0, parseFloat($("disc").value) || 0));
+  $("mdisc-row").hidden = !memActive(); if (memActive()) { $("mdisc-lab").textContent = t("mem_disc")(TIERS[st.member.tier].disc); $("mdisc").textContent = omr(md); }
   $("sub").textContent = omr(sub); $("total").textContent = omr(sub - disc);
   $("save").disabled = st.saving || !st.lines.length;
   const n = st.lines.reduce((a, l) => a + l.qty, 0);
@@ -456,12 +580,13 @@ $("save").onclick = async () => {
   if (!st.staff) problems.push(t("need_staff"));
   if (!st.pay) problems.push(t("need_pay"));
   if (st.lines.some(l => !l.ar.trim())) problems.push(t("need_name"));
-  if (st.lines.some(l => !(l.price > 0))) problems.push(t("need_price"));
+  if (st.lines.some(l => !l.use && !(l.price > 0))) problems.push(t("need_price"));
+  const sub = subTotal(), disc = Math.min(sub, memDisc() + Math.max(0, parseFloat($("disc").value) || 0));
+  if (!st.pay && sub - disc <= 0 && st.lines.length) { const i = problems.indexOf(t("need_pay")); if (i >= 0) problems.splice(i, 1); }
   if (problems.length) { toast(problems.join(" · "), true); return; }
-  const sub = subTotal(), disc = Math.min(sub, Math.max(0, parseFloat($("disc").value) || 0));
-  const body = { action: "sale", pin: PIN, staff: st.staff, payment: st.pay,
+  const body = { action: "sale", pin: PIN, staff: st.staff, payment: st.pay || "نقداً", memberId: st.member ? st.member.id : undefined,
     customer: $("c-name").value.trim(), phone: $("c-phone").value.trim(), note: $("note").value.trim(),
-    items: st.lines.map(l => ({ name: l.ar.trim(), price: l.price, qty: l.qty })), subtotal: omr(sub), discount: omr(disc), total: omr(sub - disc) };
+    items: st.lines.map(l => ({ name: l.ar.trim(), price: l.use ? 0 : l.price, qty: l.qty, use: l.use || undefined })), subtotal: omr(sub), discount: omr(disc), total: omr(sub - disc) };
   st.saving = true; updateTotals(); $("save").textContent = t("saving");
   try {
     const j = await api(null, body);
@@ -469,7 +594,7 @@ $("save").onclick = async () => {
       $("done").innerHTML = ""; const s = document.createElement("span"); s.textContent = "✔ " + t("saved") + " ";
       const b = document.createElement("b"); b.textContent = j.invoice; const s2 = document.createElement("span"); s2.textContent = " · " + body.total + " " + t("cur") + " " + t("saved_long");
       $("done").append(s, b, s2); $("done").hidden = false;
-      st.lines = []; st.pay = null; $("c-name").value = ""; $("c-phone").value = ""; $("note").value = ""; $("disc").value = "";
+      st.lines = []; st.pay = null; $("c-name").value = ""; $("c-phone").value = ""; $("note").value = ""; $("disc").value = ""; setMember(null);
       renderAll(); renderReports(j.today ? Object.assign({}, j.today, j) : j);
       toast(t("saved") + " " + j.invoice);
     } else if (j.reason === "pin") { toast(t("pin_changed"), true); $("logout").click(); }
@@ -478,6 +603,140 @@ $("save").onclick = async () => {
   st.saving = false; $("save").textContent = t("save"); updateTotals();
 };
 
+/* ===== العضوية في الفاتورة ===== */
+function setMember(m) {
+  st.member = m;
+  if (!m || m.status !== "نشطة") st.lines = st.lines.filter(l => !l.use);
+  if (m && m.status === "نشطة") st.tab = "mem";
+  renderMemberCard(); renderTabs(); renderGrid(); renderLines();
+}
+function balanceChips(m, box) {
+  const T = TIERS[m.tier], L = m.left, add = (txt, no) => { const s = document.createElement("span"); s.textContent = txt; if (no) s.className = "no"; box.appendChild(s); };
+  if (T.flex) add(t("flex_l")(L.flexLeft), !L.flexLeft);
+  else { add(t("hair_l") + ": " + L.hair, !L.hair); add(t("beard_l") + ": " + L.beard, !L.beard); }
+  if (T.picks) Object.keys(PICKS).forEach(k => add(PICKS[k][LANG === "ar" ? 0 : 1], !L.picks[k]));
+}
+function renderMemberCard() {
+  const box = $("mem-card"), m = st.member; box.innerHTML = ""; box.hidden = !m; if (!m) return;
+  box.classList.toggle("off", m.status !== "نشطة");
+  const top = document.createElement("div"); top.className = "top";
+  const a = document.createElement("span"); a.textContent = "⭐ " + (m.name || t("mem_found")) + " · ";
+  const tn = document.createElement("span"); tn.className = "tn"; tn.textContent = m.tierName; a.appendChild(tn);
+  const b = document.createElement("small"); b.textContent = t("mst")[m.status] + (m.end ? " · " + t("ends") + " " + dayText(m.end) : "") + (m.daysLeft != null ? " · " + t("days_left")(m.daysLeft) : "");
+  top.append(a, b); box.appendChild(top);
+  if (m.status === "نشطة") {
+    const ch = document.createElement("div"); ch.className = "chips"; balanceChips(m, ch); box.appendChild(ch);
+    const d = document.createElement("small"); d.textContent = t("mem_disc_note")(TIERS[m.tier].disc); box.appendChild(d);
+  } else { const d = document.createElement("small"); d.textContent = t("mem_not_active"); box.appendChild(d); }
+}
+$("mem-check").onclick = async () => {
+  const k = phoneKey($("c-phone").value);
+  if (k.length < 7) { $("mem-msg").textContent = t("mem_need_phone"); $("c-phone").focus(); return; }
+  $("mem-msg").textContent = t("mem_loading");
+  try { const j = await api({ action: "today", pin: PIN }); if (j.ok) renderReports(j); } catch (e) {}
+  const list = ((st.data && st.data.members) || []).filter(x => phoneKey(x.phone) === k && x.status !== "ملغاة");
+  const m = list.find(x => x.status === "نشطة") || list.find(x => x.status === "مجمّدة") || list.find(x => x.status === "تبدأ لاحقاً") || list.find(x => x.status === "بانتظار التفعيل") || list[0] || null;
+  $("mem-msg").textContent = m ? "" : t("mem_none");
+  if (m && !$("c-name").value.trim()) $("c-name").value = m.name;
+  setMember(m);
+};
+$("c-phone").addEventListener("input", () => { if (st.member && phoneKey($("c-phone").value) !== phoneKey(st.member.phone)) { setMember(null); } $("mem-msg").textContent = ""; });
+
+/* ===== لوحة العضويات ===== */
+async function memberOp(body, btn) {
+  if (btn) btn.disabled = true;
+  try {
+    const j = await api(null, Object.assign({ action: "member_admin", pin: PIN }, body));
+    if (j.ok) { renderReports(j); toast(j.invoice ? t("m_activated") + " · " + j.invoice : t("m_done")); return true; }
+    if (j.reason === "pin") { toast(t("pin_changed"), true); $("logout").click(); }
+    else toast(j.error || t("not_saved"), true);
+  } catch (e) { toast(t("net_fail"), true); }
+  if (btn) btn.disabled = false;
+  return false;
+}
+function stBadge(m) {
+  const s = document.createElement("span"); s.className = "st";
+  const soon = m.status === "نشطة" && m.daysLeft != null && m.daysLeft <= 3;
+  s.classList.add(soon ? "soon" : m.status === "نشطة" ? "on" : m.status === "بانتظار التفعيل" ? "wait" : m.status === "مجمّدة" ? "frz" : "x");
+  s.textContent = t("mst")[m.status] || m.status; return s;
+}
+function memRow(m, pending) {
+  const row = document.createElement("div"); row.className = "mrow";
+  const who = document.createElement("div"); who.className = "who";
+  const nb = document.createElement("b"); nb.textContent = m.name; const ph = document.createElement("span"); ph.className = "ph"; ph.textContent = m.phone + " · " + m.id;
+  who.append(nb, ph);
+  const info = document.createElement("div");
+  const tn = document.createElement("div"); const tt = document.createElement("span"); tt.className = "tn"; tt.textContent = m.tierName + " "; tn.append(tt, stBadge(m)); info.appendChild(tn);
+  const sm = document.createElement("small"); sm.className = "muted";
+  if (pending) {
+    sm.textContent = omr(m.price) + " " + t("cur") + " · " + t("m_pay_pref") + " " + (m.pay === "تحويل" ? payLabel("تحويل") : m.pay) + " · " + m.req;
+    info.appendChild(sm);
+    if (/^https?:/.test(m.receipt)) { const a = document.createElement("a"); a.className = "lnk"; a.href = m.receipt; a.target = "_blank"; a.rel = "noopener"; a.textContent = t("m_receipt") + " ↗"; info.append(" ", a); }
+  } else {
+    sm.textContent = (m.status === "تبدأ لاحقاً" ? t("starts") + " " + dayText(m.start) + " · " : "") + (m.end ? t("ends") + " " + dayText(m.end) : "") + (m.status === "نشطة" && m.daysLeft != null ? " · " + t("days_left")(m.daysLeft) : "");
+    info.appendChild(sm);
+    if (m.status === "نشطة") { const ch = document.createElement("div"); ch.className = "chips"; ch.style.marginTop = "4px"; balanceChips(m, ch); info.appendChild(ch); }
+  }
+  const acts = document.createElement("div"); acts.className = "acts";
+  if (pending) {
+    if (!st.mpay[m.id]) st.mpay[m.id] = m.pay === "تحويل" ? "تحويل" : null;
+    const sg = document.createElement("div"); sg.className = "seg";
+    PAYMENTS.forEach(([ar]) => { const b = document.createElement("button"); b.type = "button"; b.textContent = payLabel(ar); b.setAttribute("aria-pressed", st.mpay[m.id] === ar); b.onclick = () => { st.mpay[m.id] = ar; renderMembers(st.data.members); }; sg.appendChild(b); });
+    const go = document.createElement("button"); go.type = "button"; go.className = "btn sm"; go.textContent = t("m_activate");
+    go.onclick = () => { if (!st.mpay[m.id]) { toast(t("need_pay"), true); return; } memberOp({ op: "activate", id: m.id, payment: st.mpay[m.id], staff: st.staff }, go); };
+    const no = document.createElement("button"); no.type = "button"; no.className = "btn sm ghost"; no.textContent = t("m_reject");
+    no.onclick = () => { if (confirm(t("m_confirm_reject"))) memberOp({ op: "cancel", id: m.id }, no); };
+    acts.append(sg, go, no);
+  } else {
+    if (m.status === "نشطة") {
+      const yr = new Date().getFullYear() + "";
+      const fz = document.createElement("button"); fz.type = "button"; fz.className = "btn sm ghost"; fz.textContent = t("m_freeze");
+      if (m.frzYear === yr) { fz.disabled = true; fz.title = t("m_frz_used"); }
+      fz.onclick = () => { if (confirm(t("m_confirm_freeze"))) memberOp({ op: "freeze", id: m.id }, fz); };
+      acts.appendChild(fz);
+    }
+    if (m.status === "مجمّدة") { const uf = document.createElement("button"); uf.type = "button"; uf.className = "btn sm"; uf.textContent = t("m_unfreeze"); uf.onclick = () => memberOp({ op: "unfreeze", id: m.id }, uf); acts.appendChild(uf); }
+    if (m.wa && ((m.status === "نشطة" && m.daysLeft != null && m.daysLeft <= 3) || m.status === "منتهية")) {
+      const a = document.createElement("a"); a.className = "btn sm"; a.href = m.wa; a.target = "_blank"; a.rel = "noopener"; a.textContent = t("m_remind"); acts.appendChild(a);
+    }
+  }
+  row.append(who, info, acts); return row;
+}
+function renderMembers(list) {
+  list = list || [];
+  const pend = list.filter(m => m.status === "بانتظار التفعيل"), cur = list.filter(m => m.status !== "بانتظار التفعيل");
+  const order = { "نشطة": 0, "مجمّدة": 1, "تبدأ لاحقاً": 2, "منتهية": 3 };
+  cur.sort((a, b) => (order[a.status] - order[b.status]) || String(a.end).localeCompare(String(b.end)));
+  const k = $("mem-kpis"); k.innerHTML = "";
+  [[t("m_active_n"), cur.filter(m => m.status === "نشطة").length], [t("m_pend_n"), pend.length], [t("m_soon_n"), cur.filter(m => m.status === "نشطة" && m.daysLeft != null && m.daysLeft <= 3).length]]
+    .forEach(([l, n]) => { const s = document.createElement("span"); s.textContent = l + ": "; const b = document.createElement("b"); b.textContent = n; s.appendChild(b); k.appendChild(s); });
+  const pb = $("mem-pend"); pb.innerHTML = "";
+  if (!pend.length) { const e = document.createElement("div"); e.className = "muted"; e.style.fontSize = "14px"; e.textContent = t("m_none_pend"); pb.appendChild(e); }
+  pend.forEach(m => pb.appendChild(memRow(m, true)));
+  const lb = $("mem-list"); lb.innerHTML = "";
+  if (!cur.length) { const e = document.createElement("div"); e.className = "muted"; e.style.fontSize = "14px"; e.textContent = t("m_none"); lb.appendChild(e); }
+  cur.forEach(m => lb.appendChild(memRow(m, false)));
+  // تحديث بطاقة العضو المفتوحة في الفاتورة
+  if (st.member) { const fresh = list.find(x => x.id === st.member.id); if (fresh) { st.member = fresh; renderMemberCard(); if (st.tab === "mem") renderGrid(); } }
+}
+function renderNewMember() {
+  const tb = $("nm-tier"); tb.innerHTML = "";
+  Object.keys(TIERS).forEach(k => { const b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-pressed", st.nmTier === k);
+    b.append(TIERS[k].name.replace("HAYBAH ", "")); const sm = document.createElement("small"); sm.textContent = TIERS[k].price + " " + t("cur"); b.appendChild(sm);
+    b.onclick = () => { st.nmTier = k; renderNewMember(); }; tb.appendChild(b); });
+  seg("nm-pay", PAYMENTS.map(p => p[0]), "nmPay", null, payLabel);
+}
+$("mem-new-btn").onclick = () => { $("mem-new").hidden = !$("mem-new").hidden; if (!$("mem-new").hidden) { renderNewMember(); $("nm-name").focus(); } };
+$("nm-cancel").onclick = () => { $("mem-new").hidden = true; };
+$("mem-new").addEventListener("submit", async e => {
+  e.preventDefault();
+  const name = $("nm-name").value.trim(), phone = $("nm-phone").value.trim();
+  if (!name || phoneKey(phone).length < 7 || !st.nmTier || !st.nmPay) { toast(t("m_need"), true); return; }
+  if (await memberOp({ op: "new", name, phone, tier: st.nmTier, payment: st.nmPay, staff: st.staff }, $("nm-save"))) {
+    $("nm-name").value = ""; $("nm-phone").value = ""; st.nmTier = null; st.nmPay = null; $("mem-new").hidden = true; $("nm-save").disabled = false;
+  }
+});
+
 /* ===== التقارير ===== */
 function staffList(by) { return STAFF.concat(Object.keys(by || {}).filter(k => !STAFF.includes(k) && by[k])); }
 function staffCards(boxId, by, total) {
@@ -485,7 +744,7 @@ function staffCards(boxId, by, total) {
   staffList(by).forEach(n => {
     const v = (by || {})[n] || 0, pct = total ? Math.round(v / total * 100) : 0;
     const c = document.createElement("div"); c.className = "sc";
-    const w = document.createElement("span"); w.className = "who"; w.textContent = n;
+    const w = document.createElement("span"); w.className = "who"; w.textContent = staffLabel(n);
     const b = document.createElement("b"); b.textContent = omr(v); const u = document.createElement("span"); u.className = "unit"; u.textContent = t("cur");
     const val = document.createElement("div"); val.append(b, u);
     const l = document.createElement("span"); l.className = "lbl"; l.textContent = pct + "% " + t("share");
@@ -499,7 +758,7 @@ function pays(boxId, by) {
 }
 function head(id, first, by) {
   const tr = $(id); tr.innerHTML = "";
-  [first, t("th_count"), t("th_total")].concat(staffList(by)).forEach((h, i) => { const th = document.createElement("th"); th.textContent = h; if (i) th.className = "num"; tr.appendChild(th); });
+  [first, t("th_count"), t("th_total")].concat(staffList(by).map(staffLabel)).forEach((h, i) => { const th = document.createElement("th"); th.textContent = h; if (i) th.className = "num"; tr.appendChild(th); });
 }
 function sumRows(tbId, list, labelOf, curKey, by) {
   const tb = $(tbId); tb.innerHTML = "";
@@ -515,6 +774,7 @@ const monthText = ym => { const [y, m] = ym.split("-").map(Number); return new D
 
 function renderReports(d) {
   if (!d) return; st.data = d;
+  renderMembers(d.members);
   // اليوم
   $("chip-total").textContent = omr(d.total); $("chip-count").textContent = d.count;
   $("t-total").textContent = omr(d.total); $("t-count").textContent = t("n_inv")(d.count);
@@ -523,7 +783,7 @@ function renderReports(d) {
   if (!d.sales || !d.sales.length) { const tr = document.createElement("tr"); const td = document.createElement("td"); td.colSpan = 7; td.className = "muted"; td.textContent = t("no_today"); tr.appendChild(td); tb.appendChild(tr); }
   (d.sales || []).slice().reverse().forEach(x => {
     const tr = document.createElement("tr");
-    [[x.invoice, "num"], [x.time, "num"], [x.customer || "—"], [x.services], [x.staff], [payLabel(x.payment), "pill"], [omr(x.total) + " " + t("cur"), "num"]].forEach(([v, cls]) => {
+    [[x.invoice, "num"], [x.time, "num"], [x.customer || "—"], [x.services], [staffLabel(x.staff)], [payLabel(x.payment), "pill"], [omr(x.total) + " " + t("cur"), "num"]].forEach(([v, cls]) => {
       const td = document.createElement("td");
       if (cls === "pill") { const s = document.createElement("span"); s.className = "pill"; s.textContent = v; td.appendChild(s); } else { td.textContent = v; if (cls) td.className = cls; }
       tr.appendChild(td);
@@ -552,7 +812,7 @@ $("chip").onclick = () => $("today").scrollIntoView({ behavior: matchMedia("(pre
 
 function renderAll() {
   $("today-date").textContent = new Date().toLocaleDateString(locale(), { weekday: "long", day: "numeric", month: "long" });
-  renderTabs(); renderGrid(); renderLines();
+  renderTabs(); renderGrid(); renderLines(); renderMemberCard(); if (!$("mem-new").hidden) renderNewMember();
   seg("staff", STAFF, "staff", "haybah-pos-staff"); seg("pay", PAYMENTS.map(p => p[0]), "pay", null, payLabel);
 }
 setInterval(() => { $("bill-time").textContent = new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }); }, 1000);
