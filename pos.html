@@ -516,9 +516,25 @@ function renderGrid() {
   c.onclick = () => { st.lines.push({ ar: "", en: "", price: 0, qty: 1, custom: true }); $("done").hidden = true; renderLines(true); };
   box.appendChild(c);
 }
+// خدمات عادية تنحسب تلقائياً من رصيد العضوية لو العضو عنده رصيد
+const AUTO_USE = { "قص شعر": ["hair", "قص شعر (عضوية)", "Haircut (membership)"], "حلاقة اللحية": ["beard", "حلاقة لحية (عضوية)", "Beard trim (membership)"],
+  "مانيكير وباديكير": ["pick:mp", "مانيكير وباديكير (عضوية)", "Manicure & Pedicure (membership)"], "حمام مغربي كلاسيكي": ["pick:bath", "الحمام المغربي العادي (عضوية)", "Classic Moroccan Bath (membership)"] };
+function absorbMember() {
+  if (!memActive()) return;
+  st.lines.slice().forEach(l => {
+    const a = !l.use && !l.custom && AUTO_USE[l.ar]; if (!a) return;
+    while (l.qty > 0 && memLeft(a[0]) > 0) {
+      l.qty--;
+      const m = st.lines.find(x => x.use === a[0]);
+      if (m) m.qty++; else st.lines.push({ ar: a[1], en: a[2], price: 0, qty: 1, cat: "mem", use: a[0] });
+    }
+    if (l.qty <= 0) st.lines.splice(st.lines.indexOf(l), 1);
+  });
+}
 function addLine(ar, en, price, cat, use) {
   const l = st.lines.find(x => x.ar === ar && !x.custom && x.price === price && (x.use || "") === (use || ""));
   if (l) l.qty++; else st.lines.push({ ar, en, price, qty: 1, cat: cat || "", use: use || "" });
+  absorbMember();
   $("done").hidden = true; renderLines(); renderGrid();
 }
 
@@ -548,7 +564,7 @@ function renderLines(focusLast) {
     const n = document.createElement("span"); n.textContent = l.qty;
     const plus = document.createElement("button"); plus.type = "button"; plus.textContent = "+"; plus.setAttribute("aria-label", "+");
     minus.onclick = () => { if (l.qty > 1) l.qty--; else st.lines.splice(i, 1); renderLines(); renderGrid(); };
-    plus.onclick = () => { if (l.use && memLeft(l.use) <= 0) return; l.qty++; renderLines(); renderGrid(); };
+    plus.onclick = () => { if (l.use && memLeft(l.use) <= 0) return; l.qty++; absorbMember(); renderLines(); renderGrid(); };
     q.append(minus, n, plus);
     const pr = document.createElement("input"); pr.className = "price"; pr.type = "number"; pr.inputMode = "decimal"; pr.min = "0"; pr.step = "0.5"; pr.value = l.price || ""; pr.placeholder = "0";
     pr.setAttribute("aria-label", t("th_total"));
@@ -607,7 +623,7 @@ $("save").onclick = async () => {
 function setMember(m) {
   st.member = m;
   if (!m || m.status !== "نشطة") st.lines = st.lines.filter(l => !l.use);
-  if (m && m.status === "نشطة") st.tab = "mem";
+  if (m && m.status === "نشطة") { st.tab = "mem"; absorbMember(); }
   renderMemberCard(); renderTabs(); renderGrid(); renderLines();
 }
 function balanceChips(m, box) {
