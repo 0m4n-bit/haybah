@@ -352,7 +352,7 @@ ar: { title: "نظام المحاسبة", gate_p: "للموظفين فقط. اك
   ends: "تنتهي", starts: "تبدأ", days_left: n => n <= 0 ? "آخر يوم" : "باقي " + n + " يوم",
   mem_h: "العضويات الشهرية", mem_new: "+ اشتراك جديد", m_phone: "رقم الهاتف", m_tier: "الباقة", m_activate_new: "حفظ وتفعيل العضوية", m_cancel_form: "إلغاء",
   m_pending: "طلبات بانتظار التفعيل", m_active: "العضويات الحالية", m_none_pend: "ما في طلبات جديدة.", m_none: "ما في عضويات بعد.",
-  m_activate: "تفعيل", m_reject: "إلغاء الطلب", m_freeze: "تجميد", m_unfreeze: "إلغاء التجميد", m_remind: "تذكير واتساب", m_receipt: "الإيصال", m_wa: "واتساب",
+  m_activate: "تفعيل", m_reject: "إلغاء الطلب", m_freeze: "تجميد", m_unfreeze: "إلغاء التجميد", m_cancel: "إلغاء العضوية", m_confirm_cancel: (n, tn) => "إلغاء عضوية " + n + " (" + tn + ")؟\nما تقدر ترجعها بعد الإلغاء.", m_remind: "تذكير واتساب", m_receipt: "الإيصال", m_wa: "واتساب",
   m_done: "تم", m_active_n: "نشطة", m_pend_n: "بانتظار التفعيل", m_soon_n: "تنتهي خلال 3 أيام", m_need: "اكتب الاسم والرقم واختر الباقة وطريقة الدفع",
   m_confirm_reject: "متأكد تبغى تلغي هذا الطلب؟", m_confirm_freeze: "التجميد مسموح مرة وحدة في السنة. تجمّد العضوية الحين؟", m_activated: "تفعّلت العضوية", m_pay_pref: "طلب الدفع:", m_month: "شهرياً", m_frz_used: "التجميد مستخدم هذي السنة",
   mst: { "نشطة": "نشطة", "بانتظار التفعيل": "بانتظار التفعيل", "مجمّدة": "مجمّدة", "منتهية": "منتهية", "تبدأ لاحقاً": "تجديد يبدأ لاحقاً", "ملغاة": "ملغاة" } },
@@ -374,7 +374,7 @@ en: { title: "Accounting", gate_p: "Staff only. Enter the PIN to sign in.", ente
   ends: "Ends", starts: "Starts", days_left: n => n <= 0 ? "Last day" : n + " days left",
   mem_h: "Monthly memberships", mem_new: "+ New membership", m_phone: "Phone", m_tier: "Plan", m_activate_new: "Save & activate", m_cancel_form: "Cancel",
   m_pending: "Requests awaiting activation", m_active: "Current memberships", m_none_pend: "No new requests.", m_none: "No memberships yet.",
-  m_activate: "Activate", m_reject: "Cancel request", m_freeze: "Freeze", m_unfreeze: "Unfreeze", m_remind: "WhatsApp reminder", m_receipt: "Receipt", m_wa: "WhatsApp",
+  m_activate: "Activate", m_reject: "Cancel request", m_freeze: "Freeze", m_unfreeze: "Unfreeze", m_cancel: "Cancel membership", m_confirm_cancel: (n, tn) => "Cancel " + n + "'s membership (" + tn + ")?\nThis can't be undone.", m_remind: "WhatsApp reminder", m_receipt: "Receipt", m_wa: "WhatsApp",
   m_done: "Done", m_active_n: "Active", m_pend_n: "Awaiting activation", m_soon_n: "Ending within 3 days", m_need: "Enter the name and phone, and choose the plan and payment",
   m_confirm_reject: "Cancel this request?", m_confirm_freeze: "Freezing is allowed once a year. Freeze this membership now?", m_activated: "Membership activated", m_pay_pref: "Wants to pay:", m_month: "/ month", m_frz_used: "Freeze used this year",
   mst: { "نشطة": "Active", "بانتظار التفعيل": "Awaiting activation", "مجمّدة": "Frozen", "منتهية": "Expired", "تبدأ لاحقاً": "Renewal starts later", "ملغاة": "Cancelled" } }
@@ -712,6 +712,11 @@ function memRow(m, pending) {
       acts.appendChild(fz);
     }
     if (m.status === "مجمّدة") { const uf = document.createElement("button"); uf.type = "button"; uf.className = "btn sm"; uf.textContent = t("m_unfreeze"); uf.onclick = () => memberOp({ op: "unfreeze", id: m.id }, uf); acts.appendChild(uf); }
+    if (m.status === "نشطة" || m.status === "مجمّدة" || m.status === "تبدأ لاحقاً") {
+      const cx = document.createElement("button"); cx.type = "button"; cx.className = "btn sm ghost"; cx.textContent = t("m_cancel");
+      cx.onclick = () => { if (confirm(t("m_confirm_cancel")(m.name, m.tierName))) memberOp({ op: "cancel", id: m.id }, cx); };
+      acts.appendChild(cx);
+    }
     if (m.wa && ((m.status === "نشطة" && m.daysLeft != null && m.daysLeft <= 3) || m.status === "منتهية")) {
       const a = document.createElement("a"); a.className = "btn sm"; a.href = m.wa; a.target = "_blank"; a.rel = "noopener"; a.textContent = t("m_remind"); acts.appendChild(a);
     }
