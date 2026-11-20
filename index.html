@@ -849,7 +849,11 @@ function route(){
   $("view-gift").hidden = v!=="gift";
   $("view-mem").hidden = v!=="mem";
   if(v==="gift" && changed) window.scrollTo(0,0);
-  if(v==="mem"){ if(mm[1]) state.mtier=mm[1]; renderMem(); if(changed) window.scrollTo(0,0); }
+  if(v==="mem"){
+    if(mm[1]) state.mtier=mm[1]; renderMem();
+    // from a plan's "Join" button: the plan is already chosen, so go straight to the details
+    if(changed){ if(mm[1]){ window.scrollTo(0,0); requestAnimationFrame(()=>{ $("m-step-who").scrollIntoView({block:"start"}); $("m-name").focus({preventScroll:true}); }); } else window.scrollTo(0,0); }
+  }
   if(v==="appt"){ if(changed) window.scrollTo(0,0); renderDays(); renderSlots(); renderReceipt(); loadTaken(); }
   else if(changed && location.hash){ const el=document.getElementById(location.hash.slice(1)); if(el) el.scrollIntoView(); }
   renderCart();
