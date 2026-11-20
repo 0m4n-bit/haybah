@@ -352,7 +352,7 @@ ar: { title: "نظام المحاسبة", gate_p: "للموظفين فقط. اك
   ends: "تنتهي", starts: "تبدأ", days_left: n => n <= 0 ? "آخر يوم" : "باقي " + n + " يوم",
   mem_h: "العضويات الشهرية", mem_new: "+ اشتراك جديد", m_phone: "رقم الهاتف", m_tier: "الباقة", m_activate_new: "حفظ وتفعيل العضوية", m_cancel_form: "إلغاء",
   m_pending: "طلبات بانتظار التفعيل", m_active: "العضويات الحالية", m_none_pend: "ما في طلبات جديدة.", m_none: "ما في عضويات بعد.",
-  m_activate: "تفعيل", m_reject: "إلغاء الطلب", m_freeze: "تجميد", m_unfreeze: "إلغاء التجميد", m_cancel: "إلغاء العضوية", m_card: "بطاقة PDF", m_card_wait: "جارٍ تجهيز البطاقة…", m_card_fail: "تعذّر تجهيز البطاقة، تأكد من الإنترنت وجرّب مرة ثانية.", m_confirm_cancel: (n, tn) => "إلغاء عضوية " + n + " (" + tn + ")؟\nما تقدر ترجعها بعد الإلغاء.", m_remind: "تذكير واتساب", m_receipt: "الإيصال", m_wa: "واتساب",
+  m_activate: "تفعيل", m_reject: "إلغاء الطلب", m_freeze: "تجميد", m_unfreeze: "إلغاء التجميد", m_cancel: "إلغاء العضوية", m_card: "إرسال البطاقة", m_card_wait: "جارٍ تجهيز البطاقة…", m_card_fail: "تعذّر تجهيز البطاقة، جرّب مرة ثانية.", m_confirm_cancel: (n, tn) => "إلغاء عضوية " + n + " (" + tn + ")؟\nما تقدر ترجعها بعد الإلغاء.", m_remind: "تذكير واتساب", m_receipt: "الإيصال", m_wa: "واتساب",
   m_done: "تم", m_active_n: "نشطة", m_pend_n: "بانتظار التفعيل", m_soon_n: "تنتهي خلال 3 أيام", m_need: "اكتب الاسم والرقم واختر الباقة وطريقة الدفع",
   m_confirm_reject: "متأكد تبغى تلغي هذا الطلب؟", m_confirm_freeze: "التجميد مسموح مرة وحدة في السنة. تجمّد العضوية الحين؟", m_activated: "تفعّلت العضوية", m_pay_pref: "طلب الدفع:", m_month: "شهرياً", m_frz_used: "التجميد مستخدم هذي السنة",
   mst: { "نشطة": "نشطة", "بانتظار التفعيل": "بانتظار التفعيل", "مجمّدة": "مجمّدة", "منتهية": "منتهية", "تبدأ لاحقاً": "تجديد يبدأ لاحقاً", "ملغاة": "ملغاة" } },
@@ -374,7 +374,7 @@ en: { title: "Accounting", gate_p: "Staff only. Enter the PIN to sign in.", ente
   ends: "Ends", starts: "Starts", days_left: n => n <= 0 ? "Last day" : n + " days left",
   mem_h: "Monthly memberships", mem_new: "+ New membership", m_phone: "Phone", m_tier: "Plan", m_activate_new: "Save & activate", m_cancel_form: "Cancel",
   m_pending: "Requests awaiting activation", m_active: "Current memberships", m_none_pend: "No new requests.", m_none: "No memberships yet.",
-  m_activate: "Activate", m_reject: "Cancel request", m_freeze: "Freeze", m_unfreeze: "Unfreeze", m_cancel: "Cancel membership", m_card: "Card PDF", m_card_wait: "Preparing the card…", m_card_fail: "Couldn't prepare the card. Check the internet and try again.", m_confirm_cancel: (n, tn) => "Cancel " + n + "'s membership (" + tn + ")?\nThis can't be undone.", m_remind: "WhatsApp reminder", m_receipt: "Receipt", m_wa: "WhatsApp",
+  m_activate: "Activate", m_reject: "Cancel request", m_freeze: "Freeze", m_unfreeze: "Unfreeze", m_cancel: "Cancel membership", m_card: "Send card", m_card_wait: "Preparing the card…", m_card_fail: "Couldn't prepare the card. Try again.", m_confirm_cancel: (n, tn) => "Cancel " + n + "'s membership (" + tn + ")?\nThis can't be undone.", m_remind: "WhatsApp reminder", m_receipt: "Receipt", m_wa: "WhatsApp",
   m_done: "Done", m_active_n: "Active", m_pend_n: "Awaiting activation", m_soon_n: "Ending within 3 days", m_need: "Enter the name and phone, and choose the plan and payment",
   m_confirm_reject: "Cancel this request?", m_confirm_freeze: "Freezing is allowed once a year. Freeze this membership now?", m_activated: "Membership activated", m_pay_pref: "Wants to pay:", m_month: "/ month", m_frz_used: "Freeze used this year",
   mst: { "نشطة": "Active", "بانتظار التفعيل": "Awaiting activation", "مجمّدة": "Frozen", "منتهية": "Expired", "تبدأ لاحقاً": "Renewal starts later", "ملغاة": "Cancelled" } }
@@ -658,7 +658,7 @@ $("mem-check").onclick = async () => {
 };
 $("c-phone").addEventListener("input", () => { if (st.member && phoneKey($("c-phone").value) !== phoneKey(st.member.phone)) { setMember(null); } $("mem-msg").textContent = ""; });
 
-/* ===== بطاقة العضوية PDF (مقاس البطاقة البنكية 85.6 × 54 ملم + 3 ملم حواف قص) ===== */
+/* ===== بطاقة العضوية (صورة تُرسل للعميل) ===== */
 const CARD_LOOK = {
   basic: { fill: "#e6e3dd", ink: "#262524", sub: "#66625d", accent: "#262524", band: "#262524", bandInk: "#e8e6e1", name: "BASIC" },
   plus: { fill: "#5d5954", ink: "#e8e6e1", sub: "#cfcac2", accent: "#e8e6e1", band: "#2b2927", bandInk: "#e8e6e1", name: "PLUS" },
@@ -710,34 +710,38 @@ function drawCardBack(ctx, tier, PW, PH, B, m) {
   txt(ctx, "@haybah.oman", x0 + 52 * k, y0 + h - 64 * k, `700 ${21 * k}px ${LATF}`, L.ink, "left");
   txt(ctx, "+968 9746 4675 · Al Amerat, Muscat", x0 + 52 * k, y0 + h - 38 * k, `500 ${18 * k}px ${LATF}`, L.sub, "left");
 }
-let jsPDFLoad = null;
-function loadJsPDF() {
-  if (window.jspdf) return Promise.resolve();
-  return jsPDFLoad = jsPDFLoad || new Promise((res, rej) => { const sc = document.createElement("script"); sc.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"; sc.onload = res; sc.onerror = () => { jsPDFLoad = null; rej(); }; document.head.appendChild(sc); });
-}
-async function buildCardPdf(m) {
-  await loadJsPDF();
+// صورة البطاقة للجوال: الوجه فوق والظهر تحت، يرسلها الموظف للعميل على الواتساب ويظهرها العميل عند زيارته
+async function buildCardImage(m) {
   await Promise.all(["700 30px Ubuntu", "500 20px Ubuntu", '700 30px "IBM Plex Sans Arabic"', '600 22px "IBM Plex Sans Arabic"'].map(f => document.fonts.load(f, "HAYBAH الاسم")));
-  const B = cmm(3), PW = cmm(85.6) + 2 * B, PH = cmm(54) + 2 * B;
-  const c = document.createElement("canvas"); c.width = PW; c.height = PH; const ctx = c.getContext("2d");
-  const doc = new window.jspdf.jsPDF({ unit: "mm", format: [91.6, 60], orientation: "landscape" });
-  drawCardFront(ctx, m.tier, PW, PH, B); doc.addImage(c.toDataURL("image/jpeg", .95), "JPEG", 0, 0, 91.6, 60);
-  doc.addPage([91.6, 60], "landscape");
-  drawCardBack(ctx, m.tier, PW, PH, B, m); doc.addImage(c.toDataURL("image/jpeg", .95), "JPEG", 0, 0, 91.6, 60);
-  doc.setProperties({ title: "HAYBAH " + CARD_LOOK[m.tier].name + " — " + m.name + " (" + m.id + ")" });
-  return doc;
+  const CW = 960, CH = Math.round(CW * 54 / 85.6), PAD = 60, GAP = 44, W = CW + 2 * PAD, H = PAD + 70 + CH * 2 + GAP + PAD;
+  const out = document.createElement("canvas"); out.width = W; out.height = H; const o = out.getContext("2d");
+  o.fillStyle = "#d5d3ce"; o.fillRect(0, 0, W, H);
+  txt(o, "بطاقة عضوية هيبة", W - PAD, PAD + 28, '700 34px "IBM Plex Sans Arabic", sans-serif', "#262524", "right", true);
+  txt(o, "HAYBAH MEMBERSHIP", PAD, PAD + 26, `500 22px ${LATF}`, "#66625d", "left");
+  const c = document.createElement("canvas"); c.width = CW; c.height = CH; const ctx = c.getContext("2d");
+  [[drawCardFront, PAD + 70], [drawCardBack, PAD + 70 + CH + GAP]].forEach(([fn, y]) => {
+    ctx.clearRect(0, 0, CW, CH); fn(ctx, m.tier, CW, CH, 0, m);
+    o.save(); o.shadowColor = "rgba(20,18,16,.3)"; o.shadowBlur = 30; o.shadowOffsetY = 14;
+    o.beginPath(); o.roundRect(PAD, y, CW, CH, 34); o.fillStyle = CARD_LOOK[m.tier].fill; o.fill(); o.restore();
+    o.save(); o.beginPath(); o.roundRect(PAD, y, CW, CH, 34); o.clip(); o.drawImage(c, PAD, y); o.restore();
+  });
+  return new Promise(res => out.toBlob(res, "image/png"));
 }
 async function memberCardPdf(m, btn) {
   const lbl = btn.textContent; btn.disabled = true; btn.textContent = t("m_card_wait");
   try {
-    const doc = await buildCardPdf(m);
-    const fname = ("HAYBAH-" + CARD_LOOK[m.tier].name + "-" + m.id + "-" + m.name).replace(/[\\/:*?"<>|]+/g, "").replace(/\s+/g, "-") + ".pdf";
-    const file = new File([doc.output("blob")], fname, { type: "application/pdf" });
-    if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: fname }); } catch (e) { if (e && e.name !== "AbortError") doc.save(fname); } }
-    else doc.save(fname);
+    const blob = await buildCardImage(m);
+    const fname = ("HAYBAH-" + CARD_LOOK[m.tier].name + "-" + m.id + "-" + m.name).replace(/[\\/:*?"<>|]+/g, "").replace(/\s+/g, "-") + ".png";
+    const file = new File([blob], fname, { type: "image/png" });
+    const [yy, mo, dd] = String(m.end || "").split("-");
+    const text = "أهلاً " + m.name + " 🌿\nهذي بطاقة عضويتك " + m.tierName + " في هيبة" + (m.end ? "، صالحة حتى " + dd + "/" + mo + "/" + yy : "") + ".\nأظهرها للموظف عند زيارتك.";
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], text }); } catch (e) { if (e && e.name !== "AbortError") download(blob, fname); }
+    } else download(blob, fname);
   } catch (e) { toast(t("m_card_fail"), true); }
   btn.disabled = false; btn.textContent = lbl;
 }
+function download(blob, name) { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000); }
 
 /* ===== لوحة العضويات ===== */
 async function memberOp(body, btn) {
