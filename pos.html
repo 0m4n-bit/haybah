@@ -352,7 +352,7 @@ ar: { title: "نظام المحاسبة", gate_p: "للموظفين فقط. اك
   ends: "تنتهي", starts: "تبدأ", days_left: n => n <= 0 ? "آخر يوم" : "باقي " + n + " يوم",
   mem_h: "العضويات الشهرية", mem_new: "+ اشتراك جديد", m_phone: "رقم الهاتف", m_tier: "الباقة", m_activate_new: "حفظ وتفعيل العضوية", m_cancel_form: "إلغاء",
   m_pending: "طلبات بانتظار التفعيل", m_active: "العضويات الحالية", m_none_pend: "ما في طلبات جديدة.", m_none: "ما في عضويات بعد.",
-  m_activate: "تفعيل", m_reject: "إلغاء الطلب", m_freeze: "تجميد", m_unfreeze: "إلغاء التجميد", m_cancel: "إلغاء العضوية", m_confirm_cancel: (n, tn) => "إلغاء عضوية " + n + " (" + tn + ")؟\nما تقدر ترجعها بعد الإلغاء.", m_remind: "تذكير واتساب", m_receipt: "الإيصال", m_wa: "واتساب",
+  m_activate: "تفعيل", m_reject: "إلغاء الطلب", m_freeze: "تجميد", m_unfreeze: "إلغاء التجميد", m_cancel: "إلغاء العضوية", m_card: "بطاقة PDF", m_card_wait: "جارٍ تجهيز البطاقة…", m_card_fail: "تعذّر تجهيز البطاقة، تأكد من الإنترنت وجرّب مرة ثانية.", m_confirm_cancel: (n, tn) => "إلغاء عضوية " + n + " (" + tn + ")؟\nما تقدر ترجعها بعد الإلغاء.", m_remind: "تذكير واتساب", m_receipt: "الإيصال", m_wa: "واتساب",
   m_done: "تم", m_active_n: "نشطة", m_pend_n: "بانتظار التفعيل", m_soon_n: "تنتهي خلال 3 أيام", m_need: "اكتب الاسم والرقم واختر الباقة وطريقة الدفع",
   m_confirm_reject: "متأكد تبغى تلغي هذا الطلب؟", m_confirm_freeze: "التجميد مسموح مرة وحدة في السنة. تجمّد العضوية الحين؟", m_activated: "تفعّلت العضوية", m_pay_pref: "طلب الدفع:", m_month: "شهرياً", m_frz_used: "التجميد مستخدم هذي السنة",
   mst: { "نشطة": "نشطة", "بانتظار التفعيل": "بانتظار التفعيل", "مجمّدة": "مجمّدة", "منتهية": "منتهية", "تبدأ لاحقاً": "تجديد يبدأ لاحقاً", "ملغاة": "ملغاة" } },
@@ -374,7 +374,7 @@ en: { title: "Accounting", gate_p: "Staff only. Enter the PIN to sign in.", ente
   ends: "Ends", starts: "Starts", days_left: n => n <= 0 ? "Last day" : n + " days left",
   mem_h: "Monthly memberships", mem_new: "+ New membership", m_phone: "Phone", m_tier: "Plan", m_activate_new: "Save & activate", m_cancel_form: "Cancel",
   m_pending: "Requests awaiting activation", m_active: "Current memberships", m_none_pend: "No new requests.", m_none: "No memberships yet.",
-  m_activate: "Activate", m_reject: "Cancel request", m_freeze: "Freeze", m_unfreeze: "Unfreeze", m_cancel: "Cancel membership", m_confirm_cancel: (n, tn) => "Cancel " + n + "'s membership (" + tn + ")?\nThis can't be undone.", m_remind: "WhatsApp reminder", m_receipt: "Receipt", m_wa: "WhatsApp",
+  m_activate: "Activate", m_reject: "Cancel request", m_freeze: "Freeze", m_unfreeze: "Unfreeze", m_cancel: "Cancel membership", m_card: "Card PDF", m_card_wait: "Preparing the card…", m_card_fail: "Couldn't prepare the card. Check the internet and try again.", m_confirm_cancel: (n, tn) => "Cancel " + n + "'s membership (" + tn + ")?\nThis can't be undone.", m_remind: "WhatsApp reminder", m_receipt: "Receipt", m_wa: "WhatsApp",
   m_done: "Done", m_active_n: "Active", m_pend_n: "Awaiting activation", m_soon_n: "Ending within 3 days", m_need: "Enter the name and phone, and choose the plan and payment",
   m_confirm_reject: "Cancel this request?", m_confirm_freeze: "Freezing is allowed once a year. Freeze this membership now?", m_activated: "Membership activated", m_pay_pref: "Wants to pay:", m_month: "/ month", m_frz_used: "Freeze used this year",
   mst: { "نشطة": "Active", "بانتظار التفعيل": "Awaiting activation", "مجمّدة": "Frozen", "منتهية": "Expired", "تبدأ لاحقاً": "Renewal starts later", "ملغاة": "Cancelled" } }
@@ -658,6 +658,87 @@ $("mem-check").onclick = async () => {
 };
 $("c-phone").addEventListener("input", () => { if (st.member && phoneKey($("c-phone").value) !== phoneKey(st.member.phone)) { setMember(null); } $("mem-msg").textContent = ""; });
 
+/* ===== بطاقة العضوية PDF (مقاس البطاقة البنكية 85.6 × 54 ملم + 3 ملم حواف قص) ===== */
+const CARD_LOOK = {
+  basic: { fill: "#e6e3dd", ink: "#262524", sub: "#66625d", accent: "#262524", band: "#262524", bandInk: "#e8e6e1", name: "BASIC" },
+  plus: { fill: "#5d5954", ink: "#e8e6e1", sub: "#cfcac2", accent: "#e8e6e1", band: "#2b2927", bandInk: "#e8e6e1", name: "PLUS" },
+  vip: { fill: "#1b1a19", ink: "#e8e6e1", sub: "#bdb6aa", accent: "#b8955a", band: "#b8955a", bandInk: "#262524", name: "VIP" }
+};
+const CARD_DPI = 600, cmm = v => Math.round(v / 25.4 * CARD_DPI);
+const LATF = '"Ubuntu", sans-serif', ARF = '"IBM Plex Sans Arabic", sans-serif';
+function cardBase(ctx, L, PW, PH) {
+  ctx.fillStyle = L.fill; ctx.fillRect(0, 0, PW, PH);
+  const g = ctx.createLinearGradient(0, 0, PW, PH); g.addColorStop(0, "rgba(255,255,255,.10)"); g.addColorStop(.5, "rgba(255,255,255,0)"); g.addColorStop(1, "rgba(0,0,0,.10)");
+  ctx.fillStyle = g; ctx.fillRect(0, 0, PW, PH);
+}
+function txt(ctx, s, x, y, font, color, align, rtl) { ctx.save(); ctx.direction = rtl ? "rtl" : "ltr"; ctx.textAlign = align; ctx.font = font; ctx.fillStyle = color; ctx.fillText(s, x, y); ctx.restore(); }
+function drawCardFront(ctx, tier, PW, PH, B) {
+  const L = CARD_LOOK[tier], w = PW - 2 * B, h = PH - 2 * B, x = B, y = B, k = w / 760;
+  cardBase(ctx, L, PW, PH);
+  ctx.save(); ctx.globalAlpha = .12; ctx.lineWidth = w * .05; ctx.strokeStyle = L.ink; ctx.beginPath(); ctx.arc(x + w * .82, y + h * .2, h * .62, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+  ctx.beginPath(); ctx.roundRect(x + 56 * k, y + 150 * k, 92 * k, 70 * k, 12 * k); ctx.fillStyle = tier === "vip" ? "#b8955a" : "rgba(184,149,90,.85)"; ctx.fill();
+  ctx.strokeStyle = "rgba(0,0,0,.25)"; ctx.lineWidth = 2 * k; ctx.beginPath(); ctx.moveTo(x + 56 * k, y + 185 * k); ctx.lineTo(x + 148 * k, y + 185 * k); ctx.moveTo(x + 102 * k, y + 150 * k); ctx.lineTo(x + 102 * k, y + 220 * k); ctx.stroke();
+  ctx.strokeStyle = L.accent; ctx.lineWidth = 6 * k; ctx.beginPath(); ctx.arc(x + 96 * k, y + 86 * k, 34 * k, -2.6, 2.2); ctx.stroke();
+  txt(ctx, "HAYBAH", x + 150 * k, y + 98 * k, `700 ${40 * k}px ${LATF}`, L.ink, "left");
+  ctx.save(); ctx.globalAlpha = .7; txt(ctx, "GROOMING  &  SPA", x + 152 * k, y + 124 * k, `500 ${17 * k}px ${LATF}`, L.ink, "left"); ctx.restore();
+  txt(ctx, "MONTHLY  MEMBER", x + w - 52 * k, y + 92 * k, `500 ${20 * k}px ${LATF}`, L.sub, "right");
+  txt(ctx, L.name, x + 56 * k, y + h - 62 * k, `700 ${78 * k}px ${LATF}`, L.accent, "left");
+  txt(ctx, "30 DAYS", x + w - 52 * k, y + h - 70 * k, `500 ${22 * k}px ${LATF}`, L.sub, "right");
+}
+function drawCardBack(ctx, tier, PW, PH, B, m) {
+  const L = CARD_LOOK[tier], w = PW - 2 * B, h = PH - 2 * B, x0 = B, y0 = B, k = w / 760;
+  cardBase(ctx, L, PW, PH);
+  ctx.save(); ctx.globalAlpha = .1; ctx.lineWidth = w * .05; ctx.strokeStyle = L.ink; ctx.beginPath(); ctx.arc(x0 + w * .12, y0 + h * .86, h * .55, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+  ctx.fillStyle = L.band; ctx.fillRect(0, y0 + 44 * k, PW, 70 * k);
+  txt(ctx, "HAYBAH " + L.name, x0 + 52 * k, y0 + 90 * k, `700 ${30 * k}px ${LATF}`, L.bandInk, "left");
+  txt(ctx, "MONTHLY MEMBERSHIP", x0 + w - 52 * k, y0 + 88 * k, `500 ${20 * k}px ${LATF}`, L.bandInk, "right");
+  const [yy, mo, dd] = String(m.end || "").split("-");
+  const vals = [m.name || "", m.id || "", m.end ? dd + " / " + mo + " / " + yy : ""];
+  [["الاسم", "NAME"], ["رقم العضوية", "MEMBER NO."], ["صالحة حتى", "VALID UNTIL"]].forEach(([ar, en], i) => {
+    const y = y0 + (190 + i * 74) * k;
+    ctx.save(); ctx.strokeStyle = L.sub; ctx.lineWidth = 2 * k; ctx.globalAlpha = .55; ctx.beginPath(); ctx.moveTo(x0 + 52 * k, y + 14 * k); ctx.lineTo(x0 + w - 52 * k, y + 14 * k); ctx.stroke(); ctx.restore();
+    txt(ctx, ar, x0 + w - 52 * k, y - 6 * k, `700 ${24 * k}px ${ARF}`, L.sub, "right", true);
+    txt(ctx, en, x0 + 52 * k, y - 26 * k, `500 ${13 * k}px ${LATF}`, L.sub, "left");
+    const v = vals[i]; if (!v) return;
+    const isAr = /[؀-ۿ]/.test(v);
+    // the value sits in the middle of the line, between the two labels
+    let size = 30 * k; const maxW = w - 340 * k;
+    ctx.save(); ctx.font = `700 ${size}px ${isAr ? ARF : LATF}`; while (ctx.measureText(v).width > maxW && size > 14 * k) { size -= k; ctx.font = `700 ${size}px ${isAr ? ARF : LATF}`; } ctx.restore();
+    txt(ctx, v, x0 + 165 * k + maxW / 2 - 40 * k, y - 4 * k, `700 ${size}px ${isAr ? ARF : LATF}`, L.ink, "center", isAr);
+  });
+  txt(ctx, "الاهتمام بالتفاصيل يصنع الفرق", x0 + w - 52 * k, y0 + h - 44 * k, `600 ${22 * k}px ${ARF}`, L.sub, "right", true);
+  txt(ctx, "@haybah.oman", x0 + 52 * k, y0 + h - 64 * k, `700 ${21 * k}px ${LATF}`, L.ink, "left");
+  txt(ctx, "+968 9746 4675 · Al Amerat, Muscat", x0 + 52 * k, y0 + h - 38 * k, `500 ${18 * k}px ${LATF}`, L.sub, "left");
+}
+let jsPDFLoad = null;
+function loadJsPDF() {
+  if (window.jspdf) return Promise.resolve();
+  return jsPDFLoad = jsPDFLoad || new Promise((res, rej) => { const sc = document.createElement("script"); sc.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"; sc.onload = res; sc.onerror = () => { jsPDFLoad = null; rej(); }; document.head.appendChild(sc); });
+}
+async function buildCardPdf(m) {
+  await loadJsPDF();
+  await Promise.all(["700 30px Ubuntu", "500 20px Ubuntu", '700 30px "IBM Plex Sans Arabic"', '600 22px "IBM Plex Sans Arabic"'].map(f => document.fonts.load(f, "HAYBAH الاسم")));
+  const B = cmm(3), PW = cmm(85.6) + 2 * B, PH = cmm(54) + 2 * B;
+  const c = document.createElement("canvas"); c.width = PW; c.height = PH; const ctx = c.getContext("2d");
+  const doc = new window.jspdf.jsPDF({ unit: "mm", format: [91.6, 60], orientation: "landscape" });
+  drawCardFront(ctx, m.tier, PW, PH, B); doc.addImage(c.toDataURL("image/jpeg", .95), "JPEG", 0, 0, 91.6, 60);
+  doc.addPage([91.6, 60], "landscape");
+  drawCardBack(ctx, m.tier, PW, PH, B, m); doc.addImage(c.toDataURL("image/jpeg", .95), "JPEG", 0, 0, 91.6, 60);
+  doc.setProperties({ title: "HAYBAH " + CARD_LOOK[m.tier].name + " — " + m.name + " (" + m.id + ")" });
+  return doc;
+}
+async function memberCardPdf(m, btn) {
+  const lbl = btn.textContent; btn.disabled = true; btn.textContent = t("m_card_wait");
+  try {
+    const doc = await buildCardPdf(m);
+    const fname = ("HAYBAH-" + CARD_LOOK[m.tier].name + "-" + m.id + "-" + m.name).replace(/[\\/:*?"<>|]+/g, "").replace(/\s+/g, "-") + ".pdf";
+    const file = new File([doc.output("blob")], fname, { type: "application/pdf" });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: fname }); } catch (e) { if (e && e.name !== "AbortError") doc.save(fname); } }
+    else doc.save(fname);
+  } catch (e) { toast(t("m_card_fail"), true); }
+  btn.disabled = false; btn.textContent = lbl;
+}
+
 /* ===== لوحة العضويات ===== */
 async function memberOp(body, btn) {
   if (btn) btn.disabled = true;
@@ -713,6 +794,8 @@ function memRow(m, pending) {
     }
     if (m.status === "مجمّدة") { const uf = document.createElement("button"); uf.type = "button"; uf.className = "btn sm"; uf.textContent = t("m_unfreeze"); uf.onclick = () => memberOp({ op: "unfreeze", id: m.id }, uf); acts.appendChild(uf); }
     if (m.status === "نشطة" || m.status === "مجمّدة" || m.status === "تبدأ لاحقاً") {
+      const pc = document.createElement("button"); pc.type = "button"; pc.className = "btn sm"; pc.textContent = t("m_card");
+      pc.onclick = () => memberCardPdf(m, pc); acts.appendChild(pc);
       const cx = document.createElement("button"); cx.type = "button"; cx.className = "btn sm ghost"; cx.textContent = t("m_cancel");
       cx.onclick = () => { if (confirm(t("m_confirm_cancel")(m.name, m.tierName))) memberOp({ op: "cancel", id: m.id }, cx); };
       acts.appendChild(cx);
