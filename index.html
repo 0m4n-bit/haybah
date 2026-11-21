@@ -280,6 +280,12 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .tier-card{display:block;width:100%;height:auto;border-radius:12px;box-shadow:0 10px 22px -12px rgba(20,18,16,.55),0 2px 6px rgba(20,18,16,.18);transform:rotate(-3deg);margin-top:2px}
 [dir="ltr"] .tier-card{transform:rotate(3deg)}
 .tier.vip .tier-card{box-shadow:0 10px 24px -10px rgba(0,0,0,.8),0 0 0 1px rgba(232,230,225,.14)}
+.tier-name-row{display:flex;align-items:center;gap:10px;min-width:0}
+button.tier .tier-head .pick{position:static;flex:none}
+button.tier .tier-head{grid-template-columns:1fr minmax(0,38%)}
+.mem-band img{width:132px;height:auto;border-radius:9px;transform:rotate(-4deg);box-shadow:0 10px 20px -10px rgba(20,18,16,.6)}
+[dir="ltr"] .mem-band img{transform:rotate(4deg)}
+@media (max-width:700px){ .mem-band img{width:150px} }
 .tier-head .tier-name{padding-inline-end:0;white-space:nowrap;letter-spacing:.05em;font-size:clamp(16px,4.6vw,19px)}
 .tier ul{margin:0;padding:0;list-style:none;display:grid;gap:9px;flex:1;align-content:start}
 .tier li{display:grid;grid-template-columns:14px 1fr;gap:8px;font-size:14.5px;line-height:1.55}
@@ -359,7 +365,7 @@ button.tier[aria-pressed="true"] .pick::after{content:"";width:12px;height:12px;
       <div class="row">
         <a class="btn" href="#booking" data-i="start"></a>
         <a class="btn ghost" href="#offers" id="see-offers" data-i="see_offers"></a>
-        <a class="btn ghost" href="#memberships" data-i="mem_nav"></a>
+        <a class="btn ghost" href="#membership" data-i="mem_nav"></a>
         <a class="btn gift-btn" href="#gift"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="9" width="17" height="11.5" rx="1.2"/><path d="M2 6h20v3H2zM12 6v14.5M12 6C10.5 2.5 6 2 6 4.5S10 6 12 6zM12 6c1.5-3.5 6-4 6-1.5S14 6 12 6z"/></svg><span data-i="gift_nav"></span></a>
       </div>
     </div>
@@ -387,14 +393,12 @@ button.tier[aria-pressed="true"] .pick::after{content:"";width:12px;height:12px;
     <div class="packs" id="packs"></div>
   </section>
 
-  <section class="band" id="memberships">
-    <div class="sec-head">
-      <h2 data-i="mem_title"></h2>
-      <span class="alt" data-i="mem_alt"></span>
+  <section class="band" id="mem-teaser">
+    <div class="gift-band mem-band">
+      <img src="img/card-vip.webp" alt="" width="640" height="404" loading="lazy" decoding="async">
+      <div><h2 data-i="mem_title"></h2><p data-i="mem_sub"></p></div>
+      <a class="btn" href="#membership" data-i="mem_cta"></a>
     </div>
-    <p class="mem-intro" data-i="mem_sub"></p>
-    <div class="tiers" id="tiers"></div>
-    <details class="terms"><summary data-i="mem_terms"></summary><ul id="mem-terms"></ul></details>
   </section>
 
   <section class="band" id="booking">
@@ -560,7 +564,7 @@ button.tier[aria-pressed="true"] .pick::after{content:"";width:12px;height:12px;
 
 <main class="appt" id="view-mem" hidden>
   <div class="appt-top">
-    <a class="back" href="#memberships"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span data-i="home"></span></a>
+    <a class="back" href="#top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span data-i="home"></span></a>
     <h2 data-i="m_page_title"></h2>
     <p class="hero-note" data-i="m_intro" style="margin:0;color:var(--stone);max-width:60ch"></p>
   </div>
@@ -569,6 +573,7 @@ button.tier[aria-pressed="true"] .pick::after{content:"";width:12px;height:12px;
       <div id="m-step-plan">
         <h3 class="step-title"><span class="n">1</span><span data-i="m_s1"></span></h3>
         <div class="tiers" id="m-tiers"></div>
+        <details class="terms"><summary data-i="mem_terms"></summary><ul id="mem-terms"></ul></details>
       </div>
       <div id="m-step-who">
         <h3 class="step-title"><span class="n">2</span><span data-i="m_s2"></span></h3>
@@ -670,7 +675,7 @@ ar:{
   g_msg_head:"طلب هدية — HAYBAH Grooming & Spa", g_code:"رقم الهدية", g_from_l:"من", g_to_l:"إلى", g_note_l:"رسالة الإهداء",
   wa_tap:"✔ تم تثبيت الموعد — اضغط لفتح واتساب", g_wa_tap:"✔ تم حفظ الطلب — اضغط لفتح واتساب",
   g_rcpt_ok:"✔ تم إرفاق إيصال الدفع", g_rcpt_link:"رابط الإيصال", g_rcpt_later:"سأرسل إيصال الدفع في هذه المحادثة.",
-  mem_nav:"العضويات الشهرية", mem_title:"عضويات هيبة الشهرية", mem_alt:"Monthly memberships", mem_sub:"اشتراك شهري يغطي حلاقتك كل شهر، مع خصم على باقي الخدمات وأولوية في الحجز.",
+  mem_nav:"العضويات الشهرية", mem_cta:"شوف الباقات", mem_title:"عضويات هيبة الشهرية", mem_alt:"Monthly memberships", mem_sub:"اشتراك شهري يغطي حلاقتك كل شهر، مع خصم على باقي الخدمات وأولوية في الحجز.",
   mem_month:"ر.ع شهرياً", mem_join:"اشترك", mem_disc:n=>"خصم "+n+"% على باقي الخدمات", mem_prio:"أولوية في الحجز", mem_terms:"شروط العضوية",
   mem_inc:{ basic:["2 قص شعر + 2 حلاقة لحية", "أو 4 قص شعر فقط، أو 4 حلاقة لحية فقط"],
     plus:["2 قص شعر + 2 حلاقة لحية", "+ خدمة واحدة من: تنظيف الوجه العادي، أو الحمّام المغربي العادي، أو مانيكير وباديكير"],
@@ -718,7 +723,7 @@ en:{
   g_msg_head:"Gift request — HAYBAH Grooming & Spa", g_code:"Gift number", g_from_l:"From", g_to_l:"To", g_note_l:"Gift message",
   wa_tap:"✔ Slot held — tap to open WhatsApp", g_wa_tap:"✔ Request saved — tap to open WhatsApp",
   g_rcpt_ok:"✔ Payment receipt attached", g_rcpt_link:"Receipt link", g_rcpt_later:"I'll send the payment receipt in this chat.",
-  mem_nav:"Memberships", mem_title:"HAYBAH monthly memberships", mem_alt:"عضويات هيبة الشهرية", mem_sub:"A monthly plan that covers your cuts, plus a discount on other services and priority booking.",
+  mem_nav:"Memberships", mem_cta:"See the plans", mem_title:"HAYBAH monthly memberships", mem_alt:"عضويات هيبة الشهرية", mem_sub:"A monthly plan that covers your cuts, plus a discount on other services and priority booking.",
   mem_month:"OMR / month", mem_join:"Join", mem_disc:n=>n+"% off other services", mem_prio:"Priority booking", mem_terms:"Membership terms",
   mem_inc:{ basic:["2 haircuts + 2 beard trims", "or 4 haircuts only, or 4 beard trims only"],
     plus:["2 haircuts + 2 beard trims", "+ one of: Normal Facial, Classic Moroccan Bath, or Manicure & Pedicure"],
@@ -847,7 +852,7 @@ function goBook(tab){ state.tab=tab; renderTabs(); renderReceipt(); renderCart()
 function route(){
   const wantAppt = location.hash==="#appointment";
   if(wantAppt && !state.svc.size){ location.replace("#booking"); return; }
-  const mm = /^#membership(?:-(basic|plus|vip))?$/.exec(location.hash);
+  const mm = /^#membership(?:s|-(basic|plus|vip))?$/.exec(location.hash);
   const v = wantAppt ? "appt" : location.hash==="#gift" ? "gift" : mm ? "mem" : "home";
   const changed = v!==state.view; state.view=v;
   $("view-home").hidden = v!=="home";
@@ -1178,10 +1183,10 @@ function tierCard(tr, pick){
   const inc=t("mem_inc")[tr.key];
   inc.forEach((x,i)=>{ const li=document.createElement("li"); li.textContent=x; if(tr.key==="basic" && i===1) li.className="or"; ul.appendChild(li); });
   [[t("mem_disc")(tr.disc),"perk"],[t("mem_prio"),"perk"]].forEach(([x,c])=>{ const li=document.createElement("li"); li.textContent=x; li.className=c; ul.appendChild(li); });
-  if(pick) el.append(h,pr,ul);
-  else {
+  {
     const head=document.createElement("div"); head.className="tier-head";
-    const txt=document.createElement("div"); txt.className="tier-txt"; txt.append(h,pr);
+    const txt=document.createElement("div"); txt.className="tier-txt";
+    if(pick){ const row=document.createElement("div"); row.className="tier-name-row"; row.append(el.querySelector(".pick"),h); txt.append(row,pr); } else txt.append(h,pr);
     const img=document.createElement("img"); img.className="tier-card"; img.src="img/card-"+tr.key+".webp"; img.alt=tr.name+" — "+t("mem_card_alt"); img.width=640; img.height=404; img.loading="lazy"; img.decoding="async";
     head.append(txt,img); el.append(head,ul);
   }
@@ -1190,7 +1195,6 @@ function tierCard(tr, pick){
   return el;
 }
 function renderTiers(){
-  const box=$("tiers"); box.innerHTML=""; MEMBER_TIERS.forEach(tr=>box.appendChild(tierCard(tr,false)));
   const ul=$("mem-terms"); ul.innerHTML=""; t("mem_terms_list").forEach(x=>{ const li=document.createElement("li"); li.textContent=x; ul.appendChild(li); });
 }
 function renderMem(){
