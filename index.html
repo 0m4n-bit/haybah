@@ -275,6 +275,12 @@ body.has-cart{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .tier-price{font-family:var(--f-latin);font-weight:700;font-size:40px;line-height:1;display:flex;align-items:baseline;gap:6px}
 .tier-price small{font-family:var(--f-body);font-weight:500;font-size:13.5px;opacity:.7}
 [dir="ltr"] .tier-price small{font-family:var(--f-latin)}
+.tier-head{display:grid;grid-template-columns:1fr minmax(0,42%);gap:14px;align-items:start}
+.tier-txt{display:flex;flex-direction:column;gap:16px;min-width:0}
+.tier-card{display:block;width:100%;height:auto;border-radius:12px;box-shadow:0 10px 22px -12px rgba(20,18,16,.55),0 2px 6px rgba(20,18,16,.18);transform:rotate(-3deg);margin-top:2px}
+[dir="ltr"] .tier-card{transform:rotate(3deg)}
+.tier.vip .tier-card{box-shadow:0 10px 24px -10px rgba(0,0,0,.8),0 0 0 1px rgba(232,230,225,.14)}
+.tier-head .tier-name{padding-inline-end:0;white-space:nowrap;letter-spacing:.05em;font-size:clamp(16px,4.6vw,19px)}
 .tier ul{margin:0;padding:0;list-style:none;display:grid;gap:9px;flex:1;align-content:start}
 .tier li{display:grid;grid-template-columns:14px 1fr;gap:8px;font-size:14.5px;line-height:1.55}
 .tier li::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;margin-top:9px}
@@ -676,7 +682,7 @@ ar:{
   m_pay_note_salon:"ادفع في زيارتك القادمة للصالون (نقداً أو بطاقة)، ونفعّل العضوية وقتها.",
   m_summary:"ملخص الاشتراك", m_plan:"الباقة", m_pay_l:"الدفع", m_confirm:"فتح واتساب وإرسال طلب الاشتراك", m_note:"تتفعّل العضوية بعد تأكيد الدفع، ومدتها 30 يوماً من التفعيل.",
   m_err_plan:"اختر الباقة.", m_err_pay:"اختر طريقة الدفع.", m_msg_head:"طلب عضوية — HAYBAH Grooming & Spa", m_id:"رقم الطلب", m_wa_tap:"✔ تم حفظ الطلب — اضغط لفتح واتساب", m_none:"لم تختر باقة بعد",
-  b_member:"أنا عضو في هيبة", b_member_hint:"للأعضاء أولوية في الحجز", b_mem_check:"جارٍ التحقق من العضوية…", b_mem_ok:(n,e)=>"✔ عضوية "+n+" نشطة حتى "+e, b_mem_no:"ما لقينا عضوية نشطة بهذا الرقم — نتأكد منها في الصالون.", b_mem_phone:"اكتب رقم هاتفك المسجّل في العضوية.", msg_member:"العضوية",
+  mem_card_alt:"بطاقة العضوية", b_member:"أنا عضو في هيبة", b_member_hint:"للأعضاء أولوية في الحجز", b_mem_check:"جارٍ التحقق من العضوية…", b_mem_ok:(n,e)=>"✔ عضوية "+n+" نشطة حتى "+e, b_mem_no:"ما لقينا عضوية نشطة بهذا الرقم — نتأكد منها في الصالون.", b_mem_phone:"اكتب رقم هاتفك المسجّل في العضوية.", msg_member:"العضوية",
   msg_head:"طلب حجز — HAYBAH Grooming & Spa", msg_name:"الاسم", msg_phone:"الهاتف", nd_tab:"العيد الوطني", nd_tag:"عرض العيد الوطني",
   cats:{hair:"الشعر", face:"الوجه", nails:"الأظافر", body:"الجسم", packs:"الباقات", nd:"العيد الوطني"},
   days:["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"],
@@ -724,7 +730,7 @@ en:{
   m_pay_note_salon:"Pay on your next visit (cash or card) and we'll activate it then.",
   m_summary:"Membership summary", m_plan:"Plan", m_pay_l:"Payment", m_confirm:"Open WhatsApp &amp; send membership request", m_note:"The membership is activated once payment is confirmed and lasts 30 days.",
   m_err_plan:"Choose a plan.", m_err_pay:"Choose how you'll pay.", m_msg_head:"Membership request — HAYBAH Grooming & Spa", m_id:"Request number", m_wa_tap:"✔ Request saved — tap to open WhatsApp", m_none:"No plan selected yet",
-  b_member:"I'm a HAYBAH member", b_member_hint:"Members get priority booking", b_mem_check:"Checking membership…", b_mem_ok:(n,e)=>"✔ "+n+" membership active until "+e, b_mem_no:"We couldn't find an active membership for this number — we'll check at the salon.", b_mem_phone:"Enter the phone number on your membership.", msg_member:"Membership",
+  mem_card_alt:"membership card", b_member:"I'm a HAYBAH member", b_member_hint:"Members get priority booking", b_mem_check:"Checking membership…", b_mem_ok:(n,e)=>"✔ "+n+" membership active until "+e, b_mem_no:"We couldn't find an active membership for this number — we'll check at the salon.", b_mem_phone:"Enter the phone number on your membership.", msg_member:"Membership",
   msg_head:"Booking request — HAYBAH Grooming & Spa", msg_name:"Name", msg_phone:"Phone", nd_tab:"National Day", nd_tag:"National Day offer",
   cats:{hair:"Hair", face:"Face", nails:"Nails", body:"Body", packs:"Packages", nd:"National Day"},
   days:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
@@ -1172,7 +1178,13 @@ function tierCard(tr, pick){
   const inc=t("mem_inc")[tr.key];
   inc.forEach((x,i)=>{ const li=document.createElement("li"); li.textContent=x; if(tr.key==="basic" && i===1) li.className="or"; ul.appendChild(li); });
   [[t("mem_disc")(tr.disc),"perk"],[t("mem_prio"),"perk"]].forEach(([x,c])=>{ const li=document.createElement("li"); li.textContent=x; li.className=c; ul.appendChild(li); });
-  el.append(h,pr,ul);
+  if(pick) el.append(h,pr,ul);
+  else {
+    const head=document.createElement("div"); head.className="tier-head";
+    const txt=document.createElement("div"); txt.className="tier-txt"; txt.append(h,pr);
+    const img=document.createElement("img"); img.className="tier-card"; img.src="img/card-"+tr.key+".webp"; img.alt=tr.name+" — "+t("mem_card_alt"); img.width=640; img.height=404; img.loading="lazy"; img.decoding="async";
+    head.append(txt,img); el.append(head,ul);
+  }
   if(pick) el.onclick=()=>{ state.mtier=tr.key; history.replaceState(null,"","#membership-"+tr.key); renderMem(); };
   else { const a=document.createElement("a"); a.className="btn sm"; a.href="#membership-"+tr.key; a.id="join-"+tr.key; a.textContent=t("mem_join"); el.appendChild(a); }
   return el;
