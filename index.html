@@ -1056,8 +1056,10 @@ $("book-form").addEventListener("submit",async e=>{
   const list=chosen(), cur=t("cur"), sep=LANG==="ar"?"، ":", ";
   const lines=list.map(s=>"• "+nameOf(s)+(s.pack?" ("+packList(s.pack).join(sep)+")":"")+(s.nd?" — "+t("nd_tag"):"")+" — "+omr(s.p)+" "+cur).join("\n");
   const total=omr(list.reduce((a,s)=>a+s.p,0));
-  const isMember=$("f-member").checked, mem=state.member && state.member.found && state.member.status==="نشطة" ? state.member : null;
-  const memLine = isMember ? "\n⭐ "+t("msg_member")+": "+(mem ? mem.tierName+" ("+mem.id+")" : t("b_member")) : "";
+  const isMember=$("f-member").checked;
+  if(isMember) await checkMember();   // always re-verify against the current phone before writing the message
+  const mem=isMember && state.member && state.member.found && state.member.status==="نشطة" ? state.member : null;
+  const memLine = mem ? "\n⭐ "+t("msg_member")+": "+mem.tierName+" ("+mem.id+")" : "";
   const msg=t("msg_head")+"\n\n"+t("msg_name")+": "+name+"\n"+t("msg_phone")+": "+phone+memLine+"\n"+t("day")+": "+dayLabel()+"\n"+t("time")+": "+fmt12(state.time)
     +"\n\n"+t("services")+":\n"+lines+"\n\n"+t("total")+": "+total+" "+cur+(notes?"\n\n"+t("notes").replace(/ \(.*\)/,"")+": "+notes:"");
   const url="https://wa.me/"+SALON.whatsapp+"?text="+encodeURIComponent(msg);
