@@ -177,6 +177,12 @@ tr.cur td{font-weight:700}
 .line .mtag{display:block;font-size:11.5px;color:var(--stone);font-weight:600}
 .line .price[readonly]{background:transparent;border-color:transparent;color:var(--stone)}
 .mlist{display:grid;gap:8px}
+.code-box{display:flex;gap:6px;align-items:center}
+.code-in{width:130px;text-align:center;border:1.5px solid var(--cement-2);border-radius:10px;padding:6px;font-family:var(--f-latin);font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:#fff}
+.row.off .num,.row.off #cdisc-lab,.row.off #mdisc-lab{text-decoration:line-through;opacity:.55}
+.row .x{border:0;background:transparent;cursor:pointer;font-size:15px;padding:0 4px;color:var(--stone)}
+.code-note{font-size:13px}
+.crow .tn{letter-spacing:.04em}
 .mrow{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--cement);border-radius:14px;padding:10px 12px}
 .mrow .who b{display:block}
 .mrow .who .ph{font-family:var(--f-latin);font-size:13px;color:var(--stone);direction:ltr;unicode-bidi:isolate}
@@ -256,6 +262,9 @@ a.lnk{color:inherit;font-weight:600;font-size:13px}
       <div class="totals">
         <div class="row"><span data-i="subtotal"></span><span><span class="num" id="sub">0</span> <span data-i="cur"></span></span></div>
         <div class="row" id="mdisc-row" hidden><span id="mdisc-lab"></span><span><span class="num" id="mdisc">0</span> <span data-i="cur"></span></span></div>
+        <div class="row"><label for="code-in" data-i="code_lab"></label><span class="code-box"><input id="code-in" class="code-in" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="CODE"><button class="btn sm ghost" type="button" id="code-apply" data-i="code_apply"></button></span></div>
+        <div class="row" id="cdisc-row" hidden><span id="cdisc-lab"></span><span><span class="num" id="cdisc">0</span> <span data-i="cur"></span><button type="button" class="x" id="code-x" aria-label="✕">✕</button></span></div>
+        <div class="muted code-note" id="code-note" hidden></div>
         <div class="row"><label for="disc" data-i="discount"></label><input class="disc" id="disc" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0"></div>
         <div class="row grand"><span data-i="total"></span><span><b id="total">0</b><small data-i="cur"></small></span></div>
       </div>
@@ -283,6 +292,25 @@ a.lnk{color:inherit;font-weight:600;font-size:13px}
       <div class="mlist" id="mem-pend"></div>
       <div class="sub-h" style="margin-top:14px" data-i="m_active"></div>
       <div class="mlist" id="mem-list"></div>
+    </section>
+
+    <section class="panel" id="codes" aria-labelledby="codes-h">
+      <h2 id="codes-h"><span data-i="codes_h"></span> <button class="btn sm" type="button" id="code-new-btn" data-i="code_new"></button></h2>
+      <form class="new-mem" id="code-new" hidden novalidate>
+        <div class="fields">
+          <div class="field"><label class="lab" for="nc-code" data-i="code_name"></label><input id="nc-code" class="code-in" style="width:100%" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="HAYBAH10"></div>
+          <div class="field"><label class="lab" for="nc-value" data-i="code_value"></label><input id="nc-value" class="ltr-in" type="number" inputmode="decimal" min="0" step="0.5" placeholder="10"></div>
+        </div>
+        <div><span class="lab" data-i="code_type"></span><div class="seg" id="nc-type"></div></div>
+        <div><span class="lab" data-i="code_scope"></span><div class="seg" id="nc-scope"></div></div>
+        <div class="fields">
+          <div class="field"><label class="lab" for="nc-exp" data-i="code_exp"></label><input id="nc-exp" type="date"></div>
+          <div class="field"><label class="lab" for="nc-limit" data-i="code_limit"></label><input id="nc-limit" class="ltr-in" type="number" inputmode="numeric" min="0" step="1" placeholder="—"></div>
+        </div>
+        <div class="field"><label class="lab" for="nc-note" data-i="note"></label><input id="nc-note" autocomplete="off"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" type="submit" id="nc-save" data-i="code_save"></button><button class="btn ghost" type="button" id="nc-cancel" data-i="m_cancel_form"></button></div>
+      </form>
+      <div class="mlist" id="code-list"></div>
     </section>
 
     <section class="panel" id="today" aria-labelledby="today-h">
@@ -350,6 +378,12 @@ ar: { title: "نظام المحاسبة", gate_p: "للموظفين فقط. اك
   mem_disc: n => "خصم العضوية " + n + "%", mem_disc_note: n => "خصم " + n + "% على باقي الخدمات (ما يشمل الباقات والعروض)", mem_not_active: "العضوية مو نشطة — ما تقدر تستخدم رصيدها",
   mem_tag: "من رصيد العضوية", hair_l: "قص شعر", beard_l: "حلاقة لحية", flex_l: n => "حلاقات باقية (شعر أو لحية): " + n, left_n: n => "باقي " + n, picks_l: n => "خدمات مختارة باقية: " + n,
   ends: "تنتهي", starts: "تبدأ", days_left: n => n <= 0 ? "آخر يوم" : "باقي " + n + " يوم",
+  code_lab: "كود الخصم", code_apply: "تطبيق", code_disc: c => "كود " + c, code_none: "الكود غير موجود", code_bad: (c, e) => "الكود " + c + " " + e, code_zero: "الكود ما يشمل خدمات هذي الفاتورة",
+  code_vs_mem: "خصم العضوية والكود ما يجتمعون، وانحسب الأكبر", code_applied: c => "تم تطبيق الكود " + c,
+  codes_h: "أكواد الخصم", code_new: "+ كود جديد", code_name: "الكود", code_value: "قيمة الخصم", code_type: "نوع الخصم", code_scope: "يشمل", code_exp: "ينتهي (اختياري)", code_limit: "حد الاستخدام (اختياري)",
+  code_save: "حفظ الكود", code_pct: "نسبة %", code_amt: "مبلغ ر.ع", code_regular: "الخدمات العادية", code_all: "كل الخدمات", code_regular_l: "بدون الباقات والعروض", code_all_l: "كل الخدمات",
+  code_need: "اكتب الكود وقيمة الخصم", code_used: (u, l) => "استُخدم " + u + (l ? " من " + l : " مرة"), code_until: "ينتهي", code_pause: "إيقاف", code_resume: "تفعيل", code_del: "حذف",
+  code_confirm_del: c => "تحذف الكود " + c + "؟", code_none_list: "ما في أكواد بعد. أضف كود من الزر فوق.", code_done: "تم", cst: { "فعّال": "فعّال", "موقوف": "موقوف", "منتهي": "منتهي", "مستنفد": "خلص" },
   mem_h: "العضويات الشهرية", mem_new: "+ اشتراك جديد", m_phone: "رقم الهاتف", m_tier: "الباقة", m_activate_new: "حفظ وتفعيل العضوية", m_cancel_form: "إلغاء",
   m_pending: "طلبات بانتظار التفعيل", m_active: "العضويات الحالية", m_none_pend: "ما في طلبات جديدة.", m_none: "ما في عضويات بعد.",
   m_activate: "تفعيل", m_reject: "إلغاء الطلب", m_freeze: "تجميد", m_unfreeze: "إلغاء التجميد", m_cancel: "إلغاء العضوية", m_card: "إرسال البطاقة", m_card_wait: "جارٍ تجهيز البطاقة…", m_card_fail: "تعذّر تجهيز البطاقة، جرّب مرة ثانية.", m_msg_copied: "انسخت الرسالة — الصقها مع الصورة لو ما ظهرت", m_confirm_cancel: (n, tn) => "إلغاء عضوية " + n + " (" + tn + ")؟\nما تقدر ترجعها بعد الإلغاء.", m_remind: "تذكير واتساب", m_receipt: "الإيصال", m_wa: "واتساب",
@@ -372,6 +406,12 @@ en: { title: "Accounting", gate_p: "Staff only. Enter the PIN to sign in.", ente
   mem_disc: n => "Member discount " + n + "%", mem_disc_note: n => n + "% off other services (not packages or offers)", mem_not_active: "Membership isn't active — its balance can't be used",
   mem_tag: "From membership", hair_l: "Haircut", beard_l: "Beard trim", flex_l: n => "Cuts left (hair or beard): " + n, left_n: n => n + " left", picks_l: n => "Chosen services left: " + n,
   ends: "Ends", starts: "Starts", days_left: n => n <= 0 ? "Last day" : n + " days left",
+  code_lab: "Discount code", code_apply: "Apply", code_disc: c => "Code " + c, code_none: "Code not found", code_bad: (c, e) => "Code " + c + ": " + ({ "موقوف": "paused", "منتهي": "expired", "مستنفد": "used up" }[e] || e), code_zero: "This code doesn't cover the services on this bill",
+  code_vs_mem: "Member and code discounts don't combine; the larger one applies", code_applied: c => "Code " + c + " applied",
+  codes_h: "Discount codes", code_new: "+ New code", code_name: "Code", code_value: "Discount", code_type: "Type", code_scope: "Applies to", code_exp: "Expires (optional)", code_limit: "Usage limit (optional)",
+  code_save: "Save code", code_pct: "Percent %", code_amt: "Amount OMR", code_regular: "Regular services", code_all: "All services", code_regular_l: "not packages or offers", code_all_l: "all services",
+  code_need: "Enter the code and the discount", code_used: (u, l) => "Used " + u + (l ? " of " + l : (u === 1 ? " time" : " times")), code_until: "Ends", code_pause: "Pause", code_resume: "Activate", code_del: "Delete",
+  code_confirm_del: c => "Delete code " + c + "?", code_none_list: "No codes yet. Add one with the button above.", code_done: "Done", cst: { "فعّال": "Active", "موقوف": "Paused", "منتهي": "Expired", "مستنفد": "Used up" },
   mem_h: "Monthly memberships", mem_new: "+ New membership", m_phone: "Phone", m_tier: "Plan", m_activate_new: "Save & activate", m_cancel_form: "Cancel",
   m_pending: "Requests awaiting activation", m_active: "Current memberships", m_none_pend: "No new requests.", m_none: "No memberships yet.",
   m_activate: "Activate", m_reject: "Cancel request", m_freeze: "Freeze", m_unfreeze: "Unfreeze", m_cancel: "Cancel membership", m_card: "Send card", m_card_wait: "Preparing the card…", m_card_fail: "Couldn't prepare the card. Try again.", m_msg_copied: "Message copied — paste it with the image if it doesn't show", m_confirm_cancel: (n, tn) => "Cancel " + n + "'s membership (" + tn + ")?\nThis can't be undone.", m_remind: "WhatsApp reminder", m_receipt: "Receipt", m_wa: "WhatsApp",
@@ -408,7 +448,7 @@ if (OFFERS_ON) CATS.unshift({ key: "nd", hot: true, items: [
 /* ===== الحالة ===== */
 const $ = id => document.getElementById(id);
 const omr = v => String(Math.round((Number(v) || 0) * 1000) / 1000);
-const st = { tab: CATS[0].key, lines: [], staff: null, pay: null, saving: false, data: null, member: null, nmTier: null, nmPay: null, mpay: {} };
+const st = { tab: CATS[0].key, lines: [], staff: null, pay: null, saving: false, data: null, member: null, nmTier: null, nmPay: null, mpay: {}, code: null, ncType: "percent", ncScope: "regular" };
 const store = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} }, del: k => { try { localStorage.removeItem(k); } catch (e) {} } };
 let PIN = store.get("haybah-pos-pin") || "";
 let LANG = store.get("haybah-pos-lang") === "en" ? "en" : "ar";
@@ -579,9 +619,25 @@ function renderLines(focusLast) {
 const subTotal = () => st.lines.reduce((a, l) => a + l.price * l.qty, 0);
 // خصم الأعضاء: نسبة الباقة على خدمات الشعر والوجه والأظافر والجسم بأسعارها العادية
 const memDisc = () => !memActive() ? 0 : Math.round(st.lines.filter(l => !l.use && DISC_CATS.includes(l.cat)).reduce((a, l) => a + l.price * l.qty, 0) * TIERS[st.member.tier].disc / 100 * 1000) / 1000;
+// كود الخصم: نسبة أو مبلغ، على الخدمات العادية أو كل الخدمات. ما يجتمع مع خصم العضوية (ينحسب الأكبر)
+const codeKey = s => String(s || "").trim().toUpperCase().replace(/\s+/g, "");
+const codeLabel = c => c.type === "percent" ? c.value + "%" : omr(c.value) + " " + t("cur");
+function codeDisc() {
+  const c = st.code; if (!c) return 0;
+  const base = st.lines.filter(l => !l.use && (c.scope === "all" || DISC_CATS.includes(l.cat))).reduce((a, l) => a + l.price * l.qty, 0);
+  return Math.round(Math.min(base, c.type === "percent" ? base * c.value / 100 : c.value) * 1000) / 1000;
+}
+const autoDisc = () => Math.max(memDisc(), codeDisc());
+const codeWins = () => !!st.code && codeDisc() > 0 && codeDisc() >= memDisc();
 function updateTotals() {
-  const sub = subTotal(), md = memDisc(), disc = Math.min(sub, md + Math.max(0, parseFloat($("disc").value) || 0));
+  const sub = subTotal(), md = memDisc(), cd = codeDisc(), disc = Math.min(sub, autoDisc() + Math.max(0, parseFloat($("disc").value) || 0));
   $("mdisc-row").hidden = !memActive(); if (memActive()) { $("mdisc-lab").textContent = t("mem_disc")(TIERS[st.member.tier].disc); $("mdisc").textContent = omr(md); }
+  $("cdisc-row").hidden = !st.code;
+  if (st.code) { $("cdisc-lab").textContent = t("code_disc")(st.code.code) + " · " + codeLabel(st.code); $("cdisc").textContent = omr(cd); }
+  const both = memActive() && md > 0 && st.code && cd > 0;
+  $("mdisc-row").classList.toggle("off", !!both && codeWins()); $("cdisc-row").classList.toggle("off", !!both && !codeWins());
+  const note = both ? t("code_vs_mem") : (st.code && st.lines.length && !cd ? t("code_zero") : "");
+  $("code-note").hidden = !note; $("code-note").textContent = note;
   $("sub").textContent = omr(sub); $("total").textContent = omr(sub - disc);
   $("save").disabled = st.saving || !st.lines.length;
   const n = st.lines.reduce((a, l) => a + l.qty, 0);
@@ -589,6 +645,16 @@ function updateTotals() {
   $("mbar-n").textContent = t("n_svc")(n); $("mbar-t").textContent = omr(sub - disc);
 }
 $("disc").oninput = updateTotals;
+function applyCode() {
+  const k = codeKey($("code-in").value); if (!k) return;
+  const c = ((st.data && st.data.codes) || []).find(x => x.code === k);
+  if (!c) { toast(t("code_none"), true); return; }
+  if (c.eff !== "فعّال") { toast(t("code_bad")(c.code, c.eff), true); return; }
+  st.code = c; $("code-in").value = ""; updateTotals(); toast(t("code_applied")(c.code));
+}
+$("code-apply").onclick = applyCode;
+$("code-in").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); applyCode(); } });
+$("code-x").onclick = () => { st.code = null; updateTotals(); };
 $("mbar-go").onclick = () => $("bill-h").scrollIntoView({ behavior: "smooth", block: "start" });
 
 $("save").onclick = async () => {
@@ -597,12 +663,13 @@ $("save").onclick = async () => {
   if (!st.pay) problems.push(t("need_pay"));
   if (st.lines.some(l => !l.ar.trim())) problems.push(t("need_name"));
   if (st.lines.some(l => !l.use && !(l.price > 0))) problems.push(t("need_price"));
-  const sub = subTotal(), disc = Math.min(sub, memDisc() + Math.max(0, parseFloat($("disc").value) || 0));
+  const sub = subTotal(), disc = Math.min(sub, autoDisc() + Math.max(0, parseFloat($("disc").value) || 0));
   if (!st.pay && sub - disc <= 0 && st.lines.length) { const i = problems.indexOf(t("need_pay")); if (i >= 0) problems.splice(i, 1); }
   if (problems.length) { toast(problems.join(" · "), true); return; }
   const body = { action: "sale", pin: PIN, staff: st.staff, payment: st.pay || "نقداً", memberId: st.member ? st.member.id : undefined,
     customer: $("c-name").value.trim(), phone: $("c-phone").value.trim(), note: $("note").value.trim(),
-    items: st.lines.map(l => ({ name: l.ar.trim(), price: l.use ? 0 : l.price, qty: l.qty, use: l.use || undefined })), subtotal: omr(sub), discount: omr(disc), total: omr(sub - disc) };
+    code: codeWins() ? st.code.code : undefined,
+    items: st.lines.map(l => ({ name: l.ar.trim(), price: l.use ? 0 : l.price, qty: l.qty, use: l.use || undefined, cat: l.cat || undefined })), subtotal: omr(sub), discount: omr(disc), total: omr(sub - disc) };
   st.saving = true; updateTotals(); $("save").textContent = t("saving");
   try {
     const j = await api(null, body);
@@ -610,10 +677,11 @@ $("save").onclick = async () => {
       $("done").innerHTML = ""; const s = document.createElement("span"); s.textContent = "✔ " + t("saved") + " ";
       const b = document.createElement("b"); b.textContent = j.invoice; const s2 = document.createElement("span"); s2.textContent = " · " + body.total + " " + t("cur") + " " + t("saved_long");
       $("done").append(s, b, s2); $("done").hidden = false;
-      st.lines = []; st.pay = null; $("c-name").value = ""; $("c-phone").value = ""; $("note").value = ""; $("disc").value = ""; setMember(null);
+      st.lines = []; st.pay = null; $("c-name").value = ""; $("c-phone").value = ""; $("note").value = ""; $("disc").value = ""; st.code = null; setMember(null);
       renderAll(); renderReports(j.today ? Object.assign({}, j.today, j) : j);
       toast(t("saved") + " " + j.invoice);
     } else if (j.reason === "pin") { toast(t("pin_changed"), true); $("logout").click(); }
+    else if (j.reason === "code") { st.code = null; toast(j.error, true); loadToday(); }
     else toast(t("not_saved") + (j.error || ""), true);
   } catch (err) { toast(t("net_fail"), true); }
   st.saving = false; $("save").textContent = t("save"); updateTotals();
@@ -854,6 +922,58 @@ $("mem-new").addEventListener("submit", async e => {
   }
 });
 
+/* ===== لوحة أكواد الخصم ===== */
+async function codeOp(body, btn) {
+  if (btn) btn.disabled = true;
+  try {
+    const j = await api(null, Object.assign({ action: "code_admin", pin: PIN }, body));
+    if (j.ok) { renderReports(j); toast(t("code_done")); return true; }
+    if (j.reason === "pin") { toast(t("pin_changed"), true); $("logout").click(); }
+    else toast(j.error || t("not_saved"), true);
+  } catch (e) { toast(t("net_fail"), true); }
+  if (btn) btn.disabled = false;
+  return false;
+}
+function renderCodes(list) {
+  list = list || []; const box = $("code-list"); box.innerHTML = "";
+  if (!list.length) { const e = document.createElement("div"); e.className = "muted"; e.style.fontSize = "14px"; e.textContent = t("code_none_list"); box.appendChild(e); }
+  const order = { "فعّال": 0, "موقوف": 1, "مستنفد": 2, "منتهي": 3 };
+  list.slice().sort((a, b) => order[a.eff] - order[b.eff]).forEach(c => {
+    const row = document.createElement("div"); row.className = "mrow crow";
+    const who = document.createElement("div"); who.className = "who";
+    const nb = document.createElement("b"); nb.className = "tn"; nb.textContent = c.code; nb.style.direction = "ltr"; nb.style.unicodeBidi = "isolate";
+    const ph = document.createElement("span"); ph.className = "muted"; ph.style.fontSize = "13px"; ph.style.display = "block"; ph.textContent = c.note || "";
+    who.append(nb, ph);
+    const info = document.createElement("div");
+    const top = document.createElement("div"); const v = document.createElement("span"); v.textContent = codeLabel(c) + " · " + (c.scope === "all" ? t("code_all_l") : t("code_regular_l")) + " ";
+    const b = document.createElement("span"); b.className = "st " + (c.eff === "فعّال" ? "on" : c.eff === "موقوف" ? "frz" : "x"); b.textContent = t("cst")[c.eff] || c.eff;
+    top.append(v, b); info.appendChild(top);
+    const sm = document.createElement("small"); sm.className = "muted"; sm.textContent = t("code_used")(c.used, c.limit) + (c.exp ? " · " + t("code_until") + " " + dayText(c.exp) : ""); info.appendChild(sm);
+    const acts = document.createElement("div"); acts.className = "acts";
+    if (c.eff === "فعّال") { const ps = document.createElement("button"); ps.type = "button"; ps.className = "btn sm ghost"; ps.textContent = t("code_pause"); ps.onclick = () => codeOp({ op: "pause", code: c.code }, ps); acts.appendChild(ps); }
+    if (c.eff === "موقوف") { const rs = document.createElement("button"); rs.type = "button"; rs.className = "btn sm"; rs.textContent = t("code_resume"); rs.onclick = () => codeOp({ op: "resume", code: c.code }, rs); acts.appendChild(rs); }
+    const dl = document.createElement("button"); dl.type = "button"; dl.className = "btn sm ghost"; dl.textContent = t("code_del");
+    dl.onclick = () => { if (confirm(t("code_confirm_del")(c.code))) codeOp({ op: "delete", code: c.code }, dl); }; acts.appendChild(dl);
+    row.append(who, info, acts); box.appendChild(row);
+  });
+  // تحديث الكود المطبّق في الفاتورة
+  if (st.code) { const f = list.find(x => x.code === st.code.code); st.code = f && f.eff === "فعّال" ? f : null; updateTotals(); }
+}
+function renderNewCode() {
+  seg("nc-type", ["percent", "amount"], "ncType", null, v => v === "percent" ? t("code_pct") : t("code_amt"));
+  seg("nc-scope", ["regular", "all"], "ncScope", null, v => v === "regular" ? t("code_regular") : t("code_all"));
+}
+$("code-new-btn").onclick = () => { $("code-new").hidden = !$("code-new").hidden; if (!$("code-new").hidden) { renderNewCode(); $("nc-code").focus(); } };
+$("nc-cancel").onclick = () => { $("code-new").hidden = true; };
+$("code-new").addEventListener("submit", async e => {
+  e.preventDefault();
+  const code = codeKey($("nc-code").value), value = parseFloat($("nc-value").value);
+  if (!code || !(value > 0)) { toast(t("code_need"), true); return; }
+  if (await codeOp({ op: "new", code, value, type: st.ncType, scope: st.ncScope, exp: $("nc-exp").value, limit: $("nc-limit").value, note: $("nc-note").value.trim() }, $("nc-save"))) {
+    ["nc-code", "nc-value", "nc-exp", "nc-limit", "nc-note"].forEach(id => $(id).value = ""); $("code-new").hidden = true; $("nc-save").disabled = false;
+  }
+});
+
 /* ===== التقارير ===== */
 function staffList(by) { return STAFF.concat(Object.keys(by || {}).filter(k => !STAFF.includes(k) && by[k])); }
 function staffCards(boxId, by, total) {
@@ -891,7 +1011,7 @@ const monthText = ym => { const [y, m] = ym.split("-").map(Number); return new D
 
 function renderReports(d) {
   if (!d) return; st.data = d;
-  renderMembers(d.members);
+  renderMembers(d.members); renderCodes(d.codes);
   // اليوم
   $("chip-total").textContent = omr(d.total); $("chip-count").textContent = d.count;
   $("t-total").textContent = omr(d.total); $("t-count").textContent = t("n_inv")(d.count);
